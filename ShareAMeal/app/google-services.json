@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "260144299473",
+    "project_id": "shareameal-65af3",
+    "storage_bucket": "shareameal-65af3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:260144299473:android:e75fa1410f3212e3a774f0",
+        "android_client_info": {
+          "package_name": "com.example.shareameal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "260144299473-h2borqs7bvjolo1e1u4epbslkfmsmofk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjCIqzPmztr78M4sOqQ-VflAm_Mn6t9X8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "260144299473-h2borqs7bvjolo1e1u4epbslkfmsmofk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
