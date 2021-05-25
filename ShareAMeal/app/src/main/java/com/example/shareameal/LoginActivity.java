@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         // Initialise widgets
-        mEditTextEmail = findViewById(R.id.emailEdt);
+        mEditTextEmail = findViewById(R.id.emailEdtWrapper);
         mEditTextPw = findViewById(R.id.passwordEdt);
         mBtnLogin = findViewById(R.id.loginBtn);
         mTextViewSignup = findViewById(R.id.signup);

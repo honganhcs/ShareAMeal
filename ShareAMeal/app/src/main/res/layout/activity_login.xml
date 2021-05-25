@@ -19,7 +19,7 @@
         android:textSize="50dp" />
 
     <EditText
-        android:id="@+id/emailEdt"
+        android:id="@+id/emailEdtWrapper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="15"
@@ -36,9 +36,9 @@
         android:layout_height="wrap_content"
         android:ems="15"
         android:hint="Password"
-        app:layout_constraintEnd_toEndOf="@+id/emailEdt"
-        app:layout_constraintStart_toStartOf="@+id/emailEdt"
-        app:layout_constraintTop_toBottomOf="@+id/emailEdt"
+        app:layout_constraintEnd_toEndOf="@+id/emailEdtWrapper"
+        app:layout_constraintStart_toStartOf="@+id/emailEdtWrapper"
+        app:layout_constraintTop_toBottomOf="@+id/emailEdtWrapper"
         android:inputType="textPassword"
         />
 
@@ -49,7 +49,7 @@
         android:src="@drawable/showpassword"
         app:layout_constraintBottom_toBottomOf="@+id/passwordEdt"
         app:layout_constraintEnd_toEndOf="@+id/passwordEdt"
-        app:layout_constraintTop_toBottomOf="@+id/emailEdt"
+        app:layout_constraintTop_toBottomOf="@+id/emailEdtWrapper"
         android:layout_marginBottom="5dp"
         android:layout_marginRight="10dp"
         />

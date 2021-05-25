@@ -6,49 +6,145 @@
     android:layout_height="match_parent"
     tools:context=".SignupActivity">
 
-    <EditText
+    <TextView
+        android:id="@+id/header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Email"
+        android:text="Create an Account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="200dp"
-        android:ems="15"
-        android:id="@+id/emailEdt"/>
+        android:textStyle="bold"
+        android:textSize="30dp"
+        android:layout_marginTop="40dp"/>
 
-    <EditText
-        android:id="@+id/passwordEdt"
+    <TextView
+        android:id="@+id/txtQuestion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="15"
-        android:hint="Password"
-        app:layout_constraintEnd_toEndOf="@+id/emailEdt"
-        app:layout_constraintStart_toStartOf="@+id/emailEdt"
-        app:layout_constraintTop_toBottomOf="@+id/emailEdt"
-        android:inputType="textPassword"
-        />
+        android:inputType="textMultiLine"
+        android:text="Which group do you wish to register under? Indicate below."
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header" />
+
+    <RadioGroup
+        android:id="@+id/userGroups"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/txtQuestion"
+        app:layout_constraintStart_toStartOf="@+id/txtQuestion"
+        app:layout_constraintTop_toBottomOf="@+id/txtQuestion"
+        android:layout_marginRight="30dp">
+
+        <RadioButton
+            android:id="@+id/foodDonorBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Food Donor"
+            android:textSize="15sp" />
+
+        <RadioButton
+            android:id="@+id/moneyDonorBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Money Donor"
+            android:textSize="15sp" />
+
+        <RadioButton
+            android:id="@+id/recipientBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recipient"
+            android:textSize="15sp" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/emailHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter your email address"
+        app:layout_constraintEnd_toEndOf="@+id/emailEdtWrapper"
+        app:layout_constraintStart_toStartOf="@+id/emailEdtWrapper"
+        app:layout_constraintTop_toBottomOf="@+id/userGroups"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="80dp"
+        android:textSize="18dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emailEdtWrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailHeader">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/emailEdt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="15"
+            android:hint="Email"
+            android:inputType="textEmailAddress"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/passwordHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="110dp"
+        android:text="Enter your password"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toEndOf="@+id/pwEdtWrapper"
+        app:layout_constraintStart_toStartOf="@+id/pwEdtWrapper"
+        app:layout_constraintTop_toBottomOf="@+id/emailEdtWrapper" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/pwEdtWrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordHeader">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordEdt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="15"
+            android:hint="Password"
+            android:inputType="textPassword"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
         android:id="@+id/changePwVisibility"
         android:layout_width="30dp"
         android:layout_height="36dp"
-        android:src="@drawable/showpassword"
-        app:layout_constraintBottom_toBottomOf="@+id/passwordEdt"
-        app:layout_constraintEnd_toEndOf="@+id/passwordEdt"
-        app:layout_constraintTop_toBottomOf="@+id/emailEdt"
-        android:layout_marginBottom="5dp"
         android:layout_marginRight="10dp"
-        />
+        android:src="@drawable/showpassword"
+        app:layout_constraintBottom_toBottomOf="@+id/pwEdtWrapper"
+        app:layout_constraintEnd_toEndOf="@+id/pwEdtWrapper"
+        app:layout_constraintTop_toBottomOf="@+id/passwordHeader" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/signUpBtn"
+        android:id="@+id/proceedBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SIGN UP"
-        app:layout_constraintEnd_toEndOf="@+id/passwordEdt"
-        app:layout_constraintStart_toStartOf="@+id/passwordEdt"
-        app:layout_constraintTop_toBottomOf="@+id/passwordEdt"
-        android:layout_marginTop="40dp" />
+        android:text="Next"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pwEdtWrapper" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
