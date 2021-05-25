@@ -18,51 +18,63 @@
         android:textStyle="bold"
         android:textSize="50dp" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailEdtWrapper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="15"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headerTxt"
-        android:layout_marginTop="100dp"/>
+        android:layout_marginTop="100dp">
 
-    <EditText
-        android:id="@+id/passwordEdt"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/emailEdt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="15"
+            android:hint="Email"
+            android:inputType="textEmailAddress"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/pwEdtWrapper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="15"
-        android:hint="Password"
-        app:layout_constraintEnd_toEndOf="@+id/emailEdtWrapper"
-        app:layout_constraintStart_toStartOf="@+id/emailEdtWrapper"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailEdtWrapper"
-        android:inputType="textPassword"
-        />
+        android:layout_marginTop="30dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordEdt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="15"
+            android:hint="Password"
+            android:inputType="textPassword"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
         android:id="@+id/changePwVisibility"
         android:layout_width="30dp"
         android:layout_height="36dp"
         android:src="@drawable/showpassword"
-        app:layout_constraintBottom_toBottomOf="@+id/passwordEdt"
-        app:layout_constraintEnd_toEndOf="@+id/passwordEdt"
-        app:layout_constraintTop_toBottomOf="@+id/emailEdtWrapper"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="10dp"
-        />
+        app:layout_constraintBottom_toBottomOf="@+id/pwEdtWrapper"
+        app:layout_constraintEnd_toEndOf="@+id/pwEdtWrapper"
+        app:layout_constraintTop_toTopOf="@+id/pwEdtWrapper"
+        android:layout_marginRight="15dp"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/loginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="LOGIN"
-        app:layout_constraintEnd_toEndOf="@+id/passwordEdt"
-        app:layout_constraintStart_toStartOf="@+id/passwordEdt"
-        app:layout_constraintTop_toBottomOf="@+id/passwordEdt"
-        android:layout_marginTop="40dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pwEdtWrapper"
+        android:layout_marginTop="50dp"/>
 
     <TextView
         android:layout_width="wrap_content"
