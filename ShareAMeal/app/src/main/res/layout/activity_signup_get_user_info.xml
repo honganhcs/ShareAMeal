@@ -1,9 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SignupActivity_getUserInfo">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="Getting User Info"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/nameHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="150dp"
+            android:inputType="textMultiLine"
+            android:text="Please enter your name. \n (If registering as a shop, \n please enter shop name)"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/nameEdtWrapper"
+            app:layout_constraintStart_toStartOf="@+id/nameEdtWrapper"
+            app:layout_constraintTop_toBottomOf="@+id/header" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nameEdtWrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameHeader">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nameEdt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="18"
+                android:hint="Name"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/addressHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="Please enter your home / shop address. \n (Only applicable for food donors and recipients)"
+            android:textSize="16sp"
+            android:inputType="textMultiLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameEdtWrapper" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/postalCodeEdtWrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addressHeader">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/postalCodeEdt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="18"
+                android:hint="Postal Code (E.g. 400301)"
+                android:inputType="numberSigned"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/blockOrStreetNameEdtWrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/postalCodeEdtWrapper">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/blockOrStreetNameEdt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="18"
+                android:hint="Block/Street Name (E.g. Ubi Avenue 1)"
+                android:inputType="textMultiLine"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/bldgOrHseNumberEdtWrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/blockOrStreetNameEdtWrapper">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/bldgOrHseNumberEdt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="18"
+                android:hint="Building/House Number (If applicable)"
+                android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/unitNumberEdtWrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bldgOrHseNumberEdtWrapper">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/unitNumberEdt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="18"
+                android:hint="Unit Number (If applicable)"
+                android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/finishRegBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/unitNumberEdtWrapper"
+            android:layout_marginTop="50dp"
+            android:ems="13"
+            android:text="Finish Registration"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
