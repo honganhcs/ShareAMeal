@@ -21,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SignupActivity extends AppCompatActivity {
-    private RadioGroup mUserGroups;
     private EditText mEditTextEmail;
     private EditText mEditTextPw;
     private AppCompatButton mProceedBtn;
@@ -34,7 +33,6 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        mUserGroups = findViewById(R.id.userGroups);
         mEditTextEmail = findViewById(R.id.emailEdt);
         mEditTextPw = findViewById(R.id.passwordEdt);
         mProceedBtn = findViewById(R.id.proceedBtn);
@@ -65,15 +63,12 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = mEditTextEmail.getText().toString().trim();
                 String password = mEditTextPw.getText().toString().trim();
-                int selectedGroup = mUserGroups.getCheckedRadioButtonId();
 
                 // Check if email/password is empty
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(SignupActivity.this, "Enter Email Address", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(password)) {
                     Toast.makeText(SignupActivity.this, "Enter Password", Toast.LENGTH_SHORT).show();
-                } else if (selectedGroup == -1) {
-                    Toast.makeText(SignupActivity.this, "Please indicate group to register under", Toast.LENGTH_SHORT).show();
                 } else {
                     // Create a new user
                     auth.createUserWithEmailAndPassword(email, password).
@@ -83,17 +78,8 @@ public class SignupActivity extends AppCompatActivity {
                                     if (!task.isSuccessful()) {
                                         Toast.makeText(SignupActivity.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        String userGroup;
-                                        if (selectedGroup == R.id.foodDonorBtn) {
-                                            userGroup = "foodDonor";
-                                        } else if (selectedGroup == R.id.moneyDonorBtn) {
-                                            userGroup = "moneyDonor";
-                                        } else {
-                                            userGroup = "recipient";
-                                        }
                                         // Signup successful, direct user to getUserInfo activity
                                         Intent intent = new Intent(SignupActivity.this, SignupActivity_getUserInfo.class);
-                                        intent.putExtra("userGroup", userGroup);
                                         startActivity(intent);
                                         finish();
                                     }

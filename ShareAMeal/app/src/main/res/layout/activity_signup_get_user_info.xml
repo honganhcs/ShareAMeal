@@ -23,17 +23,65 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/txtQuestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="15"
+            android:inputType="textMultiLine"
+            android:text="Which group do you wish to register under? Indicate below."
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/header" />
+
+        <RadioGroup
+            android:id="@+id/userGroups"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/txtQuestion"
+            app:layout_constraintStart_toStartOf="@+id/txtQuestion"
+            app:layout_constraintTop_toBottomOf="@+id/txtQuestion"
+            android:layout_marginRight="30dp">
+
+            <RadioButton
+                android:id="@+id/foodDonorBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Food Donor"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/moneyDonorBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Money Donor"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/recipientBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Recipient"
+                android:textSize="15sp" />
+
+        </RadioGroup>
+
+        <TextView
             android:id="@+id/nameHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="150dp"
             android:inputType="textMultiLine"
             android:text="Please enter your name. \n (If registering as a shop, \n please enter shop name)"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/nameEdtWrapper"
             app:layout_constraintStart_toStartOf="@+id/nameEdtWrapper"
-            app:layout_constraintTop_toBottomOf="@+id/header" />
+            app:layout_constraintTop_toBottomOf="@+id/userGroups" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/nameEdtWrapper"
