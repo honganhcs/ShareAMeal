@@ -37,25 +37,18 @@
             android:layout_marginRight="30dp">
 
             <RadioButton
-                android:id="@+id/foodDonorBtn"
+                android:id="@+id/donorBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Food Donor"
-                android:textSize="15sp" />
-
-            <RadioButton
-                android:id="@+id/moneyDonorBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Money Donor"
-                android:textSize="15sp" />
+                android:text="Donor"
+                android:textSize="16sp" />
 
             <RadioButton
                 android:id="@+id/recipientBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Recipient"
-                android:textSize="15sp" />
+                android:textSize="16sp" />
 
         </RadioGroup>
 

@@ -45,23 +45,10 @@ public class SignupActivity_getUserInfo extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 String userGroup;
-                if (checkedId == R.id.foodDonorBtn) {
-                    userGroup = "foodDonor";
-                } else if (checkedId == R.id.moneyDonorBtn) {
-                    userGroup = "moneyDonor";
+                if (checkedId == R.id.donorBtn) {
+                    userGroup = "donor";
                 } else {
                     userGroup = "recipient";
-                }
-                if (userGroup.equals("moneyDonor")) {
-                    mPostalCodeEdt.setEnabled(false);
-                    mBlockOrStreetNameEdt.setEnabled(false);
-                    mBldgOrHseNumberEdt.setEnabled(false);
-                    mUnitNumberEdt.setEnabled(false);
-                } else {
-                    mPostalCodeEdt.setEnabled(true);
-                    mBlockOrStreetNameEdt.setEnabled(true);
-                    mBldgOrHseNumberEdt.setEnabled(true);
-                    mUnitNumberEdt.setEnabled(true);
                 }
             }
         });
@@ -80,10 +67,8 @@ public class SignupActivity_getUserInfo extends AppCompatActivity {
                     Toast.makeText(SignupActivity_getUserInfo.this, "Please indicate group to register under", Toast.LENGTH_SHORT).show();
                 } else {
                     String userGroup;
-                    if (selectedGroup == R.id.foodDonorBtn) {
-                        userGroup = "foodDonor";
-                    } else if (selectedGroup == R.id.moneyDonorBtn) {
-                        userGroup = "moneyDonor";
+                    if (selectedGroup == R.id.donorBtn) {
+                        userGroup = "donor";
                     } else {
                         userGroup = "recipient";
                     }
