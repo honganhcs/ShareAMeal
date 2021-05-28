@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         mEditTextEmail = findViewById(R.id.emailEdt);
         mEditTextPw = findViewById(R.id.passwordEdt);
         mBtnLogin = findViewById(R.id.loginBtn);
-        mTextViewSignup = findViewById(R.id.signup);
+        mTextViewSignup = findViewById(R.id.txtSignUp);
         mShowPassword = findViewById(R.id.changePwVisibility);
 
         mTextViewSignup.setOnClickListener(new View.OnClickListener() {

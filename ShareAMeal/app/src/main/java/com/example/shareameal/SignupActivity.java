@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,9 +22,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SignupActivity extends AppCompatActivity {
-    private EditText mEditTextEmail;
-    private EditText mEditTextPw;
-    private AppCompatButton mProceedBtn;
+    private EditText mEditTextEmail, mEditTextPw;
+    private TextView txtSignIn;
+    private AppCompatButton signupBtn;
     private FirebaseAuth auth;
     private ImageView mShowPassword;
     private boolean isPasswordVisible;
@@ -35,8 +36,9 @@ public class SignupActivity extends AppCompatActivity {
 
         mEditTextEmail = findViewById(R.id.emailEdt);
         mEditTextPw = findViewById(R.id.passwordEdt);
-        mProceedBtn = findViewById(R.id.proceedBtn);
+        signupBtn = findViewById(R.id.signupBtn);
         mShowPassword = findViewById(R.id.changePwVisibility);
+        txtSignIn = findViewById(R.id.txtSignIn);
 
         auth = FirebaseAuth.getInstance();
 
@@ -58,7 +60,7 @@ public class SignupActivity extends AppCompatActivity {
         });
 
         // Registering new user in database
-        mProceedBtn.setOnClickListener(new View.OnClickListener() {
+        signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = mEditTextEmail.getText().toString().trim();
@@ -86,6 +88,15 @@ public class SignupActivity extends AppCompatActivity {
                                 }
                             });
                 }
+            }
+        });
+
+        // redirect user to sign in page
+        txtSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                startActivity(intent);
             }
         });
     }
