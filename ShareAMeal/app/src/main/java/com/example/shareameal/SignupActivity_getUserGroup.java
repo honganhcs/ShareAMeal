@@ -17,7 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 // To get basic user information after account creation
-public class SignupActivity_getUserInfo extends AppCompatActivity {
+public class SignupActivity_getUserGroup extends AppCompatActivity {
     private RadioGroup mUserGroups;
     private EditText mNameEdt;
     private EditText mPostalCodeEdt;
@@ -29,7 +29,7 @@ public class SignupActivity_getUserInfo extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup_get_user_info);
+        setContentView(R.layout.activity_signup_get_user_group);
 
         // Initialise widgets
         mUserGroups = findViewById(R.id.userGroups);
@@ -64,7 +64,7 @@ public class SignupActivity_getUserInfo extends AppCompatActivity {
 
                 // Check if any of the radio buttons is checked
                 if (selectedGroup == -1) {
-                    Toast.makeText(SignupActivity_getUserInfo.this, "Please indicate group to register under", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignupActivity_getUserGroup.this, "Please indicate group to register under", Toast.LENGTH_SHORT).show();
                 } else {
                     String userGroup;
                     if (selectedGroup == R.id.donorBtn) {
@@ -87,9 +87,9 @@ public class SignupActivity_getUserInfo extends AppCompatActivity {
                         String bldgOrHseNumber = mBldgOrHseNumberEdt.getText().toString().trim();
                         String unitNumber = mUnitNumberEdt.getText().toString().trim();
                         if (TextUtils.isEmpty(postalCode)) {
-                            Toast.makeText(SignupActivity_getUserInfo.this, "Please enter postal code", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignupActivity_getUserGroup.this, "Please enter postal code", Toast.LENGTH_SHORT).show();
                         } else if (TextUtils.isEmpty(blockOrStreetName)) {
-                            Toast.makeText(SignupActivity_getUserInfo.this, "Please enter block/street name", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignupActivity_getUserGroup.this, "Please enter block/street name", Toast.LENGTH_SHORT).show();
                         } else {
                             String address;
                             if (TextUtils.isEmpty(bldgOrHseNumber) && TextUtils.isEmpty(unitNumber)) {
@@ -107,7 +107,7 @@ public class SignupActivity_getUserInfo extends AppCompatActivity {
                             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Users");
                             mDatabase.child(uid).setValue(user);
 
-                            Intent intent = new Intent(SignupActivity_getUserInfo.this, MainActivity.class);
+                            Intent intent = new Intent(SignupActivity_getUserGroup.this, MainActivity.class);
                             startActivity(intent);
                             finish();
                         }
@@ -115,7 +115,7 @@ public class SignupActivity_getUserInfo extends AppCompatActivity {
                         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Users");
                         mDatabase.child(uid).setValue(user);
 
-                        Intent intent = new Intent(SignupActivity_getUserInfo.this, MainActivity.class);
+                        Intent intent = new Intent(SignupActivity_getUserGroup.this, MainActivity.class);
                         startActivity(intent);
                         finish();
                     }

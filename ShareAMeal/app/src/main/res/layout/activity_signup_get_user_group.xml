@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignupActivity_getUserInfo"
-    android:background="#D2FDFF">
+    tools:context=".SignupActivity_getUserGroup"
+    android:background="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,13 +16,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:ems="15"
             android:inputType="textMultiLine"
-            android:text="What is your main purpose for using this app?"
+            android:text="With this app, I want to..."
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,24 +29,23 @@
             android:id="@+id/userGroups"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="@+id/txtQuestion"
             app:layout_constraintStart_toStartOf="@+id/txtQuestion"
-            app:layout_constraintTop_toBottomOf="@+id/txtQuestion"
-            android:layout_marginRight="30dp">
+            app:layout_constraintTop_toBottomOf="@+id/txtQuestion">
 
             <RadioButton
                 android:id="@+id/donorBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Donor"
+                android:text="donate food items to those in need /\npay for donated food items."
                 android:textSize="16sp" />
 
             <RadioButton
                 android:id="@+id/recipientBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Recipient"
+                android:text="receive donated food items."
                 android:textSize="16sp" />
 
         </RadioGroup>
