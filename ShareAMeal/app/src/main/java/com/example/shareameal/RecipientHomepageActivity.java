@@ -5,10 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -17,22 +18,42 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class MainActivity extends AppCompatActivity {
+public class RecipientHomepageActivity extends AppCompatActivity {
+
+    private BottomNavigationView bottomNav;
+    private TextView userNameTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_recipient_homepage);
 
         // Check if user is logged in
         // If user is not logged in, direct user to login page
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            Intent intent = new Intent(RecipientHomepageActivity.this, LoginActivity.class);
             startActivity(intent);
-            finish();
         }
 
-        // Redirecting user to the correct interface/home page
+        bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int curr = item.getItemId();
+                if (curr == R.id.claimFood) {
+                    Toast.makeText(RecipientHomepageActivity.this, "Food claiming system not yet implemented", Toast.LENGTH_SHORT).show();
+                } else if (curr == R.id.records) {
+                    Toast.makeText(RecipientHomepageActivity.this, "Records not yet implemented", Toast.LENGTH_SHORT).show();
+                } else if (curr == R.id.profile) {
+                    Intent intent = new Intent(RecipientHomepageActivity.this, RecipientUserPageActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                return true;
+            }
+        });
+
+        userNameTxt = findViewById(R.id.userNameTxt);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userid = user.getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
@@ -40,15 +61,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
-                if (user.getUserGroup().equals("donor")) {
-                    Intent intent = new Intent(MainActivity.this, DonorHomepageActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else if (user.getUserGroup().equals("recipient")) {
-                    Intent intent = new Intent(MainActivity.this, RecipientHomepageActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
+                userNameTxt.setText(user.getName());
             }
 
             @Override
@@ -57,5 +70,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 }
