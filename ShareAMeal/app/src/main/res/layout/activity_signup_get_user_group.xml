@@ -1,186 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignupActivity_getUserGroup"
-    android:background="@color/white">
+    android:background="white"
+    tools:context=".SignupActivity_getUserGroup">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/foodImage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="275dp"
+        android:alpha="0.6"
+        android:src="@drawable/food_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/txtQuestion"
+    <TextView
+        android:id="@+id/txtQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="With this app, I wish to..."
+        android:textColor="#af1b1b"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.442" />
+
+    <RadioGroup
+        android:id="@+id/rgUserGroups"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="@+id/txtQuestion"
+        app:layout_constraintStart_toStartOf="@+id/txtQuestion"
+        app:layout_constraintTop_toBottomOf="@+id/txtQuestion">
+
+        <RadioButton
+            android:id="@+id/donorBtn1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext"
+            android:ems="10"
+            android:text="donate food items / \npay for donated food items."
+            android:textColor="#af1b1b"
+            android:textSize="20sp" />
+
+
+        <RadioButton
+            android:id="@+id/recipientBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:inputType="textMultiLine"
-            android:text="With this app, I want to..."
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <RadioGroup
-            android:id="@+id/userGroups"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="@+id/txtQuestion"
-            app:layout_constraintStart_toStartOf="@+id/txtQuestion"
-            app:layout_constraintTop_toBottomOf="@+id/txtQuestion">
-
-            <RadioButton
-                android:id="@+id/donorBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="donate food items to those in need /\npay for donated food items."
-                android:textSize="16sp" />
-
-            <RadioButton
-                android:id="@+id/recipientBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="receive donated food items."
-                android:textSize="16sp" />
-
-        </RadioGroup>
-
-        <TextView
-            android:id="@+id/nameHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="150dp"
-            android:inputType="textMultiLine"
-            android:text="Please enter your name. \n (If registering as a shop, \n please enter shop name)"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@+id/nameEdtWrapper"
-            app:layout_constraintStart_toStartOf="@+id/nameEdtWrapper"
-            app:layout_constraintTop_toBottomOf="@+id/userGroups" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/nameEdtWrapper"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nameHeader">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/nameEdt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="18"
-                android:hint="Name"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/addressHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="Please enter your home / shop address. \n (Only applicable for food donors and recipients)"
-            android:textSize="16sp"
-            android:inputType="textMultiLine"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nameEdtWrapper" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/postalCodeEdtWrapper"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addressHeader">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/postalCodeEdt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="18"
-                android:hint="Postal Code (E.g. 400301)"
-                android:inputType="numberSigned"
-                />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/blockOrStreetNameEdtWrapper"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postalCodeEdtWrapper">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/blockOrStreetNameEdt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="18"
-                android:hint="Block/Street Name (E.g. Ubi Avenue 1)"
-                android:inputType="textMultiLine"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/bldgOrHseNumberEdtWrapper"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/blockOrStreetNameEdtWrapper">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/bldgOrHseNumberEdt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="18"
-                android:hint="Building/House Number (If applicable)"
-                android:inputType="text"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/unitNumberEdtWrapper"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bldgOrHseNumberEdtWrapper">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/unitNumberEdt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="18"
-                android:hint="Unit Number (If applicable)"
-                android:inputType="text"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/finishRegBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/unitNumberEdtWrapper"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="30dp"
             android:ems="13"
-            android:text="Finish Registration"/>
+            android:background="@drawable/edittext"
+            android:text="receive donated food items."
+            android:textColor="#af1b1b"
+            android:textSize="20sp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RadioGroup>
 
-</ScrollView>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/nextBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:background="@drawable/button2"
+        android:text="NEXT"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constaintVertical_bias="0.387"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.92" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+

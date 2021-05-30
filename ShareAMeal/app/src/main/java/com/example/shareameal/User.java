@@ -3,6 +3,7 @@ package com.example.shareameal;
 public class User {
     private String userGroup;
     private String name;
+    private String restaurant;
     private String address;
     private String userId;
 
@@ -15,6 +16,8 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
+
+    public void setRestaurant(String restaurant) { this.restaurant = restaurant; }
 
     public void setAddress(String address) {
         this.address = address;
