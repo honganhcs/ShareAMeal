@@ -76,7 +76,7 @@ public class SignupActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (!task.isSuccessful()) {
-                                        Toast.makeText(SignupActivity.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SignupActivity.this, "Email already registered!", Toast.LENGTH_SHORT).show();
                                     } else {
                                         // Signup successful, direct user to getUserInfo activity
                                         Intent intent = new Intent(SignupActivity.this, SignupActivity_getUserGroup.class);

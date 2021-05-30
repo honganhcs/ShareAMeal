@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/bottom_navigation"
-        android:background="#FFE499"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,8 +19,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
-                android:layout_width="900px"
-                android:layout_height="400px"
+                android:layout_width="370dp"
+                android:layout_height="150dp"
                 android:layout_marginTop="50dp"
                 android:background="@drawable/homepagefloat"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -98,14 +98,13 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/nextBtn"
+        android:id="@+id/nextBtn1"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:background="@drawable/button2"
         android:text="NEXT"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constaintVertical_bias="0.387"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

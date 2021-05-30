@@ -5,6 +5,7 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -35,26 +36,39 @@ public class SignupActivity_getAddress extends AppCompatActivity {
         edtStreet = findViewById(R.id.edtStreet);
         edtPostalCode = findViewById(R.id.edtPostalCode);
 
-        unit = edtUnit.getText().toString().trim();
-        building = edtBuilding.getText().toString().trim();
-        street = edtStreet.getText().toString().trim();
-        pCode = edtPostalCode.getText().toString().trim();
-
+        createAccountBtn = findViewById(R.id.finishRegBtn);
         createAccountBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                if(unit.matches("") || building.matches("") || street.matches("")
-                   || pCode.matches("")) {
-                    Toast.makeText(SignupActivity_getAddress.this, "Please fill in all of the above fields",
-                            Toast.LENGTH_SHORT).show();
+                unit = edtUnit.getText().toString().trim();
+                building = edtBuilding.getText().toString().trim();
+                street = edtStreet.getText().toString().trim();
+                pCode = edtPostalCode.getText().toString().trim();
+
+                if (unit.contains("#")) {
+                    unit = unit.substring(1);
+                }
+
+                if (TextUtils.isEmpty(pCode)) {
+                    Toast.makeText(SignupActivity_getAddress.this, "Please enter postal code", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(street)) {
+                    Toast.makeText(SignupActivity_getAddress.this, "Please enter block/street name", Toast.LENGTH_SHORT).show();
                 } else {
                     User user = new User();
                     user.setUserGroup(userGroup);
                     user.setName(username);
                     user.setRestaurant(restaurant);
 
-                    address = "#" + unit + ", " + building + ", " + street + ", Singapore " + pCode;
+                    if (TextUtils.isEmpty(building) && TextUtils.isEmpty(unit)) {
+                        address = street + " Singapore " + pCode;
+                    } else if (TextUtils.isEmpty(building)) {
+                        address = street + " #" + unit + " Singapore " + pCode;
+                    } else if (TextUtils.isEmpty(unit)) {
+                        address = building + " " + street + " Singapore " + pCode;
+                    } else {
+                        address = building + " " + street + " #" + unit + " Singapore " + pCode;
+                    }
                     user.setAddress(address);
 
                     FirebaseUser loggedInUser = FirebaseAuth.getInstance().getCurrentUser();

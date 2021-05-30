@@ -33,7 +33,7 @@
         app:layout_constraintVertical_bias="0.442"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/edtWrapUnit"
+        android:id="@+id/edtWrapStreet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -42,12 +42,12 @@
         app:layout_constraintTop_toBottomOf="@+id/txtAddressQuestion">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtUnit"
+            android:id="@+id/edtStreet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edittext"
             android:ems="18"
-            android:hint="Unit Number"
+            android:hint="Block/Street Name"
             android:inputType="text" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -59,7 +59,7 @@
         android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtWrapUnit">
+        app:layout_constraintTop_toBottomOf="@+id/edtWrapStreet">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtBuilding"
@@ -67,12 +67,12 @@
             android:layout_height="wrap_content"
             android:background="@drawable/edittext"
             android:ems="18"
-            android:hint="Building/House Number"
+            android:hint="Building/House Number (If applicable)"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/edtWrapStreet"
+        android:id="@+id/edtWrapUnit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -81,12 +81,12 @@
         app:layout_constraintTop_toBottomOf="@+id/edtWrapBuilding">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtStreet"
+            android:id="@+id/edtUnit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edittext"
             android:ems="18"
-            android:hint="Street Name"
+            android:hint="Unit Number (If applicable)"
             android:inputType="textMultiLine" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -98,7 +98,7 @@
         android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtWrapStreet">
+        app:layout_constraintTop_toBottomOf="@+id/edtWrapUnit">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtPostalCode"
@@ -106,7 +106,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/edittext"
             android:ems="18"
-            android:hint="Postal Code"
+            android:hint="Postal Code (E.g. 400301)"
             android:inputType="numberSigned" />
 
     </com.google.android.material.textfield.TextInputLayout>

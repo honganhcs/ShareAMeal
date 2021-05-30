@@ -40,14 +40,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
-                if (user.getUserGroup().equals("donor")) {
-                    Intent intent = new Intent(MainActivity.this, DonorHomepageActivity.class);
+                if (user == null) {
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
-                } else if (user.getUserGroup().equals("recipient")) {
-                    Intent intent = new Intent(MainActivity.this, RecipientHomepageActivity.class);
-                    startActivity(intent);
-                    finish();
+                } else {
+                    if (user.getUserGroup().equals("donor")) {
+                        Intent intent = new Intent(MainActivity.this, DonorHomepageActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else if (user.getUserGroup().equals("recipient")) {
+                        Intent intent = new Intent(MainActivity.this, RecipientHomepageActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 }
             }
 

@@ -35,6 +35,8 @@ public class User {
         return name;
     }
 
+    public String getRestaurant() { return restaurant;}
+
     public String getAddress() {
         return address;
     }
