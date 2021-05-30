@@ -11,7 +11,6 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +18,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class SignupActivity extends AppCompatActivity {
     private EditText mEditTextEmail, mEditTextPw;
@@ -81,7 +79,7 @@ public class SignupActivity extends AppCompatActivity {
                                         Toast.makeText(SignupActivity.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
                                     } else {
                                         // Signup successful, direct user to getUserInfo activity
-                                        Intent intent = new Intent(SignupActivity.this, SignupActivity_getUserInfo.class);
+                                        Intent intent = new Intent(SignupActivity.this, SignupActivity_getUserGroup.class);
                                         startActivity(intent);
                                         finish();
                                     }

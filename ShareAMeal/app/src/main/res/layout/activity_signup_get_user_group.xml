@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="white"
+    tools:context=".SignupActivity_getUserGroup">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/foodImage"
+        android:layout_width="match_parent"
+        android:layout_height="275dp"
+        android:alpha="0.6"
+        android:src="@drawable/food_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="With this app, I wish to..."
+        android:textColor="#af1b1b"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.442" />
+
+    <RadioGroup
+        android:id="@+id/rgUserGroups"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="@+id/txtQuestion"
+        app:layout_constraintStart_toStartOf="@+id/txtQuestion"
+        app:layout_constraintTop_toBottomOf="@+id/txtQuestion">
+
+        <RadioButton
+            android:id="@+id/donorBtn1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext"
+            android:ems="10"
+            android:text="donate food items / \npay for donated food items."
+            android:textColor="#af1b1b"
+            android:textSize="20sp" />
+
+
+        <RadioButton
+            android:id="@+id/recipientBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:ems="13"
+            android:background="@drawable/edittext"
+            android:text="receive donated food items."
+            android:textColor="#af1b1b"
+            android:textSize="20sp" />
+
+    </RadioGroup>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/nextBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:background="@drawable/button2"
+        android:text="NEXT"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constaintVertical_bias="0.387"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.92" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+

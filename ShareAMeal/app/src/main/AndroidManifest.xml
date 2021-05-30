@@ -17,6 +17,9 @@
         <activity android:name=".DonorHomepageActivity">
         </activity>
         <activity android:name=".SignupActivity_getUserInfo" />
+        <activity android:name=".SignupActivity_getUserName"></activity>
+        <activity android:name=".SignupActivity_getAddress" />
+        <activity android:name=".SignupActivity_getUserGroup" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity">
