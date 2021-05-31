@@ -20,7 +20,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
                 android:layout_width="370dp"
-                android:layout_height="150dp"
+                android:layout_height="160dp"
                 android:layout_marginTop="50dp"
                 android:background="@drawable/homepagefloat"
                 app:layout_constraintEnd_toEndOf="parent"
