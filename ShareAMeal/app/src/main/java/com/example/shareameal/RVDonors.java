@@ -54,7 +54,7 @@ public class RVDonors extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
