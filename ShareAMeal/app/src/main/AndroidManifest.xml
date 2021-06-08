@@ -11,12 +11,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShareAMeal">
-        <activity android:name=".RecipientUserPageActivity"></activity>
-        <activity android:name=".DonorUserPageActivity"></activity>
+        <activity android:name=".RVDonors"></activity>
+        <activity android:name=".RecipientUserPageActivity" />
+        <activity android:name=".DonorUserPageActivity" />
         <activity android:name=".RecipientHomepageActivity" />
-        <activity android:name=".DonorHomepageActivity">
-        </activity>
-        <activity android:name=".SignupActivity_getUserName"></activity>
+        <activity android:name=".DonorHomepageActivity"></activity>
+        <activity android:name=".SignupActivity_getUserName" />
         <activity android:name=".SignupActivity_getAddress" />
         <activity android:name=".SignupActivity_getUserGroup" />
         <activity android:name=".SignupActivity" />

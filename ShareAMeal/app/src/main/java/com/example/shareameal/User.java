@@ -1,5 +1,7 @@
 package com.example.shareameal;
 
+import com.google.firebase.database.Query;
+
 public class User {
     private String userGroup;
     private String name;

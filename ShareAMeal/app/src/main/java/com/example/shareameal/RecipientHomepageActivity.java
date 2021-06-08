@@ -41,7 +41,9 @@ public class RecipientHomepageActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int curr = item.getItemId();
                 if (curr == R.id.claimFood) {
-                    Toast.makeText(RecipientHomepageActivity.this, "Food claiming system not yet implemented", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(RecipientHomepageActivity.this, RVDonors.class);
+                    startActivity(intent);
+                    finish();
                 } else if (curr == R.id.records) {
                     Toast.makeText(RecipientHomepageActivity.this, "Records not yet implemented", Toast.LENGTH_SHORT).show();
                 } else if (curr == R.id.profile) {
