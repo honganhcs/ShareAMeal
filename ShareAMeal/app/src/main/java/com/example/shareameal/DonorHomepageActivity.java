@@ -43,7 +43,9 @@ public class DonorHomepageActivity extends AppCompatActivity {
                 if (curr == R.id.pay) {
                     Toast.makeText(DonorHomepageActivity.this, "Pay-it-forward system not yet implemented", Toast.LENGTH_SHORT).show();
                 } else if (curr == R.id.food) {
-                    Toast.makeText(DonorHomepageActivity.this, "Food donation system not yet implemented", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(DonorHomepageActivity.this, DonateFoodActivity.class);
+                    startActivity(intent);
+                    finish();
                 } else if (curr == R.id.records) {
                     Toast.makeText(DonorHomepageActivity.this, "Records not yet implemented", Toast.LENGTH_SHORT).show();
                 } else if (curr == R.id.profile) {

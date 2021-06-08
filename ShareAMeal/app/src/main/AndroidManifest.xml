@@ -13,9 +13,13 @@
         android:theme="@style/Theme.ShareAMeal">
         <activity android:name=".RVDonors"></activity>
         <activity android:name=".RecipientUserPageActivity" />
+        <activity android:name=".EditFoodItemActivity"></activity>
+        <activity android:name=".DonorFoodItemPageActivity" />
+        <activity android:name=".AddFoodItemActivity" />
+        <activity android:name=".DonateFoodActivity" />
         <activity android:name=".DonorUserPageActivity" />
         <activity android:name=".RecipientHomepageActivity" />
-        <activity android:name=".DonorHomepageActivity"></activity>
+        <activity android:name=".DonorHomepageActivity" />
         <activity android:name=".SignupActivity_getUserName" />
         <activity android:name=".SignupActivity_getAddress" />
         <activity android:name=".SignupActivity_getUserGroup" />
