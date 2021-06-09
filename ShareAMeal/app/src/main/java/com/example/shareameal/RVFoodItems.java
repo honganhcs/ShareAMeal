@@ -22,29 +22,27 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class RVDonors extends AppCompatActivity implements RVDonorsAdapter.OnDonorClickListener{
+public class RVFoodItems extends AppCompatActivity implements RVFoodItemsAdapter.OnFoodClickListener{
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private BottomNavigationView bottomNav;
 
     private DatabaseReference reference;
-    private ArrayList<User> users = new ArrayList<>();
-    private RVDonorsAdapter adapter;
+    private ArrayList<Food> food = new ArrayList<>();
+    private RVFoodItemsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rvdonors);
+        setContentView(R.layout.activity_rvfood_items);
 
         swipeRefreshLayout = findViewById(R.id.swipe);
         recyclerView = findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);
-        adapter = new RVDonorsAdapter(this, this);
+        adapter = new RVFoodItemsAdapter(this, this);
         recyclerView.setAdapter(adapter);
-        reference = FirebaseDatabase.getInstance().getReference("Users");
-        loadData();
 
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setSelectedItemId(R.id.claimFood);
@@ -53,32 +51,37 @@ public class RVDonors extends AppCompatActivity implements RVDonorsAdapter.OnDon
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int curr = item.getItemId();
                 if (curr == R.id.home) {
-                    Intent intent = new Intent(RVDonors.this, RecipientHomepageActivity.class);
+                    Intent intent = new Intent(RVFoodItems.this, RecipientHomepageActivity.class);
                     startActivity(intent);
                     finish();
                 } else if (curr == R.id.records) {
-                    Toast.makeText(RVDonors.this, "Records not yet implemented", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RVFoodItems.this, "Records not yet implemented", Toast.LENGTH_SHORT).show();
                 } else if (curr == R.id.profile) {
-                    Intent intent = new Intent(RVDonors.this, RecipientUserPageActivity.class);
+                    Intent intent = new Intent(RVFoodItems.this, RecipientUserPageActivity.class);
                     startActivity(intent);
                     finish();
                 }
                 return true;
             }
         });
+
+        reference = FirebaseDatabase.getInstance().getReference("Foods");
+        Intent intent = getIntent();
+        String donorId = intent.getStringExtra("donorId");
+        loadData(donorId);
     }
 
-    private void loadData() {
+    private void loadData(String donorId) {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot data : snapshot.getChildren()) {
-                    User donor = data.getValue(User.class);
-                    if(donor.getUserGroup().equals("donor")) {
-                        users.add(donor);
+                    String userId = data.getKey();
+                    if(userId.equals(donorId)) {
+                        food.add(data.getValue(Food.class));
                     }
                 }
-                adapter.setItems(users);
+                adapter.setItems(food);
                 adapter.notifyDataSetChanged();
             }
 
@@ -90,10 +93,8 @@ public class RVDonors extends AppCompatActivity implements RVDonorsAdapter.OnDon
     }
 
     @Override
-    public void onDonorClick(int position) {
-        String donorId = users.get(position).getUserId();
-        Intent intent = new Intent(RVDonors.this, RVFoodItems.class);
-        intent.putExtra("donorId", donorId);
+    public void onFoodClick(int position) {
+        Intent intent = new Intent(RVFoodItems.this, ReserveFoodItem.class);
         startActivity(intent);
         finish();
     }

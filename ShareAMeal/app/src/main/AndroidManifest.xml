@@ -11,9 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShareAMeal">
-        <activity android:name=".RVDonors"></activity>
+        <activity android:name=".ReserveFoodItem"></activity>
+        <activity android:name=".RVFoodItems" />
+        <activity android:name=".RVDonors" />
         <activity android:name=".RecipientUserPageActivity" />
-        <activity android:name=".EditFoodItemActivity"></activity>
+        <activity android:name=".EditFoodItemActivity" />
         <activity android:name=".DonorFoodItemPageActivity" />
         <activity android:name=".AddFoodItemActivity" />
         <activity android:name=".DonateFoodActivity" />

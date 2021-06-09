@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/edittext"
             android:ems="10"
-            android:text="donate food items / \npay for donated food items."
+            android:text="donate food items."
             android:textColor="#af1b1b"
             android:textSize="20sp" />
 

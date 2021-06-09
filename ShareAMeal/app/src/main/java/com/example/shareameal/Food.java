@@ -52,6 +52,7 @@ public class Food implements Parcelable {
         return foodId;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
