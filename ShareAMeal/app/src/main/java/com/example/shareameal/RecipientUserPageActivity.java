@@ -21,8 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class RecipientUserPageActivity extends AppCompatActivity {
     private BottomNavigationView bottomNav;
-    private TextView editProfileTxt;
-    private TextView logoutTxt;
+    private TextView editProfileTxt, logoutTxt, changePasswordTxt;
     private TextView userNameTxt;
 
     @Override
@@ -61,11 +60,22 @@ public class RecipientUserPageActivity extends AppCompatActivity {
 
         // Adding reactions to the different settings
         editProfileTxt = findViewById(R.id.editProfileTxt);
+        changePasswordTxt = findViewById(R.id.changePasswordTxt);
         logoutTxt = findViewById(R.id.logoutTxt);
         editProfileTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(RecipientUserPageActivity.this, "Editing profile not implemented yet", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(RecipientUserPageActivity.this, EditProfileActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        changePasswordTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RecipientUserPageActivity.this, ChangePasswordActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
         logoutTxt.setOnClickListener(new View.OnClickListener() {
