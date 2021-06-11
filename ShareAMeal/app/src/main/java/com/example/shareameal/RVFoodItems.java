@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -80,14 +82,13 @@ public class RVFoodItems extends AppCompatActivity implements RVFoodItemsAdapter
     }
 
     private void loadData(String donorId) {
+        reference = reference.child(donorId);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot data : snapshot.getChildren()) {
-                    String userId = data.getKey();
-                    if(userId.equals(donorId)) {
-                        food.add(data.getValue(Food.class));
-                    }
+                    Food currFood = data.getValue(Food.class);
+                    food.add(currFood);
                 }
                 adapter.setItems(food);
                 adapter.notifyDataSetChanged();
