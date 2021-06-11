@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 public class DonorUserPageActivity extends AppCompatActivity {
     private BottomNavigationView bottomNav;
     private TextView editProfileTxt;
-    private TextView addFoodItemTxt;
+    private TextView changePasswordTxt;
     private TextView logoutTxt;
     private TextView userNameTxt;
 
@@ -62,18 +62,22 @@ public class DonorUserPageActivity extends AppCompatActivity {
 
         // Adding reactions to the different settings
         editProfileTxt = findViewById(R.id.editProfileTxt);
-        addFoodItemTxt = findViewById(R.id.addFoodItemTxt);
+        changePasswordTxt = findViewById(R.id.changePasswordTxt);
         logoutTxt = findViewById(R.id.logoutTxt);
         editProfileTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(DonorUserPageActivity.this, "Editing profile not implemented yet", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(DonorUserPageActivity.this, EditProfileActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
-        addFoodItemTxt.setOnClickListener(new View.OnClickListener() {
+        changePasswordTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(DonorUserPageActivity.this, "Adding food item not implemented yet", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(DonorUserPageActivity.this, ChangePasswordActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
         logoutTxt.setOnClickListener(new View.OnClickListener() {
