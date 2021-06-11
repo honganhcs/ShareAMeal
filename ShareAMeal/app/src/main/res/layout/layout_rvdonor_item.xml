@@ -2,7 +2,11 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="5dp"
+    android:backgroundTint="#FFEEA9"
     android:id="@+id/cvDonor">
 
     <LinearLayout
@@ -14,24 +18,31 @@
             android:layout_height="96dp"
             android:padding="5dp"
             android:id="@+id/img_donor" />
+
         <LinearLayout
+            android:id="@+id/txtLinearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
+
             <TextView
+                android:id="@+id/txt_donor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:text="Donor name"
+                android:textColor="#C45508"
                 android:textSize="25sp"
-                android:layout_marginBottom="5dp"
-                android:id="@+id/txt_donor"/>
+                android:textStyle="bold" />
+
             <TextView
+                android:id="@+id/txt_donor_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Address"
-                android:textSize="20sp"
                 android:layout_marginBottom="5dp"
-                android:id="@+id/txt_donor_address"/>
+                android:text="Address"
+                android:textColor="#C45508"
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
 

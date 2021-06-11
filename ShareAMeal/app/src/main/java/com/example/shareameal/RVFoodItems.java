@@ -69,6 +69,14 @@ public class RVFoodItems extends AppCompatActivity implements RVFoodItemsAdapter
         Intent intent = getIntent();
         String donorId = intent.getStringExtra("donorId");
         loadData(donorId);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void loadData(String donorId) {

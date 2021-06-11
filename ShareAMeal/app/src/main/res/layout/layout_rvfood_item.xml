@@ -2,7 +2,11 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="5dp"
+    app:cardBackgroundColor="#FFEEA9"
     android:id="@+id/cvFood">
 
     <LinearLayout
@@ -22,21 +26,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Food item"
+                android:textColor="#C45508"
                 android:textSize="25sp"
+                android:textStyle="bold"
                 android:layout_marginBottom="5dp"
                 android:id="@+id/txt_food"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Description"
-                android:textSize="20sp"
+                android:textColor="#C45508"
+                android:textSize="15sp"
                 android:layout_marginBottom="5dp"
                 android:id="@+id/txt_food_description"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Quantity"
-                android:textSize="20sp"
+                android:text="Quantity:"
                 android:layout_marginBottom="5dp"
                 android:id="@+id/txt_food_quantity"/>
         </LinearLayout>

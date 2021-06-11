@@ -4,29 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RVDonors"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".RVDonors">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/swipe">
+        android:layout_weight="15">
+
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/rv" />
+            android:layout_height="match_parent" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foregroundGravity="bottom"
         android:background="#F6DABA"
-        app:menu="@menu/menu_bottom_nav_recipient"
-        app:itemTextColor="#AF1B1B"
+        android:foregroundGravity="bottom"
         app:itemIconTint="@drawable/bottom_navigation_selector"
-        />
+        app:itemTextColor="#AF1B1B"
+        app:menu="@menu/menu_bottom_nav_recipient" />
 
 </LinearLayout>

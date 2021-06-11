@@ -66,6 +66,14 @@ public class RVDonors extends AppCompatActivity implements RVDonorsAdapter.OnDon
                 return true;
             }
         });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void loadData() {
