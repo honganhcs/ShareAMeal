@@ -50,6 +50,7 @@ public class DonorFoodItemPageActivity extends AppCompatActivity {
 
         updateFoodQuantityBtn.setClickable(false);
         updateFoodQuantityBtn.setEnabled(false);
+        updateFoodQuantityBtn.setBackground(getDrawable(R.drawable.disabledbutton));
 
         bundle = this.getIntent().getExtras();
         if (bundle != null) {
@@ -89,6 +90,7 @@ public class DonorFoodItemPageActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 updateFoodQuantityBtn.setClickable(true);
                 updateFoodQuantityBtn.setEnabled(true);
+                updateFoodQuantityBtn.setBackground(getDrawable(R.drawable.button));
             }
 
             @Override
@@ -107,6 +109,10 @@ public class DonorFoodItemPageActivity extends AppCompatActivity {
                 database.child(foodId).setValue(food);
 
                 Toast.makeText(DonorFoodItemPageActivity.this, "Quantity successfully updated", Toast.LENGTH_SHORT).show();
+
+                updateFoodQuantityBtn.setClickable(false);
+                updateFoodQuantityBtn.setEnabled(false);
+                updateFoodQuantityBtn.setBackground(getDrawable(R.drawable.disabledbutton));
             }
         });
 

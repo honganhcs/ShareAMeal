@@ -8,7 +8,9 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
@@ -32,6 +34,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 public class EditFoodItemActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
 
@@ -40,9 +44,13 @@ public class EditFoodItemActivity extends AppCompatActivity {
     private Uri imageUri;
     private StorageReference mStorageRef;
 
+    // Purpose of these boolean values is to ensure user update the profile after he/she has
+    // confirmed on the image choice for the food image
+    private boolean isImageUploaded, isFoodUpdated;
+
     private EditText foodNameEdt;
     private EditText foodDescriptionEdt;
-    private AppCompatButton editFoodItemBtn;
+    private AppCompatButton backBtn, editFoodItemBtn;
     private String imageUrl, foodId;
     private Food oldFood;
 
@@ -64,14 +72,42 @@ public class EditFoodItemActivity extends AppCompatActivity {
         uploadImageBtn = findViewById(R.id.uploadImageBtn);
         uploadImageBtn.setClickable(false);
         uploadImageBtn.setEnabled(false);
+        uploadImageBtn.setBackground(getDrawable(R.drawable.disabledbutton));
         foodImage = findViewById(R.id.foodImage);
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference("imageUploads");
         mStorageRef = storageReference.child(userId);
 
+        backBtn = findViewById(R.id.backBtn);
         foodNameEdt = findViewById(R.id.foodNameEdt);
         foodDescriptionEdt = findViewById(R.id.descriptionEdt);
         editFoodItemBtn = findViewById(R.id.editFoodItemBtn);
+
+        // "Edit Food Listing" button is clickable only after any of the fields are updated
+        foodNameEdt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                editFoodItemBtn.setClickable(true);
+                editFoodItemBtn.setEnabled(true);
+                editFoodItemBtn.setBackground(getDrawable(R.drawable.button2));
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        foodDescriptionEdt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                editFoodItemBtn.setClickable(true);
+                editFoodItemBtn.setEnabled(true);
+                editFoodItemBtn.setBackground(getDrawable(R.drawable.button2));
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
         // Loading the previous food entry into the different fields
         Bundle bundle = this.getIntent().getExtras();
@@ -93,9 +129,36 @@ public class EditFoodItemActivity extends AppCompatActivity {
             }
 
             foodId = oldFood.getFoodId();
+
+            editFoodItemBtn.setClickable(false);
+            editFoodItemBtn.setEnabled(false);
+            editFoodItemBtn.setBackground(getDrawable(R.drawable.disabledbutton));
         } else {
             new NullPointerException();
         }
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isImageUploaded) {
+                    if (!isFoodUpdated) {
+                        Toast.makeText(EditFoodItemActivity.this, "Please click on \"Edit Food Listing\" down below", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent intent = new Intent(EditFoodItemActivity.this, DonorFoodItemPageActivity.class);
+                        bundle.putParcelable("food", oldFood);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                        finish();
+                    }
+                } else {
+                    Intent intent = new Intent(EditFoodItemActivity.this, DonorFoodItemPageActivity.class);
+                    bundle.putParcelable("food", oldFood);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        });
 
         chooseImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,9 +184,18 @@ public class EditFoodItemActivity extends AppCompatActivity {
                     }
                 }
                 uploadImage();
+                editFoodItemBtn.setClickable(true);
+                editFoodItemBtn.setEnabled(true);
+                editFoodItemBtn.setBackground(getDrawable(R.drawable.button2));
+                isImageUploaded = true;
+                isFoodUpdated = false;
+                uploadImageBtn.setClickable(false);
+                uploadImageBtn.setEnabled(false);
+                uploadImageBtn.setBackground(getDrawable(R.drawable.disabledbutton));
             }
         });
 
+        // When "Edit Food Listing" button is clicked
         editFoodItemBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,9 +228,10 @@ public class EditFoodItemActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Toast.makeText(EditFoodItemActivity.this, "Food item successfully edited", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(EditFoodItemActivity.this, DonateFoodActivity.class);
-                        startActivity(intent);
-                        finish();
+                        editFoodItemBtn.setClickable(false);
+                        editFoodItemBtn.setEnabled(false);
+                        editFoodItemBtn.setBackground(getDrawable(R.drawable.disabledbutton));
+                        isFoodUpdated = true;
                     }
 
                     @Override
@@ -177,6 +250,7 @@ public class EditFoodItemActivity extends AppCompatActivity {
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
         uploadImageBtn.setClickable(true);
         uploadImageBtn.setEnabled(true);
+        uploadImageBtn.setBackground(getDrawable(R.drawable.button));
     }
 
     @Override

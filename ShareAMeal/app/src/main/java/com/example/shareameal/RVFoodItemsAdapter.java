@@ -77,7 +77,7 @@ public class RVFoodItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         vh.txt_food.setText(food.getName());
         vh.txt_food_description.setText(food.getDescription());
-        vh.txt_food_quantity.setText("Quantity " + food.getQuantity());
+        vh.txt_food_quantity.setText("Quantity: " + food.getQuantity());
     }
 
     @Override

@@ -21,8 +21,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/userProfilePic"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
                 android:layout_marginTop="50dp"
                 android:src="@drawable/profile128px"
                 app:civ_border_color="#CEA267"
@@ -65,29 +65,51 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/recordsIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/history32"
+                android:layout_marginTop="40dp"
+                app:layout_constraintEnd_toStartOf="@+id/recordsTxt"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/recordsTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Records"
+                android:textColor="#C45508"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/recordsIcon"
+                app:layout_constraintStart_toStartOf="@+id/editProfileTxt"
+                app:layout_constraintTop_toTopOf="@+id/recordsIcon" />
+
+            <ImageView
                 android:id="@+id/editProfileIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/pencil"
-                app:layout_constraintBottom_toBottomOf="@+id/editProfileTxt"
+                android:layout_marginTop="40dp"
                 app:layout_constraintEnd_toStartOf="@+id/editProfileTxt"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/editProfileTxt" />
+                app:layout_constraintTop_toBottomOf="@+id/recordsIcon" />
 
             <TextView
                 android:id="@+id/editProfileTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
-                android:layout_marginTop="250px"
                 android:layout_marginRight="200dp"
                 android:text="Edit Profile"
                 android:textColor="#C45508"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/editProfileIcon"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/editProfileIcon" />
 
             <ImageView
                 android:id="@+id/changePasswordIcon"
@@ -103,7 +125,6 @@
                 android:id="@+id/changePasswordTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="180dp"
                 android:text="Change Password"
                 android:textColor="#C45508"
                 android:textSize="18sp"

@@ -75,6 +75,8 @@ public class SignupActivity_getAddress extends AppCompatActivity {
                     String uid = loggedInUser.getUid();
                     user.setUserId(uid);
 
+                    user.setImageUrl("null");
+
                     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Users");
                     mDatabase.child(uid).setValue(user);
 

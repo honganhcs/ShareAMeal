@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,13 +19,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 public class DonorUserPageActivity extends AppCompatActivity {
     private BottomNavigationView bottomNav;
-    private TextView editProfileTxt;
-    private TextView changePasswordTxt;
-    private TextView logoutTxt;
+    private TextView recordsTxt, editProfileTxt, changePasswordTxt, logoutTxt;
     private TextView userNameTxt;
+    private ImageView userProfilePic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class DonorUserPageActivity extends AppCompatActivity {
 
         // Setting name to the registered name of the account
         userNameTxt = findViewById(R.id.userNameTxt);
+        userProfilePic = findViewById(R.id.userProfilePic);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userid = user.getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
@@ -48,6 +50,17 @@ public class DonorUserPageActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
                 userNameTxt.setText(user.getName());
+
+                String imageUrl = user.getImageUrl();
+                if (imageUrl == null) {
+                    userProfilePic.setImageResource(R.drawable.profile128px);
+                } else {
+                    if (imageUrl.equals("null")) {
+                        userProfilePic.setImageResource(R.drawable.profile128px);
+                    } else {
+                        Picasso.get().load(imageUrl).into(userProfilePic);
+                    }
+                }
             }
 
             @Override
@@ -61,9 +74,16 @@ public class DonorUserPageActivity extends AppCompatActivity {
         bottomNav.setSelectedItemId(R.id.profile);
 
         // Adding reactions to the different settings
+        recordsTxt = findViewById(R.id.recordsTxt);
         editProfileTxt = findViewById(R.id.editProfileTxt);
         changePasswordTxt = findViewById(R.id.changePasswordTxt);
         logoutTxt = findViewById(R.id.logoutTxt);
+        recordsTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(DonorUserPageActivity.this, "Records not implemented yet", Toast.LENGTH_SHORT).show();
+            }
+        });
         editProfileTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

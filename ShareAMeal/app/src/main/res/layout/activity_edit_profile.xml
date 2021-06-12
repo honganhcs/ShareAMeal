@@ -12,8 +12,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/userpagebg">
+            android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/backBtn"
@@ -38,6 +37,43 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/profilePicImg"
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:src="@drawable/profile128px"
+                android:layout_marginRight="150dp"
+                android:layout_marginTop="50dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/chooseImageBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="choose image"
+                android:textColor="@color/white"
+                android:background="@drawable/button"
+                android:ems="8"
+                android:layout_marginLeft="30dp"
+                android:layout_marginBottom="50dp"
+                app:layout_constraintBottom_toBottomOf="@+id/profilePicImg"
+                app:layout_constraintStart_toEndOf="@+id/profilePicImg"
+                app:layout_constraintTop_toTopOf="@+id/profilePicImg" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/uploadImageBtn"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="confirm image choice"
+                android:textColor="@color/white"
+                android:background="@drawable/button"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/chooseImageBtn"
+                app:layout_constraintStart_toStartOf="@+id/chooseImageBtn"
+                app:layout_constraintTop_toBottomOf="@+id/chooseImageBtn" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,7 +95,7 @@
                 android:textColorHint="#AF1B1B"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2">
+                app:layout_constraintTop_toBottomOf="@+id/profilePicImg">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/usernameEdt"
@@ -127,10 +163,10 @@
                 android:id="@+id/restaurantWrapper"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColorHint="#AF1B1B"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
                 android:layout_marginTop="5dp"
+                android:textColorHint="#AF1B1B"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5">
@@ -155,7 +191,8 @@
                 android:layout_marginBottom="50dp"
                 android:text="Update Profile Information"
                 android:ems="12"
-                android:background="@drawable/edittext1"
+                android:background="@drawable/button2"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
