@@ -66,10 +66,10 @@ public class RVFoodItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         Food food = list.get(position);
 
         if (food.getImageUrl() == null) {
-            vh.img_food.setImageResource(R.drawable.dish);
+            vh.img_food.setImageResource(R.drawable.dish128);
         } else {
             if (food.getImageUrl().equals("null")) {
-                vh.img_food.setImageResource(R.drawable.dish);
+                vh.img_food.setImageResource(R.drawable.dish128);
             } else {
                 Picasso.get().load(food.getImageUrl()).into(vh.img_food);
             }

@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext1"
                     android:ems="15"
-                    android:hint="User name"
+                    android:hint="Username"
                     android:inputType="text"
                     android:textColor="@color/black"/>
 

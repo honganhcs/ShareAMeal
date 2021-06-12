@@ -61,10 +61,10 @@ public class DonorFoodItemPageActivity extends AppCompatActivity {
             foodId = food.getFoodId();
 
             if (food.getImageUrl() == null) {
-                foodImage.setImageResource(R.drawable.dish);
+                foodImage.setImageResource(R.drawable.dish128);
             } else {
                 if (food.getImageUrl().equals("null")) {
-                    foodImage.setImageResource(R.drawable.dish);
+                    foodImage.setImageResource(R.drawable.dish128);
                 } else {
                     Picasso.get().load(food.getImageUrl()).into(foodImage);
                 }

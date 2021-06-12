@@ -52,7 +52,7 @@ public class EditFoodItemActivity extends AppCompatActivity {
     private EditText foodDescriptionEdt;
     private AppCompatButton backBtn, editFoodItemBtn;
     private String imageUrl, foodId;
-    private Food oldFood;
+    private Food oldFood, food;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,10 +119,10 @@ public class EditFoodItemActivity extends AppCompatActivity {
             }
 
             if (oldFood.getImageUrl() == null) {
-                foodImage.setImageResource(R.drawable.dish);
+                foodImage.setImageResource(R.drawable.dish128);
             } else {
                 if (oldFood.getImageUrl().equals("null")) {
-                    foodImage.setImageResource(R.drawable.dish);
+                    foodImage.setImageResource(R.drawable.dish128);
                 } else {
                     Picasso.get().load(oldFood.getImageUrl()).into(foodImage);
                 }
@@ -145,14 +145,22 @@ public class EditFoodItemActivity extends AppCompatActivity {
                         Toast.makeText(EditFoodItemActivity.this, "Please click on \"Edit Food Listing\" down below", Toast.LENGTH_SHORT).show();
                     } else {
                         Intent intent = new Intent(EditFoodItemActivity.this, DonorFoodItemPageActivity.class);
-                        bundle.putParcelable("food", oldFood);
+                        if (isFoodUpdated) {
+                            bundle.putParcelable("food", food);
+                        } else {
+                            bundle.putParcelable("food", oldFood);
+                        }
                         intent.putExtras(bundle);
                         startActivity(intent);
                         finish();
                     }
                 } else {
                     Intent intent = new Intent(EditFoodItemActivity.this, DonorFoodItemPageActivity.class);
-                    bundle.putParcelable("food", oldFood);
+                    if (isFoodUpdated) {
+                        bundle.putParcelable("food", food);
+                    } else {
+                        bundle.putParcelable("food", oldFood);
+                    }
                     intent.putExtras(bundle);
                     startActivity(intent);
                     finish();
@@ -204,7 +212,7 @@ public class EditFoodItemActivity extends AppCompatActivity {
 
                 DatabaseReference database = FirebaseDatabase.getInstance().getReference("Foods").child(userId);
 
-                Food food = new Food();
+                food = new Food();
                 food.setName(name);
 
                 if (TextUtils.isEmpty(description)) {
