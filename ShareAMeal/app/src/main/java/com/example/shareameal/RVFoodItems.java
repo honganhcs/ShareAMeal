@@ -86,7 +86,10 @@ public class RVFoodItems extends AppCompatActivity implements RVFoodItemsAdapter
                 for(DataSnapshot data : snapshot.getChildren()) {
                     String userId = data.getKey();
                     if(userId.equals(donorId)) {
-                        food.add(data.getValue(Food.class));
+                        for(DataSnapshot d : data.getChildren()) {
+                            Food item = d.getValue(Food.class);
+                            food.add(item);
+                        }
                     }
                 }
                 adapter.setItems(food);
