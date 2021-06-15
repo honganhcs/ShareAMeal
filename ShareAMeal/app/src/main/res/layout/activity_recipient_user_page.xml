@@ -80,14 +80,37 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/changePasswordIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:src="@drawable/padlock"
+                app:layout_constraintEnd_toEndOf="@+id/editProfileIcon"
+                app:layout_constraintStart_toStartOf="@+id/editProfileIcon"
+                app:layout_constraintTop_toBottomOf="@+id/editProfileIcon" />
+
+            <TextView
+                android:id="@+id/changePasswordTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="180dp"
+                android:text="Change Password"
+                android:textColor="#C45508"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/changePasswordIcon"
+                app:layout_constraintStart_toStartOf="@+id/editProfileTxt"
+                app:layout_constraintTop_toTopOf="@+id/changePasswordIcon" />
+
+            <ImageView
                 android:id="@+id/logoutIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:src="@drawable/logout"
-                app:layout_constraintEnd_toEndOf="@+id/editProfileIcon"
-                app:layout_constraintStart_toStartOf="@+id/editProfileIcon"
-                app:layout_constraintTop_toBottomOf="@+id/editProfileIcon" />
+                app:layout_constraintEnd_toEndOf="@+id/changePasswordIcon"
+                app:layout_constraintStart_toStartOf="@+id/changePasswordIcon"
+                app:layout_constraintTop_toBottomOf="@+id/changePasswordIcon" />
 
             <TextView
                 android:id="@+id/logoutTxt"
@@ -98,7 +121,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/logoutIcon"
-                app:layout_constraintStart_toStartOf="@+id/editProfileTxt"
+                app:layout_constraintStart_toStartOf="@+id/changePasswordTxt"
                 app:layout_constraintTop_toTopOf="@+id/logoutIcon" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
