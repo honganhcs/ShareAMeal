@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddNewTimeSlotActivity">
+
+    <TextView
+        android:id="@+id/txtSelectDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:text="Select date:"
+        android:textColor="@color/maroon"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnDatePicker"
+        style="?android:spinnerItemStyle"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:background="@color/ash_pink"
+        android:text="MMM DD YYYY"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtSelectDate"
+        android:layout_marginTop="10dp"
+        android:onClick="openDatePicker"/>
+
+    <TextView
+        android:id="@+id/txtSelectStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:text="Select start time:"
+        android:textColor="@color/maroon"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnDatePicker" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnStartPicker"
+        style="?android:spinnerItemStyle"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:background="@color/ash_pink"
+        android:text="HH : MM"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtSelectStart"
+        android:layout_marginTop="10dp"
+        android:onClick="openStartPicker"/>
+
+    <TextView
+        android:id="@+id/txtSelectEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:text="Select end time:"
+        android:textColor="@color/maroon"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnStartPicker" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnEndPicker"
+        style="?android:spinnerItemStyle"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:background="@color/ash_pink"
+        android:text="HH : MM"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtSelectEnd"
+        android:layout_marginTop="10dp"
+        android:onClick="openEndPicker"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnCreateSlot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button"
+        android:ems="10"
+        android:text="Create Time Slot"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnEndPicker"
+        app:layout_constraintVertical_bias="0.4"
+        android:onClick="onBtnCreateSlotClick"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

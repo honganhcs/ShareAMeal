@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DonorFoodItemPageActivity">
+    tools:context=".OrderConfirmation">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -12,14 +12,11 @@
         android:paddingBottom="40dp">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/backToListingsBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Back to listings"
-            android:textColor="@color/white"
-            android:ems="9"
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_margin="20dp"
-            android:background="@drawable/button"
+            android:background="@drawable/leftarrow"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,19 +24,19 @@
             android:id="@+id/foodImage"
             android:layout_width="170dp"
             android:layout_height="170dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/foodimageborder"
             android:src="@drawable/dish"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/backToListingsBtn" />
+            app:layout_constraintTop_toBottomOf="@+id/btnBack" />
 
         <TextView
             android:id="@+id/foodNameTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Food Name"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:textSize="25sp"
             android:textStyle="bold"
             android:textColor="@color/black"
@@ -51,7 +48,7 @@
             android:id="@+id/foodDescriptionTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
             android:textSize="17sp"
@@ -62,15 +59,27 @@
             app:layout_constraintTop_toBottomOf="@+id/foodNameTxt" />
 
         <TextView
+            android:id="@+id/txtCurrentQuantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/foodDescriptionTxt"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="Current quantity:"
+            android:textSize="17sp"/>
+
+        <TextView
             android:id="@+id/foodQuantityHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="120dp"
-            android:text="Quantity: "
-            android:textSize="18sp"
+            android:layout_marginTop="10dp"
+            android:text="Order quantity: "
+            android:textSize="17sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/foodNameTxt" />
+            app:layout_constraintTop_toBottomOf="@+id/txtCurrentQuantity" />
 
         <EditText
             android:id="@+id/foodQuantityEdt"
@@ -84,44 +93,51 @@
             app:layout_constraintStart_toStartOf="@+id/foodQuantityHeader"
             app:layout_constraintTop_toBottomOf="@+id/foodQuantityHeader" />
 
+        <TextView
+            android:id="@+id/txtSchedule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/foodQuantityEdt"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="Scheduled for collection at: \nDate and Time"
+            android:inputType="textMultiLine"
+            android:textSize="17sp" />
+
+
+
+        <TextView
+            android:id="@+id/txtAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:textSize="17sp"
+            android:text="Address: This is the address of the donor where the recipient will collect the food item."
+            android:inputType="textMultiLine"
+            app:layout_constraintTop_toBottomOf="@id/txtSchedule"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+
+
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/updateFoodQuantityBtn"
+            android:id="@+id/btnConfirmOrder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Update Food Quantity"
+            android:text="Confirm order"
             android:textColor="@color/white"
             android:background="@drawable/button"
-            android:ems="12"
-            android:layout_marginTop="20dp"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:ems="9"
+            android:layout_marginTop="40dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/foodQuantityEdt" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/editFoodListingBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Edit Food Listing"
-            android:textColor="@color/white"
-            android:background="@drawable/button"
-            android:ems="10"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="@+id/updateFoodQuantityBtn"
-            app:layout_constraintStart_toStartOf="@+id/updateFoodQuantityBtn"
-            app:layout_constraintTop_toBottomOf="@+id/updateFoodQuantityBtn" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/deleteFoodListingBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Delete food listing"
-            android:textColor="@color/white"
-            android:background="@drawable/button2"
-            android:ems="10"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="@+id/editFoodListingBtn"
-            app:layout_constraintStart_toStartOf="@+id/editFoodListingBtn"
-            app:layout_constraintTop_toBottomOf="@+id/editFoodListingBtn" />
+            app:layout_constraintTop_toBottomOf="@+id/txtAddress" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
