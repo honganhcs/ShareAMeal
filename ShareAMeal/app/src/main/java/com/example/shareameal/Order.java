@@ -9,6 +9,8 @@ public class Order {
     private String slotId;
     private int quantity;
 
+    public Order() {}
+
     public String getDate() {
         return date;
     }

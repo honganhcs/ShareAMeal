@@ -18,7 +18,8 @@
             android:layout_margin="20dp"
             android:background="@drawable/leftarrow"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:onClick="onBackBtn"/>
 
         <ImageView
             android:id="@+id/foodImage"
@@ -39,7 +40,7 @@
             android:layout_marginTop="20dp"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:textColor="@color/black"
+            android:textColor="@color/maroon"
             app:layout_constraintEnd_toEndOf="@+id/foodImage"
             app:layout_constraintStart_toStartOf="@+id/foodImage"
             app:layout_constraintTop_toBottomOf="@+id/foodImage" />
@@ -137,7 +138,8 @@
             android:layout_marginTop="40dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtAddress" />
+            app:layout_constraintTop_toBottomOf="@+id/txtAddress"
+            android:onClick="onConfirmOrder"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

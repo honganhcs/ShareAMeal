@@ -45,7 +45,9 @@ public class RecipientHomepageActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else if (curr == R.id.schedule) {
-                    Toast.makeText(RecipientHomepageActivity.this, "Records not yet implemented", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(RecipientHomepageActivity.this, RecipientViewOrders.class);
+                    startActivity(intent);
+                    finish();
                 } else if (curr == R.id.profile) {
                     Intent intent = new Intent(RecipientHomepageActivity.this, RecipientUserPageActivity.class);
                     startActivity(intent);

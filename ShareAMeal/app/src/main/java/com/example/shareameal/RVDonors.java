@@ -57,7 +57,9 @@ public class RVDonors extends AppCompatActivity implements RVDonorsAdapter.OnDon
                     startActivity(intent);
                     finish();
                 } else if (curr == R.id.schedule) {
-                    Toast.makeText(RVDonors.this, "Records not yet implemented", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(RVDonors.this, RecipientViewOrders.class);
+                    startActivity(intent);
+                    finish();
                 } else if (curr == R.id.profile) {
                     Intent intent = new Intent(RVDonors.this, RecipientUserPageActivity.class);
                     startActivity(intent);

@@ -142,7 +142,7 @@ public class AddNewTimeSlotActivity extends AppCompatActivity {
             public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
                 endHour = selectedHour;
                 endMinute = selectedMinute;
-                btnEndPicker.setText(String.format(Locale.getDefault(), "%02d : %02d", startHour, startMinute));
+                btnEndPicker.setText(String.format(Locale.getDefault(), "%02d : %02d", endHour, endMinute));
             }
         };
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, listener, endHour, endMinute, true);
