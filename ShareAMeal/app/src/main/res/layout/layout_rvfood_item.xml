@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,17 +7,23 @@
     app:cardCornerRadius="8dp"
     app:cardElevation="5dp"
     app:cardBackgroundColor="#FFEEA9"
+    app:strokeWidth="1dp"
+    app:strokeColor="#AF1B1B"
     android:id="@+id/cvFood">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <ImageView
+
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:padding="5dp"
-            android:id="@+id/img_food" />
+            android:id="@+id/img_food"
+            android:src="@drawable/dish128"
+            app:civ_border_color="#AF1B1B"
+            app:civ_border_width="2.5dp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,7 +36,9 @@
                 android:textSize="25sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="5dp"
-                android:id="@+id/txt_food"/>
+                android:id="@+id/txt_food"
+                android:maxLines="1"
+                android:ellipsize="end"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -38,7 +46,9 @@
                 android:textColor="#C45508"
                 android:textSize="15sp"
                 android:layout_marginBottom="5dp"
-                android:id="@+id/txt_food_description"/>
+                android:id="@+id/txt_food_description"
+                android:maxLines="1"
+                android:ellipsize="end"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,6 +56,7 @@
                 android:layout_marginBottom="5dp"
                 android:id="@+id/txt_food_quantity"/>
         </LinearLayout>
+
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,23 +7,30 @@
     app:cardCornerRadius="8dp"
     app:cardElevation="5dp"
     android:backgroundTint="#FFEEA9"
-    android:id="@+id/cvDonor">
+    android:id="@+id/cvDonor"
+    app:strokeWidth="1dp"
+    app:strokeColor="#AF1B1B">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <ImageView
+
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:padding="5dp"
-            android:id="@+id/img_donor" />
+            android:id="@+id/img_donor"
+            android:src="@drawable/profile128px"
+            app:civ_border_color="#AF1B1B"
+            app:civ_border_width="2.5dp"/>
 
         <LinearLayout
             android:id="@+id/txtLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
 
             <TextView
                 android:id="@+id/txt_donor"
@@ -33,7 +40,9 @@
                 android:text="Donor name"
                 android:textColor="#C45508"
                 android:textSize="25sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end"/>
 
             <TextView
                 android:id="@+id/txt_donor_address"
@@ -46,4 +55,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

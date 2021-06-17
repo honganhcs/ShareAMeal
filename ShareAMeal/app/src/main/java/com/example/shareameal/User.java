@@ -8,6 +8,7 @@ public class User {
     private String restaurant;
     private String address;
     private String userId;
+    public String imageUrl;
 
     public User() {}
 
@@ -29,6 +30,10 @@ public class User {
         this.userId = userId;
     }
 
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public String getUserGroup() {
         return userGroup;
     }
@@ -45,5 +50,9 @@ public class User {
 
     public String getUserId() {
         return userId;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 }
