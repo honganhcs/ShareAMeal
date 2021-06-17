@@ -16,16 +16,16 @@
         />
 
     <item
-        android:id="@+id/records"
+        android:id="@+id/schedule"
         android:enabled="true"
-        android:title="Records"
-        android:icon="@drawable/history"
+        android:title="Schedule"
+        android:icon="@drawable/schedule"
         />
 
     <item
         android:id="@+id/profile"
         android:enabled="true"
-        android:icon="@drawable/profile24px"
+        android:icon="@drawable/profile128px"
         android:title="Profile"
         />
 

@@ -118,8 +118,10 @@ public class RecipientUserPageActivity extends AppCompatActivity {
                     Intent intent = new Intent(RecipientUserPageActivity.this, RVDonors.class);
                     startActivity(intent);
                     finish();
-                } else if (curr == R.id.records) {
-                    Toast.makeText(RecipientUserPageActivity.this, "Records not yet implemented", Toast.LENGTH_SHORT).show();
+                } else if (curr == R.id.schedule) {
+                    Intent intent = new Intent(RecipientUserPageActivity.this, RecipientViewOrders.class);
+                    startActivity(intent);
+                    finish();
                 } else if (curr == R.id.home) {
                     Intent intent = new Intent(RecipientUserPageActivity.this, RecipientHomepageActivity.class);
                     startActivity(intent);

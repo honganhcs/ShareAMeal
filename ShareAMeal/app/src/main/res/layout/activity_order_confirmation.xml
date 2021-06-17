@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OrderConfirmation">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="40dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/leftarrow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:onClick="onBackBtn"/>
+
+        <ImageView
+            android:id="@+id/foodImage"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/foodimageborder"
+            android:src="@drawable/dish"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnBack" />
+
+        <TextView
+            android:id="@+id/foodNameTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Food Name"
+            android:layout_marginTop="20dp"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="@color/maroon"
+            app:layout_constraintEnd_toEndOf="@+id/foodImage"
+            app:layout_constraintStart_toStartOf="@+id/foodImage"
+            app:layout_constraintTop_toBottomOf="@+id/foodImage" />
+
+        <TextView
+            android:id="@+id/foodDescriptionTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:textSize="17sp"
+            android:text="Description: This is a basic description about the food item. Optional description and is inputted by the donor if necessary."
+            android:inputType="textMultiLine"
+            app:layout_constraintEnd_toEndOf="@+id/foodNameTxt"
+            app:layout_constraintStart_toStartOf="@+id/foodNameTxt"
+            app:layout_constraintTop_toBottomOf="@+id/foodNameTxt" />
+
+        <TextView
+            android:id="@+id/txtCurrentQuantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/foodDescriptionTxt"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="Current quantity:"
+            android:textSize="17sp"/>
+
+        <TextView
+            android:id="@+id/foodQuantityHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Order quantity: "
+            android:textSize="17sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtCurrentQuantity" />
+
+        <EditText
+            android:id="@+id/foodQuantityEdt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="3"
+            android:text="0"
+            android:inputType="numberSigned"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/foodQuantityHeader"
+            app:layout_constraintStart_toStartOf="@+id/foodQuantityHeader"
+            app:layout_constraintTop_toBottomOf="@+id/foodQuantityHeader" />
+
+        <TextView
+            android:id="@+id/txtSchedule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/foodQuantityEdt"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="Scheduled for collection at: \nDate and Time"
+            android:inputType="textMultiLine"
+            android:textSize="17sp" />
+
+
+
+        <TextView
+            android:id="@+id/txtAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:textSize="17sp"
+            android:text="Address: This is the address of the donor where the recipient will collect the food item."
+            android:inputType="textMultiLine"
+            app:layout_constraintTop_toBottomOf="@id/txtSchedule"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnConfirmOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirm order"
+            android:textColor="@color/white"
+            android:background="@drawable/button"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:ems="9"
+            android:layout_marginTop="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtAddress"
+            android:onClick="onConfirmOrder"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

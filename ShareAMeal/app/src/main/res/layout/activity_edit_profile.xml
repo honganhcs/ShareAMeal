@@ -8,19 +8,20 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/white">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/backBtn"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
+                android:layout_margin="20dp"
                 android:background="@drawable/leftarrow"
                 android:backgroundTint="#C45508"
-                android:layout_margin="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -77,11 +78,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:text="User Name"
                 android:textColor="#C45508"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="5dp"
                 app:layout_constraintBottom_toTopOf="@+id/usernameWrapper"
                 app:layout_constraintStart_toStartOf="@+id/usernameWrapper" />
 
@@ -89,10 +90,10 @@
                 android:id="@+id/usernameWrapper"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
                 android:layout_marginTop="80dp"
                 android:textColorHint="#AF1B1B"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/profilePicImg">
@@ -105,7 +106,7 @@
                     android:ems="15"
                     android:hint="Username"
                     android:inputType="text"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -126,10 +127,10 @@
                 android:id="@+id/addressWrapper"
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
+                android:layout_marginTop="5dp"
                 android:textColorHint="#AF1B1B"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
-                android:layout_marginTop="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView4">
@@ -137,7 +138,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/addressEdt"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="59dp"
                     android:background="@drawable/edittext1"
                     android:ems="15"
                     android:hint="Address"
@@ -189,9 +190,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="80dp"
                 android:layout_marginBottom="50dp"
-                android:text="Update Profile Information"
                 android:ems="12"
                 android:background="@drawable/button2"
+                android:text="Update Profile Information"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,14 +39,14 @@ public class DonorHomepageActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int curr = item.getItemId();
-                if (curr == R.id.pay) {
-                    Toast.makeText(DonorHomepageActivity.this, "Pay-it-forward system not yet implemented", Toast.LENGTH_SHORT).show();
-                } else if (curr == R.id.food) {
+                if (curr == R.id.food) {
                     Intent intent = new Intent(DonorHomepageActivity.this, DonateFoodActivity.class);
                     startActivity(intent);
                     finish();
-                } else if (curr == R.id.records) {
-                    Toast.makeText(DonorHomepageActivity.this, "Records not yet implemented", Toast.LENGTH_SHORT).show();
+                } else if (curr == R.id.schedule) {
+                    Intent intent = new Intent(DonorHomepageActivity.this, DonorsScheduleActivity.class);
+                    startActivity(intent);
+                    finish();
                 } else if (curr == R.id.profile) {
                     Intent intent = new Intent(DonorHomepageActivity.this, DonorUserPageActivity.class);
                     startActivity(intent);

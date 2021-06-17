@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -49,14 +48,14 @@ public class DonateFoodActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int curr = item.getItemId();
-                if (curr == R.id.pay) {
-                    Toast.makeText(DonateFoodActivity.this, "Pay-it-forward system not yet implemented", Toast.LENGTH_SHORT).show();
-                } else if (curr == R.id.profile) {
+                if (curr == R.id.profile) {
                     Intent intent = new Intent(DonateFoodActivity.this, DonorUserPageActivity.class);
                     startActivity(intent);
                     finish();
-                } else if (curr == R.id.records) {
-                    Toast.makeText(DonateFoodActivity.this, "Records not yet implemented", Toast.LENGTH_SHORT).show();
+                } else if (curr == R.id.schedule) {
+                    Intent intent = new Intent(DonateFoodActivity.this, DonorsScheduleActivity.class);
+                    startActivity(intent);
+                    finish();
                 } else if (curr == R.id.home) {
                     Intent intent = new Intent(DonateFoodActivity.this, DonorHomepageActivity.class);
                     startActivity(intent);

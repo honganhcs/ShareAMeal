@@ -5,26 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ReserveFoodItem">
-    <TextView
-        android:id="@+id/txt_select_slot"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select a time slot:"
-        android:textColor="@color/maroon"
-        android:textSize="30sp"
-        android:textAlignment="center"
-        android:layout_margin="5dp"/>
+    tools:context=".RecipientViewOrders">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="15">
+        android:layout_weight="15" >
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
         </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F6DABA"
+        android:foregroundGravity="bottom"
+        app:itemIconTint="@drawable/bottom_navigation_selector"
+        app:itemTextColor="#AF1B1B"
+        app:menu="@menu/menu_bottom_nav_recipient" />
 
 </LinearLayout>

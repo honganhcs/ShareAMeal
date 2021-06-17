@@ -36,6 +36,7 @@ public class RVFoodItems extends AppCompatActivity implements RVFoodItemsAdapter
     private DatabaseReference reference;
     private ArrayList<Food> food = new ArrayList<>();
     private RVFoodItemsAdapter adapter;
+    String donorId;
 
     private TextView foodDonorName;
     private AppCompatButton backBtn;
@@ -63,8 +64,10 @@ public class RVFoodItems extends AppCompatActivity implements RVFoodItemsAdapter
                     Intent intent = new Intent(RVFoodItems.this, RecipientHomepageActivity.class);
                     startActivity(intent);
                     finish();
-                } else if (curr == R.id.records) {
-                    Toast.makeText(RVFoodItems.this, "Records not yet implemented", Toast.LENGTH_SHORT).show();
+                } else if (curr == R.id.schedule) {
+                    Intent intent = new Intent(RVFoodItems.this, RecipientViewOrders.class);
+                    startActivity(intent);
+                    finish();
                 } else if (curr == R.id.profile) {
                     Intent intent = new Intent(RVFoodItems.this, RecipientUserPageActivity.class);
                     startActivity(intent);
@@ -76,7 +79,7 @@ public class RVFoodItems extends AppCompatActivity implements RVFoodItemsAdapter
 
         reference = FirebaseDatabase.getInstance().getReference("Foods");
         Intent intent = getIntent();
-        String donorId = intent.getStringExtra("donorId");
+        donorId = intent.getStringExtra("donorId");
         loadData(donorId);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -141,6 +144,8 @@ public class RVFoodItems extends AppCompatActivity implements RVFoodItemsAdapter
     @Override
     public void onFoodClick(int position) {
         Intent intent = new Intent(RVFoodItems.this, ReserveFoodItem.class);
+        intent.putExtra("donorId", donorId);
+        intent.putExtra("foodId", food.get(position).getFoodId());
         startActivity(intent);
         finish();
     }
