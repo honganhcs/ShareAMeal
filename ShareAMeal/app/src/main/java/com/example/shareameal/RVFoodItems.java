@@ -128,7 +128,11 @@ public class RVFoodItems extends AppCompatActivity implements RVFoodItemsAdapter
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot data : snapshot.getChildren()) {
                     Food currFood = data.getValue(Food.class);
-                    food.add(currFood);
+
+                    // So that foods with 0 qty won't be show to recipients
+                    if (currFood.getQuantity() > 0) {
+                        food.add(currFood);
+                    }
                 }
                 adapter.setItems(food);
                 adapter.notifyDataSetChanged();
