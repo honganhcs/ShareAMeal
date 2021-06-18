@@ -2,14 +2,21 @@ package com.example.shareameal;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,6 +47,9 @@ public class DonateFoodActivity extends AppCompatActivity {
             Intent intent = new Intent(DonateFoodActivity.this, LoginActivity.class);
             startActivity(intent);
         }
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
+        getSupportActionBar().setTitle("Food Listings");
 
         // Initialising bottom navigation bar
         bottomNav = findViewById(R.id.bottom_navigation);
@@ -121,6 +131,12 @@ public class DonateFoodActivity extends AppCompatActivity {
                     food.setFoodId(foodId);
                     foodCallback.onCallback(food);
                 }
+                rvFood = findViewById(R.id.recycleViewFood);
+                rvFood.setHasFixedSize(true);
+                foodRvAdapter = new FoodRvAdapter(DonateFoodActivity.this, foodList);
+                rvFood.setAdapter(foodRvAdapter);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(DonateFoodActivity.this);
+                rvFood.setLayoutManager(linearLayoutManager);
             }
 
             @Override
@@ -128,5 +144,30 @@ public class DonateFoodActivity extends AppCompatActivity {
                 // Handle database error
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.example_menu_search, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setQueryHint("Search food listing here");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                foodRvAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+        return true;
     }
 }

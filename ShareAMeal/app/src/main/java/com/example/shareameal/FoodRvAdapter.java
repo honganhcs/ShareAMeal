@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -15,15 +18,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class FoodRvAdapter extends RecyclerView.Adapter<FoodRvAdapter.FoodsViewHolder> {
+public class FoodRvAdapter extends RecyclerView.Adapter<FoodRvAdapter.FoodsViewHolder> implements Filterable {
     private Context mContext;
     private List<Food> foodsList;
+    private List<Food> foodsListFull;
 
     public FoodRvAdapter(Context context, List<Food> foods) {
         mContext = context;
         foodsList = foods;
+        foodsListFull = new ArrayList<>(foodsList);
     }
 
     @NonNull
@@ -82,4 +88,41 @@ public class FoodRvAdapter extends RecyclerView.Adapter<FoodRvAdapter.FoodsViewH
             cardView = view.findViewById(R.id.cardViewNote);
         }
     }
+
+    @Override
+    public Filter getFilter() {
+        return exampleFilter;
+    }
+
+    private Filter exampleFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Food> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(foodsListFull);
+            } else {
+                String filteredPattern = constraint.toString().toLowerCase().trim();
+
+                for (Food food: foodsListFull) {
+                    if (food.getName().toLowerCase().contains(filteredPattern)) {
+                        filteredList.add(food);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            results.count = filteredList.size();
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            foodsList.clear();
+            foodsList.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 }

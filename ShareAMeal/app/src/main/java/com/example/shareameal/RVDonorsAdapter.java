@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,11 +17,13 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
+import java.util.List;
 
-public class RVDonorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RVDonorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
 
     private Context context;
     private ArrayList<User> list = new ArrayList<>();
+    private ArrayList<User> listFull;
     private OnDonorClickListener onDonorClickListener;
 
     public RVDonorsAdapter(Context ctx, OnDonorClickListener onDonorClickListener) {
@@ -29,6 +33,7 @@ public class RVDonorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void setItems(ArrayList<User> users) {
         list.addAll(users);
+        listFull = new ArrayList<>(list);
     }
 
     public class DonorVH extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -91,4 +96,47 @@ public class RVDonorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public interface OnDonorClickListener {
         void onDonorClick(int position);
     }
+
+    @Override
+    public Filter getFilter() {
+        return exampleFilter;
+    }
+
+    private Filter exampleFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<User> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(listFull);
+            } else {
+                String filteredPattern = constraint.toString().toLowerCase().trim();
+
+                for (User user: listFull) {
+                    if (user.getRestaurant() == null || TextUtils.isEmpty(user.getRestaurant())) {
+                        if (user.getName().toLowerCase().contains(filteredPattern)) {
+                            filteredList.add(user);
+                        }
+                    } else {
+                        if (user.getRestaurant().toLowerCase().contains(filteredPattern)) {
+                            filteredList.add(user);
+                        }
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            results.count = filteredList.size();
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            list.clear();
+            list.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 }
