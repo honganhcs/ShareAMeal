@@ -1,21 +1,28 @@
 package com.example.shareameal;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,7 +34,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class DonateFoodActivity extends AppCompatActivity {
     private BottomNavigationView bottomNav;
@@ -149,7 +160,7 @@ public class DonateFoodActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.example_menu_search, menu);
+        inflater.inflate(R.menu.example_menu_searchandfilter, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
@@ -169,5 +180,48 @@ public class DonateFoodActivity extends AppCompatActivity {
             }
         });
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_sort) {
+            showSortDialog();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showSortDialog() {
+        // Options to display in dialog
+        String[] sortOptions = {"Descending Quantity", "Ascending Quantity"};
+
+        // Create alert dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Sort by").setIcon(R.drawable.ic_filter).setItems(sortOptions, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    Collections.sort(foodList, new Comparator<Food>() {
+                        @Override
+                        public int compare(Food o1, Food o2) {
+                            return o2.getQuantity() - o1.getQuantity();
+                        }
+                    });
+                    foodRvAdapter.notifyDataSetChanged();
+                } else if (which == 1) {
+                    Collections.sort(foodList, new Comparator<Food>() {
+                        @Override
+                        public int compare(Food o1, Food o2) {
+                            return o1.getQuantity() - o2.getQuantity();
+                        }
+                    });
+                    foodRvAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+        builder.show();
     }
 }
