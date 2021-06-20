@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,9 +17,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 public class SignupActivity_getAddress extends AppCompatActivity {
 
     private String userGroup, username, restaurant, unit, building, street, pCode, address;
+    private double latitude, longitude;
     private EditText edtUnit, edtBuilding, edtStreet, edtPostalCode;
     private AppCompatButton createAccountBtn;
 
@@ -70,6 +77,21 @@ public class SignupActivity_getAddress extends AppCompatActivity {
                         address = building + " " + street + " #" + unit + " Singapore " + pCode;
                     }
                     user.setAddress(address);
+
+                    Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                    try {
+                        List addressList = geocoder.getFromLocationName(address, 1);
+                        if (addressList != null && addressList.size() > 0) {
+                            Address addressItem = (Address) addressList.get(0);
+                            longitude = addressItem.getLongitude();
+                            latitude = addressItem.getLatitude();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    user.setAddressLatitude(latitude);
+                    user.setAddressLongitude(longitude);
 
                     FirebaseUser loggedInUser = FirebaseAuth.getInstance().getCurrentUser();
                     String uid = loggedInUser.getUid();
