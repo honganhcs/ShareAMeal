@@ -132,6 +132,16 @@ public class RVDonorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 String donorId = list.get(position).getUserId();
                 Intent intent = new Intent(v.getContext(), RVFoodItems.class);
                 intent.putExtra("donorId", donorId);
+
+                User selectedDonor = list.get(position);
+                if (selectedDonor.getRestaurant() == null || TextUtils.isEmpty(selectedDonor.getRestaurant())) {
+                    intent.putExtra("donorName", selectedDonor.getName());
+                } else {
+                    intent.putExtra("donorName", selectedDonor.getRestaurant());
+                }
+
+                Intent adapterIntent = new Intent(v.getContext(), RVFoodItemsAdapter.class);
+                adapterIntent.putExtra("donorId", donorId);
                 v.getContext().startActivity(intent);
             }
         });
@@ -140,10 +150,6 @@ public class RVDonorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemCount() {
         return list.size();
-    }
-
-    public interface OnDonorClickListener {
-        void onDonorClick(int position);
     }
 
     @Override

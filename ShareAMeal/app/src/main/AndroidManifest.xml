@@ -19,7 +19,7 @@
         <activity android:name=".ChangePasswordActivity" />
         <activity android:name=".EditProfileActivity" />
         <activity android:name=".ReserveFoodItem" />
-        <activity android:name=".RVFoodItems" />
+        <activity android:name=".RVFoodItems" android:theme="@style/Theme.MaterialComponents.Light" > </activity>
         <activity android:name=".RVDonors" android:theme="@style/Theme.MaterialComponents.Light">
         </activity>
         <activity android:name=".RecipientUserPageActivity" />

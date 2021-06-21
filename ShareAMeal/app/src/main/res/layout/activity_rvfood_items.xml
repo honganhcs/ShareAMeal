@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,59 +7,12 @@
     tools:context=".RVFoodItems"
     android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/backBtn"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:background="@drawable/leftarrow"
-            android:backgroundTint="#C45508"
-            android:layout_margin="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Food Listings"
-            android:textColor="#AF1B1B"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:layout_marginTop="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/foodDonorName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Food Donor Name"
-            android:textColor="#AF1B1B"
-            android:textSize="15sp"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/header"
-            app:layout_constraintStart_toStartOf="@+id/header"
-            app:layout_constraintTop_toBottomOf="@+id/header" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/swipe">
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/rv" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_navigation"
+        />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -67,9 +20,10 @@
         android:layout_height="wrap_content"
         android:foregroundGravity="bottom"
         android:background="#F6DABA"
+        android:layout_alignParentBottom="true"
         app:menu="@menu/menu_bottom_nav_recipient"
         app:itemTextColor="#AF1B1B"
         app:itemIconTint="@drawable/bottom_navigation_selector"
         />
 
-</LinearLayout>
+</RelativeLayout>

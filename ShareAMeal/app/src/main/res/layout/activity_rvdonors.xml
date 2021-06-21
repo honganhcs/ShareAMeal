@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,34 +7,22 @@
     android:orientation="vertical"
     tools:context=".RVDonors">
 
-<!--    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
-<!--        android:id="@+id/swipe"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="15"-->
-<!--        android:layout_marginTop="5dp">-->
-
-<!--        <androidx.recyclerview.widget.RecyclerView-->
-<!--            android:id="@+id/rv"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent" />-->
-<!--    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="300"/>
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_navigation"
+        />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_alignParentBottom="true"
         android:background="#F6DABA"
         android:foregroundGravity="bottom"
         app:itemIconTint="@drawable/bottom_navigation_selector"
         app:itemTextColor="#AF1B1B"
         app:menu="@menu/menu_bottom_nav_recipient" />
 
-</LinearLayout>
+</RelativeLayout>
