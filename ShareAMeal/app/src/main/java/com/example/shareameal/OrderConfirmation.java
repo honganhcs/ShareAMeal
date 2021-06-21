@@ -69,24 +69,40 @@ public class OrderConfirmation extends AppCompatActivity {
                         food = data.getValue(Food.class);
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
-
-        reference2 = FirebaseDatabase.getInstance().getReference("Users");
-
-        reference2.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                for(DataSnapshot data : snapshot.getChildren()) {
-                    if(data.getKey().equals(donorId)) {
-                        donor = data.getValue(User.class);
+                if (food.getImageUrl() == null) {
+                    foodImage.setImageResource(R.drawable.dish);
+                } else {
+                    if (food.getImageUrl().equals("null")) {
+                        foodImage.setImageResource(R.drawable.dish);
+                    } else {
+                        Picasso.get().load(food.getImageUrl()).into(foodImage);
                     }
                 }
+
+                reference2 = FirebaseDatabase.getInstance().getReference("Users");
+
+                reference2.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        for(DataSnapshot data : snapshot.getChildren()) {
+                            if(data.getKey().equals(donorId)) {
+                                donor = data.getValue(User.class);
+                            }
+                        }
+
+                        foodNameTxt.setText(food.getName());
+                        foodDescriptionTxt.setText(food.getDescription());
+                        txtCurrentQuantity.setText("Current quantity: " + food.getQuantity());
+                        txtSchedule.setText("Scheduled for collection at:\n" + slot.getStartTime() + " - " + slot.getEndTime() + ", " + slot.getDate());
+                        txtAddress.setText("Address: " + donor.getAddress());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                    }
+                });
             }
 
             @Override
@@ -94,24 +110,6 @@ public class OrderConfirmation extends AppCompatActivity {
 
             }
         });
-
-        if (food.getImageUrl() == null) {
-            foodImage.setImageResource(R.drawable.dish);
-        } else {
-            if (food.getImageUrl().equals("null")) {
-                foodImage.setImageResource(R.drawable.dish);
-            } else {
-                Picasso.get().load(food.getImageUrl()).into(foodImage);
-            }
-        }
-
-        foodNameTxt.setText(food.getName());
-        foodDescriptionTxt.setText(food.getDescription());
-        txtCurrentQuantity.setText("Current quantity: " + food.getQuantity());
-        txtSchedule.setText("Scheduled for collection at:\n" + slot.getStartTime() + " - " + slot.getEndTime() + ", " + slot.getDate());
-        txtAddress.setText("Address: " + donor.getAddress());
-
-
 
     }
 
