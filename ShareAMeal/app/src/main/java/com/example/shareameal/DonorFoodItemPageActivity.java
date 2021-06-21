@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,7 +27,7 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 public class DonorFoodItemPageActivity extends AppCompatActivity {
-    private AppCompatButton backToListingsBtn, updateFoodQuantityBtn, editFoodListingBtn, deleteFoodListingBtn;
+    private AppCompatButton updateFoodQuantityBtn, editFoodListingBtn, deleteFoodListingBtn;
     private ImageView foodImage;
     private TextView foodNameTxt, foodDescriptionTxt;
     private EditText foodQuantityEdt;
@@ -39,7 +41,6 @@ public class DonorFoodItemPageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_donor_food_item_page);
 
         // Initialise widgets
-        backToListingsBtn = findViewById(R.id.backToListingsBtn);
         updateFoodQuantityBtn = findViewById(R.id.updateFoodQuantityBtn);
         editFoodListingBtn = findViewById(R.id.editFoodListingBtn);
         deleteFoodListingBtn = findViewById(R.id.deleteFoodListingBtn);
@@ -73,14 +74,10 @@ public class DonorFoodItemPageActivity extends AppCompatActivity {
             new NullPointerException();
         }
 
-        backToListingsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DonorFoodItemPageActivity.this, DonateFoodActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
+        getSupportActionBar().setTitle("Food Listing");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         foodQuantityEdt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -154,5 +151,13 @@ public class DonorFoodItemPageActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        Intent intent = new Intent(DonorFoodItemPageActivity.this, DonateFoodActivity.class);
+        startActivity(intent);
+        finish();
+        return true;
     }
 }

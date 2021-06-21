@@ -6,6 +6,8 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -50,7 +52,7 @@ public class EditFoodItemActivity extends AppCompatActivity {
 
     private EditText foodNameEdt;
     private EditText foodDescriptionEdt;
-    private AppCompatButton backBtn, editFoodItemBtn;
+    private AppCompatButton editFoodItemBtn;
     private String imageUrl, foodId;
     private Food oldFood, food;
 
@@ -65,6 +67,11 @@ public class EditFoodItemActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
+        getSupportActionBar().setTitle("Edit Food Listing");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userId = user.getUid();
 
@@ -78,7 +85,6 @@ public class EditFoodItemActivity extends AppCompatActivity {
         StorageReference storageReference = FirebaseStorage.getInstance().getReference("imageUploads");
         mStorageRef = storageReference.child(userId);
 
-        backBtn = findViewById(R.id.backBtn);
         foodNameEdt = findViewById(R.id.foodNameEdt);
         foodDescriptionEdt = findViewById(R.id.descriptionEdt);
         editFoodItemBtn = findViewById(R.id.editFoodItemBtn);
@@ -136,37 +142,6 @@ public class EditFoodItemActivity extends AppCompatActivity {
         } else {
             new NullPointerException();
         }
-
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isImageUploaded) {
-                    if (!isFoodUpdated) {
-                        Toast.makeText(EditFoodItemActivity.this, "Please click on \"Edit Food Listing\" down below", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Intent intent = new Intent(EditFoodItemActivity.this, DonorFoodItemPageActivity.class);
-                        if (isFoodUpdated) {
-                            bundle.putParcelable("food", food);
-                        } else {
-                            bundle.putParcelable("food", oldFood);
-                        }
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                        finish();
-                    }
-                } else {
-                    Intent intent = new Intent(EditFoodItemActivity.this, DonorFoodItemPageActivity.class);
-                    if (isFoodUpdated) {
-                        bundle.putParcelable("food", food);
-                    } else {
-                        bundle.putParcelable("food", oldFood);
-                    }
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-        });
 
         chooseImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -311,5 +286,36 @@ public class EditFoodItemActivity extends AppCompatActivity {
         } else {
             Toast.makeText(EditFoodItemActivity.this, "No image selected", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        Bundle bundle = this.getIntent().getExtras();
+        if (isImageUploaded) {
+            if (!isFoodUpdated) {
+                Toast.makeText(EditFoodItemActivity.this, "Please click on \"Edit Food Listing\" down below", Toast.LENGTH_SHORT).show();
+            } else {
+                Intent intent = new Intent(EditFoodItemActivity.this, DonorFoodItemPageActivity.class);
+                if (isFoodUpdated) {
+                    bundle.putParcelable("food", food);
+                } else {
+                    bundle.putParcelable("food", oldFood);
+                }
+                intent.putExtras(bundle);
+                startActivity(intent);
+                finish();
+            }
+        } else {
+            Intent intent = new Intent(EditFoodItemActivity.this, DonorFoodItemPageActivity.class);
+            if (isFoodUpdated) {
+                bundle.putParcelable("food", food);
+            } else {
+                bundle.putParcelable("food", oldFood);
+            }
+            intent.putExtras(bundle);
+            startActivity(intent);
+            finish();
+        }
+        return true;
     }
 }
