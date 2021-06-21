@@ -66,6 +66,7 @@
             app:layout_constraintTop_toBottomOf="@id/foodDescriptionTxt"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="30dp"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
             android:text="Order quantity:"

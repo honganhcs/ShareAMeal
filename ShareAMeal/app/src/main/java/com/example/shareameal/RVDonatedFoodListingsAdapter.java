@@ -180,6 +180,10 @@ public class RVDonatedFoodListingsAdapter extends RecyclerView.Adapter<RecyclerV
     private Filter exampleFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
+            if (listFull.size() == 0) {
+                listFull = new ArrayList<>(list);
+            }
+            
             List<Food> filteredList = new ArrayList<>();
 
             if (constraint == null || constraint.length() == 0) {
