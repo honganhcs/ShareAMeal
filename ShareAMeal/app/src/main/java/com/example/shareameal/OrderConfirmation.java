@@ -48,7 +48,7 @@ public class OrderConfirmation extends AppCompatActivity {
         foodImage = findViewById(R.id.foodImage);
         foodNameTxt = findViewById(R.id.foodNameTxt);
         foodDescriptionTxt = findViewById(R.id.foodDescriptionTxt);
-        txtCurrentQuantity = findViewById(R.id.txtCurrentQuantity);
+        txtCurrentQuantity = findViewById(R.id.txtOrderQuantity);
         txtSchedule = findViewById(R.id.txtSchedule);
         txtAddress = findViewById(R.id.txtAddress);
         foodQuantityEdt = findViewById(R.id.foodQuantityEdt);
@@ -59,7 +59,7 @@ public class OrderConfirmation extends AppCompatActivity {
         donorId = bundle.getString("donorId");
         foodId = bundle.getString("foodId");
 
-        reference1 = FirebaseDatabase.getInstance().getReference("Foods").child("donorId");
+        reference1 = FirebaseDatabase.getInstance().getReference("Foods").child(donorId);
 
         reference1.addValueEventListener(new ValueEventListener() {
             @Override
@@ -130,6 +130,8 @@ public class OrderConfirmation extends AppCompatActivity {
             order.setDonorId(donorId);
             order.setFoodId(foodId);
             order.setQuantity(orderQuantity);
+            order.setFoodName(food.getName());
+            order.setFoodImageURL(food.getImageUrl());
             reference4 = FirebaseDatabase.getInstance().getReference("Orders").child(slot.getRecipientId());
             String orderId = reference4.push().getKey();
             reference4.child(orderId).setValue(order);
@@ -140,7 +142,7 @@ public class OrderConfirmation extends AppCompatActivity {
 
             //update slot
             slot.setAvailability(false);
-            reference3 = FirebaseDatabase.getInstance().getReference("Slots").child("donorId");
+            reference3 = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
             reference3.child(slot.getSlotId()).setValue(slot);
 
             Toast.makeText(OrderConfirmation.this, "Your order has been successfully created.", Toast.LENGTH_SHORT).show();

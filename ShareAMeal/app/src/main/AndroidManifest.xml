@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShareAMeal">
         <activity android:name=".RVDonatedFoodListings" android:theme="@style/Theme.MaterialComponents.Light"></activity>
+        <activity android:name=".ViewOrder"></activity>
         <activity android:name=".RecipientViewOrders" />
         <activity android:name=".OrderConfirmation" />
         <activity android:name=".DonorViewSlot" />

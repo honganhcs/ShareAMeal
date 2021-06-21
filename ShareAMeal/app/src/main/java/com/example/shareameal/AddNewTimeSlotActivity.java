@@ -128,7 +128,7 @@ public class AddNewTimeSlotActivity extends AppCompatActivity {
             public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
                 startHour = selectedHour;
                 startMinute = selectedMinute;
-                btnStartPicker.setText(String.format(Locale.getDefault(), "%02d : %02d", startHour, startMinute));
+                btnStartPicker.setText(String.format(Locale.getDefault(), "%02d:%02d", startHour, startMinute));
             }
         };
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, listener, startHour, startMinute, true);
@@ -142,7 +142,7 @@ public class AddNewTimeSlotActivity extends AppCompatActivity {
             public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
                 endHour = selectedHour;
                 endMinute = selectedMinute;
-                btnEndPicker.setText(String.format(Locale.getDefault(), "%02d : %02d", endHour, endMinute));
+                btnEndPicker.setText(String.format(Locale.getDefault(), "%02d:%02d", endHour, endMinute));
             }
         };
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, listener, endHour, endMinute, true);
@@ -155,7 +155,7 @@ public class AddNewTimeSlotActivity extends AppCompatActivity {
         String startTime = btnStartPicker.getText().toString().trim();
         String endTime = btnEndPicker.getText().toString().trim();
 
-        if(date.equals("MMM DD YYY") || startTime.equals("HH : MM") || endTime.equals("HH : MM")) {
+        if(date.equals("MMM DD YYY") || startTime.equals("HH:MM") || endTime.equals("HH:MM")) {
             Toast.makeText(AddNewTimeSlotActivity.this, "Please ensure that date, start time and end time are all selected.", Toast.LENGTH_SHORT).show();
         } else if(Year < todayYear
                 || (Year == todayYear && Month < todayMonth)
@@ -193,5 +193,11 @@ public class AddNewTimeSlotActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public void onBackBtn(View view) {
+        Intent intent = new Intent(AddNewTimeSlotActivity.this, DonorsScheduleActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +42,7 @@ public class ReserveFoodItem extends AppCompatActivity implements RVSlotsAdapter
         Intent intent = getIntent();
         donorId = intent.getStringExtra("donorId");
         foodId = intent.getStringExtra("foodId");
-        reference = reference.child("Slots").child(donorId);
+        reference = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
 
         loadData();
 
