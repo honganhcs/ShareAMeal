@@ -132,6 +132,7 @@ public class OrderConfirmation extends AppCompatActivity {
             order.setQuantity(orderQuantity);
             order.setFoodName(food.getName());
             order.setFoodImageURL(food.getImageUrl());
+            order.setSlotId(slot.getSlotId());
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             String userId = user.getUid();

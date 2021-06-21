@@ -30,6 +30,7 @@ public class ViewOrder extends AppCompatActivity {
     private DatabaseReference reference1, reference2, reference3, reference4;
     private String donorId, foodId, slotId;
     private Order order;
+    private Slot slot;
     private Food food;
     private User donor;
     private int orderQuantity;
@@ -139,9 +140,24 @@ public class ViewOrder extends AppCompatActivity {
         //remove order
         reference2.child(slotId).removeValue();
 
-        //remove slot
+        //update slot
         reference4 = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
-        reference4.child(slotId).removeValue();
+        reference4.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot data : snapshot.getChildren()) {
+                    slot = data.getValue(Slot.class);
+                }
+                slot.setAvailability(true);
+                slot.setRecipientId(null);
+                reference4.child(slotId).setValue(slot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
 
         //update food quantity
         food.setQuantity(food.getQuantity() + orderQuantity);
