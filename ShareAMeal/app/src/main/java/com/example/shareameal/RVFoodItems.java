@@ -46,7 +46,6 @@ public class RVFoodItems extends AppCompatActivity {
     private RVFoodItemsAdapter adapter;
     String donorId;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
