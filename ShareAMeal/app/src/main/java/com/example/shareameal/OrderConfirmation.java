@@ -136,8 +136,7 @@ public class OrderConfirmation extends AppCompatActivity {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             String userId = user.getUid();
             reference4 = FirebaseDatabase.getInstance().getReference("Orders").child(userId);
-            String orderId = reference4.push().getKey();
-            reference4.child(orderId).setValue(order);
+            reference4.child(slot.getSlotId()).setValue(order);
 
             //update food item
             food.setQuantity(food.getQuantity() - orderQuantity);

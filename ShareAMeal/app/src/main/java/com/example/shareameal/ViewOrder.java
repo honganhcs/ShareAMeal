@@ -99,7 +99,6 @@ public class ViewOrder extends AppCompatActivity {
                                 }
 
                                 orderQuantity = order.getQuantity();
-
                                 foodNameTxt.setText(food.getName());
                                 foodDescriptionTxt.setText(food.getDescription());
                                 txtOrderQuantity.setText("Order quantity: " + orderQuantity);
