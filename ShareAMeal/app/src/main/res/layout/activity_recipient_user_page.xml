@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/history32"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="40dp"
                 app:layout_constraintEnd_toStartOf="@+id/recordsTxt"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -158,8 +158,9 @@
         android:foregroundGravity="bottom"
         android:background="#F6DABA"
         app:menu="@menu/menu_bottom_nav_recipient"
-        app:itemTextColor="#AF1B1B"
+        app:itemTextColor="@color/menu_select_deselect"
         app:itemIconTint="@drawable/bottom_navigation_selector"
+        app:labelVisibilityMode="labeled"
         />
 
 </RelativeLayout>

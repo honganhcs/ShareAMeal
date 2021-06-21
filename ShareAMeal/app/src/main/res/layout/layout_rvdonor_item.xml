@@ -51,7 +51,18 @@
                 android:layout_marginBottom="5dp"
                 android:text="Address"
                 android:textColor="#C45508"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:id="@+id/txt_donor_distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Distance Away"
+                android:textColor="#C45508"
+                android:textSize="15sp"
+                />
         </LinearLayout>
     </LinearLayout>
 

@@ -3,27 +3,25 @@ package com.example.shareameal;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Filterable;
+import android.view.View;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,36 +33,29 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class RVDonors extends AppCompatActivity {
+public class RVDonatedFoodListings extends AppCompatActivity {
     private RecyclerView recyclerView;
     private BottomNavigationView bottomNav;
-
     private DatabaseReference reference;
-    private ArrayList<User> users = new ArrayList<>();
-    private RVDonorsAdapter adapter;
+    private ArrayList<Food> foods;
+    private RVDonatedFoodListingsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rvdonors);
+        setContentView(R.layout.activity_rvfood_items);
 
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-        getSupportActionBar().setTitle("Food Donors");
-
+        foods = new ArrayList<>();
         recyclerView = findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
-        adapter = new RVDonorsAdapter(this, users);
+        adapter = new RVDonatedFoodListingsAdapter(this, foods);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);
-        reference = FirebaseDatabase.getInstance().getReference("Users");
-        loadData();
 
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setSelectedItemId(R.id.claimFood);
@@ -73,46 +64,72 @@ public class RVDonors extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int curr = item.getItemId();
                 if (curr == R.id.home) {
-                    Intent intent = new Intent(RVDonors.this, RecipientHomepageActivity.class);
+                    Intent intent = new Intent(RVDonatedFoodListings.this, RecipientHomepageActivity.class);
                     startActivity(intent);
                     finish();
                 } else if (curr == R.id.schedule) {
-                    Intent intent = new Intent(RVDonors.this, RecipientViewOrders.class);
+                    Intent intent = new Intent(RVDonatedFoodListings.this, RecipientViewOrders.class);
                     startActivity(intent);
                     finish();
                 } else if (curr == R.id.profile) {
-                    Intent intent = new Intent(RVDonors.this, RecipientUserPageActivity.class);
+                    Intent intent = new Intent(RVDonatedFoodListings.this, RecipientUserPageActivity.class);
                     startActivity(intent);
                     finish();
                 }
                 return true;
             }
         });
+
+        reference = FirebaseDatabase.getInstance().getReference("Foods");
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
+        getSupportActionBar().setTitle("Donated Foods");
+
+        getFirebaseData(new FoodCallback() {
+            @Override
+            public void onCallback(Food food) {
+                foods.add(food);
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
-    private void loadData() {
-        reference.addValueEventListener(new ValueEventListener() {
+    private void getFirebaseData(final FoodCallback foodCallback) {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                for(DataSnapshot data : snapshot.getChildren()) {
-                    User donor = data.getValue(User.class);
-                    if(donor.getUserGroup().equals("donor")) {
-                        users.add(donor);
-                        adapter.notifyDataSetChanged();
-                    }
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    String userId = data.getKey();
+                    DatabaseReference nestedRef = reference.child(userId);
+                    nestedRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot2) {
+                            for (DataSnapshot dataFoods : snapshot2.getChildren()) {
+                                Food currFood = dataFoods.getValue(Food.class);
+
+                                // So that foods with 0 qty won't be show to recipients
+                                if (currFood.getQuantity() > 0) {
+                                    foodCallback.onCallback(currFood);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {}
+                    });
                 }
 
                 recyclerView = findViewById(R.id.rv);
                 recyclerView.setHasFixedSize(true);
-                adapter = new RVDonorsAdapter(RVDonors.this, users);
+                adapter = new RVDonatedFoodListingsAdapter(RVDonatedFoodListings.this, foods);
                 recyclerView.setAdapter(adapter);
-                LinearLayoutManager manager = new LinearLayoutManager(RVDonors.this);
+                LinearLayoutManager manager = new LinearLayoutManager(RVDonatedFoodListings.this);
                 recyclerView.setLayoutManager(manager);
             }
 
             @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle database error
             }
         });
     }
@@ -125,7 +142,7 @@ public class RVDonors extends AppCompatActivity {
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setMaxWidth(Integer.MAX_VALUE);
-        searchView.setQueryHint("Search food donor here");
+        searchView.setQueryHint("Search donated food here");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -159,7 +176,7 @@ public class RVDonors extends AppCompatActivity {
 
     private void showSortDialog() {
         // Options to display in dialog
-        String[] sortOptions = {"Closest to me"};
+        String[] sortOptions = {"Descending Quantity", "Ascending Quantity"};
 
         // Create alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -167,42 +184,18 @@ public class RVDonors extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
-                    FirebaseUser recipient = FirebaseAuth.getInstance().getCurrentUser();
-                    String recipientId = recipient.getUid();
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
-                    ref.child(recipientId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    Collections.sort(foods, new Comparator<Food>() {
                         @Override
-                        public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
-                            if (!task.isSuccessful()) {
-                                Log.e("Firebase", "Error getting data", task.getException());
-                            } else {
-                                User user = task.getResult().getValue(User.class);
-                                double recipientAddressLat = user.getAddressLatitude();
-                                double recipientAddressLong = user.getAddressLongitude();
-
-                                Collections.sort(users, new Comparator<User>() {
-                                    @Override
-                                    public int compare(User o1, User o2) {
-                                        double o1Lat = o1.getAddressLatitude();
-                                        double o1Long = o1.getAddressLongitude();
-                                        double o2Lat = o2.getAddressLatitude();
-                                        double o2Long = o2.getAddressLongitude();
-                                        float[] o1result = new float[1];
-                                        float[] o2result = new float[1];
-                                        Location.distanceBetween(recipientAddressLat, recipientAddressLong, o1Lat, o1Long, o1result);
-                                        Location.distanceBetween(recipientAddressLat, recipientAddressLong, o2Lat, o2Long, o2result);
-                                        float o1distance = o1result[0];
-                                        float o2distance = o2result[0];
-                                        if (o1distance > o2distance) {
-                                            return 1;
-                                        } else if (o1distance == o2distance) {
-                                            return 0;
-                                        } else {
-                                            return -1;
-                                        }
-                                    }
-                                });
-                            }
+                        public int compare(Food o1, Food o2) {
+                            return o2.getQuantity() - o1.getQuantity();
+                        }
+                    });
+                    adapter.notifyDataSetChanged();
+                } else if (which == 1) {
+                    Collections.sort(foods, new Comparator<Food>() {
+                        @Override
+                        public int compare(Food o1, Food o2) {
+                            return o1.getQuantity() - o2.getQuantity();
                         }
                     });
                     adapter.notifyDataSetChanged();
@@ -220,11 +213,11 @@ public class RVDonors extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
-                    Toast.makeText(RVDonors.this, "Already viewing food donors", Toast.LENGTH_SHORT).show();
-                } else if (which == 1) {
-                    Intent intent = new Intent(RVDonors.this, RVDonatedFoodListings.class);
+                    Intent intent = new Intent(RVDonatedFoodListings.this, RVDonors.class);
                     startActivity(intent);
                     finish();
+                } else if (which == 1) {
+                    Toast.makeText(RVDonatedFoodListings.this, "Already viewing donated foods", Toast.LENGTH_SHORT).show();
                 }
             }
         });

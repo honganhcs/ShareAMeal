@@ -8,7 +8,9 @@ public class User {
     private String restaurant;
     private String address;
     private String userId;
-    public String imageUrl;
+    private String imageUrl;
+    private double addressLatitude;
+    private double addressLongitude;
 
     public User() {}
 
@@ -34,6 +36,14 @@ public class User {
         this.imageUrl = imageUrl;
     }
 
+    public void setAddressLatitude(double addressLatitude) {
+        this.addressLatitude = addressLatitude;
+    }
+
+    public void setAddressLongitude(double addressLongitude) {
+        this.addressLongitude = addressLongitude;
+    }
+
     public String getUserGroup() {
         return userGroup;
     }
@@ -54,5 +64,13 @@ public class User {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public double getAddressLatitude() {
+        return addressLatitude;
+    }
+
+    public double getAddressLongitude() {
+        return addressLongitude;
     }
 }

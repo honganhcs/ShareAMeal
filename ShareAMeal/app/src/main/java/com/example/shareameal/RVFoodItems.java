@@ -1,17 +1,24 @@
 package com.example.shareameal;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,9 +34,10 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
-public class RVFoodItems extends AppCompatActivity implements RVFoodItemsAdapter.OnFoodClickListener{
-    private SwipeRefreshLayout swipeRefreshLayout;
+public class RVFoodItems extends AppCompatActivity {
     private RecyclerView recyclerView;
     private BottomNavigationView bottomNav;
 
@@ -38,21 +46,17 @@ public class RVFoodItems extends AppCompatActivity implements RVFoodItemsAdapter
     private RVFoodItemsAdapter adapter;
     String donorId;
 
-    private TextView foodDonorName;
-    private AppCompatButton backBtn;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rvfood_items);
 
-        swipeRefreshLayout = findViewById(R.id.swipe);
         recyclerView = findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
+        adapter = new RVFoodItemsAdapter(this, food);
+        recyclerView.setAdapter(adapter);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);
-        adapter = new RVFoodItemsAdapter(this, this);
-        recyclerView.setAdapter(adapter);
 
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setSelectedItemId(R.id.claimFood);
@@ -80,45 +84,14 @@ public class RVFoodItems extends AppCompatActivity implements RVFoodItemsAdapter
         reference = FirebaseDatabase.getInstance().getReference("Foods");
         Intent intent = getIntent();
         donorId = intent.getStringExtra("donorId");
+        String donorName = intent.getStringExtra("donorName");
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
+        getSupportActionBar().setTitle(donorName);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         loadData(donorId);
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                adapter.notifyDataSetChanged();
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-
-        // Obtaining restaurant name / username of food donor
-        foodDonorName = findViewById(R.id.foodDonorName);
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-        reference.child(donorId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                User user = snapshot.getValue(User.class);
-                String restaurantName = user.getRestaurant();
-                if (TextUtils.isEmpty(restaurantName)) {
-                    foodDonorName.setText(user.getName());
-                } else {
-                    foodDonorName.setText(restaurantName);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {}
-        });
-
-        backBtn = findViewById(R.id.backBtn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RVFoodItems.this, RVDonors.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
     }
 
     private void loadData(String donorId) {
@@ -128,10 +101,20 @@ public class RVFoodItems extends AppCompatActivity implements RVFoodItemsAdapter
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot data : snapshot.getChildren()) {
                     Food currFood = data.getValue(Food.class);
-                    food.add(currFood);
+
+                    // So that foods with 0 qty won't be show to recipients
+                    if (currFood.getQuantity() > 0) {
+                        food.add(currFood);
+                        adapter.notifyDataSetChanged();
+                    }
                 }
-                adapter.setItems(food);
-                adapter.notifyDataSetChanged();
+
+                recyclerView = findViewById(R.id.rv);
+                recyclerView.setHasFixedSize(true);
+                adapter = new RVFoodItemsAdapter(RVFoodItems.this, food);
+                recyclerView.setAdapter(adapter);
+                LinearLayoutManager manager = new LinearLayoutManager(RVFoodItems.this);
+                recyclerView.setLayoutManager(manager);
             }
 
             @Override
@@ -142,19 +125,86 @@ public class RVFoodItems extends AppCompatActivity implements RVFoodItemsAdapter
     }
 
     @Override
-    public void onFoodClick(int position) {
-        Intent intent = new Intent(RVFoodItems.this, ReserveFoodItem.class);
-        intent.putExtra("donorId", donorId);
-        intent.putExtra("foodId", food.get(position).getFoodId());
-        startActivity(intent);
-        finish();
-    }
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(RVFoodItems.this, RVDonors.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.example_menu_searchandfilter, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setQueryHint("Search food listing here");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_sort) {
+            showSortDialog();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        Intent intent = new Intent(RVFoodItems.this, RVDonors.class);
+        startActivity(intent);
+        finish();
+        return true;
+    }
+
+    private void showSortDialog() {
+        // Options to display in dialog
+        String[] sortOptions = {"Descending Quantity", "Ascending Quantity"};
+
+        // Create alert dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Sort by").setIcon(R.drawable.ic_filter).setItems(sortOptions, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    Collections.sort(food, new Comparator<Food>() {
+                        @Override
+                        public int compare(Food o1, Food o2) {
+                            return o2.getQuantity() - o1.getQuantity();
+                        }
+                    });
+                    adapter.notifyDataSetChanged();
+                } else if (which == 1) {
+                    Collections.sort(food, new Comparator<Food>() {
+                        @Override
+                        public int compare(Food o1, Food o2) {
+                            return o1.getQuantity() - o2.getQuantity();
+                        }
+                    });
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+        builder.show();
     }
 }

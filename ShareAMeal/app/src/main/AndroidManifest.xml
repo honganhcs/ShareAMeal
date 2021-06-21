@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShareAMeal">
+        <activity android:name=".RVDonatedFoodListings" android:theme="@style/Theme.MaterialComponents.Light"></activity>
         <activity android:name=".ViewOrder"></activity>
         <activity android:name=".RecipientViewOrders" />
         <activity android:name=".OrderConfirmation" />
@@ -20,13 +21,19 @@
         <activity android:name=".ChangePasswordActivity" />
         <activity android:name=".EditProfileActivity" />
         <activity android:name=".ReserveFoodItem" />
-        <activity android:name=".RVFoodItems" />
-        <activity android:name=".RVDonors" />
+        <activity
+            android:name=".RVFoodItems"
+            android:theme="@style/Theme.MaterialComponents.Light"></activity>
+        <activity
+            android:name=".RVDonors"
+            android:theme="@style/Theme.MaterialComponents.Light"></activity>
         <activity android:name=".RecipientUserPageActivity" />
         <activity android:name=".EditFoodItemActivity" />
         <activity android:name=".DonorFoodItemPageActivity" />
         <activity android:name=".AddFoodItemActivity" />
-        <activity android:name=".DonateFoodActivity" />
+        <activity
+            android:name=".DonateFoodActivity"
+            android:theme="@style/Theme.MaterialComponents.Light"></activity>
         <activity android:name=".DonorUserPageActivity" />
         <activity android:name=".RecipientHomepageActivity" />
         <activity android:name=".DonorHomepageActivity" />

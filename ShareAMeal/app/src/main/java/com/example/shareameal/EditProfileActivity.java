@@ -77,26 +77,6 @@ public class EditProfileActivity extends AppCompatActivity {
         restaurantEdt = findViewById(R.id.restaurantEdt);
         restaurantWrapper = findViewById(R.id.restaurantWrapper);
 
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isImageUploaded) {
-                    if (!isProfileUpdated) {
-                        Toast.makeText(EditProfileActivity.this, "Please click on \"Update Profile Information\" down below", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Intent intent = new Intent(EditProfileActivity.this, DonorUserPageActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                } else {
-                    Intent intent = new Intent(EditProfileActivity.this, DonorUserPageActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-        });
-
-
         // "Update Profile Info" button is clickable only after any of the fields are updated
         usernameEdt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -268,6 +248,37 @@ public class EditProfileActivity extends AppCompatActivity {
                             Toast.makeText(EditProfileActivity.this, "Profile information failed to update", Toast.LENGTH_SHORT).show();
                         }
                     });
+                }
+            }
+        });
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isImageUploaded) {
+                    if (!isProfileUpdated) {
+                        Toast.makeText(EditProfileActivity.this, "Please click on \"Update Profile Information\" down below", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (userGroup.equals("donor")) {
+                            Intent intent = new Intent(EditProfileActivity.this, DonorUserPageActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Intent intent = new Intent(EditProfileActivity.this, RecipientUserPageActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+                } else {
+                    if (userGroup.equals("donor")) {
+                        Intent intent = new Intent(EditProfileActivity.this, DonorUserPageActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Intent intent = new Intent(EditProfileActivity.this, RecipientUserPageActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 }
             }
         });
