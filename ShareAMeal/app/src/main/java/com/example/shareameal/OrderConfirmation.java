@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,7 +23,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class OrderConfirmation extends AppCompatActivity {
 
-    private Button btnBack, btnConfirmOrder;
     private ImageView foodImage;
     private TextView foodNameTxt, foodDescriptionTxt, txtCurrentQuantity, txtSchedule, txtAddress;
     private EditText foodQuantityEdt;
@@ -43,8 +41,6 @@ public class OrderConfirmation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_confirmation);
 
-        btnBack = findViewById(R.id.btnBack);
-        btnConfirmOrder = findViewById(R.id.btnConfirmOrder);
         foodImage = findViewById(R.id.foodImage);
         foodNameTxt = findViewById(R.id.foodNameTxt);
         foodDescriptionTxt = findViewById(R.id.foodDescriptionTxt);
@@ -110,8 +106,6 @@ public class OrderConfirmation extends AppCompatActivity {
         txtCurrentQuantity.setText("Current quantity: " + food.getQuantity());
         txtSchedule.setText("Scheduled for collection at:\n" + slot.getStartTime() + " - " + slot.getEndTime() + ", " + slot.getDate());
         txtAddress.setText("Address: " + donor.getAddress());
-
-
 
     }
 
