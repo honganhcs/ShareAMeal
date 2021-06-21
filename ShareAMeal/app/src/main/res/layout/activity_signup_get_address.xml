@@ -73,7 +73,7 @@
                 android:background="@drawable/edittext"
                 android:ems="18"
                 android:hint="Building/House Number (If applicable)"
-                android:inputType="text" />
+                android:inputType="numberSigned" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -91,6 +91,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext"
                 android:ems="18"
+                android:digits="0123456789,-#"
                 android:hint="Unit Number (If applicable)"
                 android:inputType="textMultiLine" />
 
