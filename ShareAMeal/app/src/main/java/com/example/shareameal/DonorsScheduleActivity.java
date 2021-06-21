@@ -8,8 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,8 +27,9 @@ import java.util.ArrayList;
 
 public class DonorsScheduleActivity extends AppCompatActivity implements RVSlotsAdapter.OnSlotClickListener{
 
-    private AppCompatButton btnAddTimeSlot;
+    private FloatingActionButton btnAddTimeSlot;
     private RecyclerView recyclerView;
+    private BottomNavigationView bottomNav;
 
     private DatabaseReference reference;
     private ArrayList<Slot> slots = new ArrayList<>();
@@ -49,6 +53,29 @@ public class DonorsScheduleActivity extends AppCompatActivity implements RVSlots
         reference = reference.child("Slots").child(userId);
 
         loadData();
+
+        bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setSelectedItemId(R.id.schedule);
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int curr = item.getItemId();
+                if (curr == R.id.profile) {
+                    Intent intent = new Intent(DonorsScheduleActivity.this, DonorUserPageActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (curr == R.id.food) {
+                    Intent intent = new Intent(DonorsScheduleActivity.this, DonateFoodActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (curr == R.id.home) {
+                    Intent intent = new Intent(DonorsScheduleActivity.this, DonorHomepageActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                return true;
+            }
+        });
 
         btnAddTimeSlot = findViewById(R.id.btnAddTimeSlot);
         btnAddTimeSlot.setOnClickListener(new View.OnClickListener() {
