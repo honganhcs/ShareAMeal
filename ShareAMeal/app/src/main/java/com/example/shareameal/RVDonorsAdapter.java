@@ -1,6 +1,7 @@
 package com.example.shareameal;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.widget.Filter;
@@ -43,38 +45,26 @@ public class RVDonorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Context context;
     private ArrayList<User> list = new ArrayList<>();
     private ArrayList<User> listFull;
-    private OnDonorClickListener onDonorClickListener;
 
-    public RVDonorsAdapter(Context ctx, OnDonorClickListener onDonorClickListener) {
+    public RVDonorsAdapter(Context ctx, ArrayList<User> usersList) {
         this.context = ctx;
-        this.onDonorClickListener = onDonorClickListener;
-    }
-
-    public void setItems(ArrayList<User> users) {
-        list.addAll(users);
+        list = usersList;
         listFull = new ArrayList<>(list);
     }
 
-    public class DonorVH extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class DonorVH extends RecyclerView.ViewHolder {
 
         public TextView txt_donor, txt_donor_address, txt_donor_distance;
         public ImageView image;
-        public OnDonorClickListener onDonorClickListener;
+        public CardView cardView;
 
-        public DonorVH(@NonNull @NotNull View itemView, OnDonorClickListener onDonorClickListener) {
+        public DonorVH(@NonNull @NotNull View itemView) {
             super(itemView);
             txt_donor = itemView.findViewById(R.id.txt_donor);
             txt_donor_address = itemView.findViewById(R.id.txt_donor_address);
             txt_donor_distance = itemView.findViewById(R.id.txt_donor_distance);
             image = itemView.findViewById(R.id.img_donor);
-            this.onDonorClickListener = onDonorClickListener;
-
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            onDonorClickListener.onDonorClick(getBindingAdapterPosition());
+            cardView = itemView.findViewById(R.id.cvDonor);
         }
     }
 
@@ -82,8 +72,8 @@ public class RVDonorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @org.jetbrains.annotations.NotNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull @org.jetbrains.annotations.NotNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_rvdonor_item, parent, false);
-        return new DonorVH(view, onDonorClickListener);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_rvdonor_item, parent, false);
+        return new DonorVH(view);
     }
 
     @Override
@@ -135,6 +125,16 @@ public class RVDonorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 Picasso.get().load(donor.getImageUrl()).into(vh.image);
             }
         }
+
+        ((DonorVH) holder).cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String donorId = list.get(position).getUserId();
+                Intent intent = new Intent(v.getContext(), RVFoodItems.class);
+                intent.putExtra("donorId", donorId);
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
