@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -130,7 +132,10 @@ public class OrderConfirmation extends AppCompatActivity {
             order.setQuantity(orderQuantity);
             order.setFoodName(food.getName());
             order.setFoodImageURL(food.getImageUrl());
-            reference4 = FirebaseDatabase.getInstance().getReference("Orders").child(slot.getRecipientId());
+
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String userId = user.getUid();
+            reference4 = FirebaseDatabase.getInstance().getReference("Orders").child(userId);
             String orderId = reference4.push().getKey();
             reference4.child(orderId).setValue(order);
 
@@ -140,6 +145,7 @@ public class OrderConfirmation extends AppCompatActivity {
 
             //update slot
             slot.setAvailability(false);
+            slot.setRecipientId(userId);
             reference3 = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
             reference3.child(slot.getSlotId()).setValue(slot);
 

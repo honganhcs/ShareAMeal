@@ -64,43 +64,62 @@ public class ViewOrder extends AppCompatActivity {
                         food = data.getValue(Food.class);
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String userId = user.getUid();
-
-        reference2 = FirebaseDatabase.getInstance().getReference("Orders").child(userId);
-        reference2.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                for(DataSnapshot data : snapshot.getChildren()) {
-                    if(data.getKey().equals(slotId)) {
-                        order = data.getValue(Order.class);
+                if (food.getImageUrl() == null) {
+                    foodImage.setImageResource(R.drawable.dish);
+                } else {
+                    if (food.getImageUrl().equals("null")) {
+                        foodImage.setImageResource(R.drawable.dish);
+                    } else {
+                        Picasso.get().load(food.getImageUrl()).into(foodImage);
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String userId = user.getUid();
 
-            }
-        });
+                reference2 = FirebaseDatabase.getInstance().getReference("Orders").child(userId);
+                reference2.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        for(DataSnapshot data : snapshot.getChildren()) {
+                            if(data.getKey().equals(slotId)) {
+                                order = data.getValue(Order.class);
+                            }
+                        }
 
-        reference3 = FirebaseDatabase.getInstance().getReference("Users");
-        reference3.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                for(DataSnapshot data : snapshot.getChildren()) {
-                    if(data.getKey().equals(donorId)) {
-                        donor = data.getValue(User.class);
+                        reference3 = FirebaseDatabase.getInstance().getReference("Users");
+                        reference3.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                for(DataSnapshot data : snapshot.getChildren()) {
+                                    if(data.getKey().equals(donorId)) {
+                                        donor = data.getValue(User.class);
+                                    }
+                                }
+
+                                orderQuantity = order.getQuantity();
+
+                                foodNameTxt.setText(food.getName());
+                                foodDescriptionTxt.setText(food.getDescription());
+                                txtOrderQuantity.setText("Order quantity: " + orderQuantity);
+                                txtSchedule.setText("Scheduled for collection at:\n" + order.getStartTime() + " - " + order.getEndTime() + ", " + order.getDate());
+                                txtAddress.setText("Address: " + donor.getAddress());
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                            }
+                        });
                     }
-                }
+
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                    }
+                });
             }
 
             @Override
@@ -109,23 +128,6 @@ public class ViewOrder extends AppCompatActivity {
             }
         });
 
-        if (food.getImageUrl() == null) {
-            foodImage.setImageResource(R.drawable.dish);
-        } else {
-            if (food.getImageUrl().equals("null")) {
-                foodImage.setImageResource(R.drawable.dish);
-            } else {
-                Picasso.get().load(food.getImageUrl()).into(foodImage);
-            }
-        }
-
-        orderQuantity = order.getQuantity();
-
-        foodNameTxt.setText(food.getName());
-        foodDescriptionTxt.setText(food.getDescription());
-        txtOrderQuantity.setText("Order quantity: " + orderQuantity);
-        txtSchedule.setText("Scheduled for collection at:\n" + order.getStartTime() + " - " + order.getEndTime() + ", " + order.getDate());
-        txtAddress.setText("Address: " + donor.getAddress());
     }
 
     public void onBackBtn(View view) {
