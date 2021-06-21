@@ -39,12 +39,12 @@ public class FoodRvAdapter extends RecyclerView.Adapter<FoodRvAdapter.FoodsViewH
         final Food food = foodsList.get(position);
         holder.name.setText(food.getName());
         holder.description.setText(food.getDescription());
-        holder.quantity.setText(String.valueOf(food.getQuantity()));
+        holder.quantity.setText("Quantity: " + String.valueOf(food.getQuantity()));
         if (food.getImageUrl() == null) {
-            holder.image.setImageResource(R.drawable.dish);
+            holder.image.setImageResource(R.drawable.dish128);
         } else {
             if (food.getImageUrl().equals("null")) {
-                holder.image.setImageResource(R.drawable.dish);
+                holder.image.setImageResource(R.drawable.dish128);
             } else {
                 Picasso.get().load(food.getImageUrl()).into(holder.image);
             }

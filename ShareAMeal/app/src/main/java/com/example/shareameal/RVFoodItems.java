@@ -2,13 +2,17 @@ package com.example.shareameal;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -33,6 +37,9 @@ public class RVFoodItems extends AppCompatActivity implements RVFoodItemsAdapter
     private ArrayList<Food> food = new ArrayList<>();
     private RVFoodItemsAdapter adapter;
     String donorId;
+
+    private TextView foodDonorName;
+    private AppCompatButton backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +89,36 @@ public class RVFoodItems extends AppCompatActivity implements RVFoodItemsAdapter
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+
+        // Obtaining restaurant name / username of food donor
+        foodDonorName = findViewById(R.id.foodDonorName);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        reference.child(donorId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                String restaurantName = user.getRestaurant();
+                if (TextUtils.isEmpty(restaurantName)) {
+                    foodDonorName.setText(user.getName());
+                } else {
+                    foodDonorName.setText(restaurantName);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {}
+        });
+
+        backBtn = findViewById(R.id.backBtn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RVFoodItems.this, RVDonors.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
 
     private void loadData(String donorId) {
@@ -109,6 +146,14 @@ public class RVFoodItems extends AppCompatActivity implements RVFoodItemsAdapter
         Intent intent = new Intent(RVFoodItems.this, ReserveFoodItem.class);
         intent.putExtra("donorId", donorId);
         intent.putExtra("foodId", food.get(position).getFoodId());
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(RVFoodItems.this, RVDonors.class);
         startActivity(intent);
         finish();
     }

@@ -7,7 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
@@ -29,12 +34,14 @@ public class RVDonorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public class DonorVH extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public TextView txt_donor, txt_donor_address;
+        public ImageView image;
         public OnDonorClickListener onDonorClickListener;
 
         public DonorVH(@NonNull @NotNull View itemView, OnDonorClickListener onDonorClickListener) {
             super(itemView);
             txt_donor = itemView.findViewById(R.id.txt_donor);
             txt_donor_address = itemView.findViewById(R.id.txt_donor_address);
+            image = itemView.findViewById(R.id.img_donor);
             this.onDonorClickListener = onDonorClickListener;
 
             itemView.setOnClickListener(this);
@@ -65,6 +72,15 @@ public class RVDonorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             vh.txt_donor.setText(donor.getRestaurant());
         }
         vh.txt_donor_address.setText(donor.getAddress());
+        if (donor.getImageUrl() == null) {
+            vh.image.setImageResource(R.drawable.profile128px);
+        } else {
+            if (donor.getImageUrl().equals("null")) {
+                vh.image.setImageResource(R.drawable.profile128px);
+            } else {
+                Picasso.get().load(donor.getImageUrl()).into(vh.image);
+            }
+        }
     }
 
     @Override
