@@ -125,7 +125,7 @@ public class RVDonors extends AppCompatActivity {
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setMaxWidth(Integer.MAX_VALUE);
-        searchView.setQueryHint("Search food listing here");
+        searchView.setQueryHint("Search food donor here");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
