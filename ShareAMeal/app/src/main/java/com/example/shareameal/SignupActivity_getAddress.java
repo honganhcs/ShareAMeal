@@ -87,26 +87,29 @@ public class SignupActivity_getAddress extends AppCompatActivity {
                                 Address addressItem = (Address) addressList.get(0);
                                 longitude = addressItem.getLongitude();
                                 latitude = addressItem.getLatitude();
+
+                                user.setAddressLatitude(latitude);
+                                user.setAddressLongitude(longitude);
+
+                                FirebaseUser loggedInUser = FirebaseAuth.getInstance().getCurrentUser();
+                                String uid = loggedInUser.getUid();
+                                user.setUserId(uid);
+
+                                user.setImageUrl("null");
+
+                                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Users");
+                                mDatabase.child(uid).setValue(user);
+
+                                Intent intent = new Intent(SignupActivity_getAddress.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(SignupActivity_getAddress.this, "Please provide a valid address", Toast.LENGTH_SHORT).show();
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
 
-                        user.setAddressLatitude(latitude);
-                        user.setAddressLongitude(longitude);
-
-                        FirebaseUser loggedInUser = FirebaseAuth.getInstance().getCurrentUser();
-                        String uid = loggedInUser.getUid();
-                        user.setUserId(uid);
-
-                        user.setImageUrl("null");
-
-                        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Users");
-                        mDatabase.child(uid).setValue(user);
-
-                        Intent intent = new Intent(SignupActivity_getAddress.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
                     }
                 }
         });
