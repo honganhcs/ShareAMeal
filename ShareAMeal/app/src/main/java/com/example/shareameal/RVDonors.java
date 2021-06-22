@@ -202,10 +202,11 @@ public class RVDonors extends AppCompatActivity {
                                         }
                                     }
                                 });
+
+                                adapter.notifyDataSetChanged();
                             }
                         }
                     });
-                    adapter.notifyDataSetChanged();
                 }
             }
         });
