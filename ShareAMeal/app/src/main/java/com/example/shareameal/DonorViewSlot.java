@@ -64,13 +64,12 @@ public class DonorViewSlot extends AppCompatActivity {
                     for(DataSnapshot data : snapshot.getChildren()) {
                         if(data.getKey().equals(slotId)) {
                             order = data.getValue(Order.class);
+                            donorId = order.getDonorId();
+                            foodId = order.getFoodId();
                         }
                     }
 
-                    donorId = order.getDonorId();
-                    foodId = order.getFoodId();
-
-                    reference2 = FirebaseDatabase.getInstance().getReference("Food").child(donorId);
+                    reference2 = FirebaseDatabase.getInstance().getReference("Foods").child(donorId);
                     reference2.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -99,6 +98,7 @@ public class DonorViewSlot extends AppCompatActivity {
             });
         }
     }
+
 
     public void onDeleteBtn(View view) {
         reference3 = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
