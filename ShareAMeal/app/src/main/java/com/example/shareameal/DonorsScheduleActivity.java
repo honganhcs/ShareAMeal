@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +41,9 @@ public class DonorsScheduleActivity extends AppCompatActivity implements RVSlots
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donors_schedule);
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
+        getSupportActionBar().setTitle("View all time slots");
 
         recyclerView = findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);

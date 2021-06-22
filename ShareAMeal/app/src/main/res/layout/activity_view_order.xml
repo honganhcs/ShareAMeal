@@ -9,28 +9,18 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="40dp">
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="20dp"
-            android:background="@drawable/leftarrow"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:onClick="onBackBtn"/>
+        android:layout_marginTop="20dp"
+        >
 
         <ImageView
             android:id="@+id/foodImage"
             android:layout_width="170dp"
             android:layout_height="170dp"
-            android:layout_marginTop="20dp"
             android:background="@drawable/foodimageborder"
             android:src="@drawable/dish"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnBack" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/foodNameTxt"

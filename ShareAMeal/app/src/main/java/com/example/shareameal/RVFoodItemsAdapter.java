@@ -81,9 +81,11 @@ public class RVFoodItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             public void onClick(View v) {
                 Intent oldIntent = ((Activity) v.getContext()).getIntent();
                 String donorId = oldIntent.getStringExtra("donorId");
+                String donorName = oldIntent.getStringExtra("donorName");
                 Intent intent = new Intent(v.getContext(), ReserveFoodItem.class);
                 intent.putExtra("donorId", donorId);
                 intent.putExtra("foodId", list.get(position).getFoodId());
+                intent.putExtra("donorName", donorName);
                 v.getContext().startActivity(intent);
             }
         });

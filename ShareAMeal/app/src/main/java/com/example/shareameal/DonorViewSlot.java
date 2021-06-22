@@ -4,9 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +33,11 @@ public class DonorViewSlot extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donor_view_slot);
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
+        getSupportActionBar().setTitle("View time slot");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         txtDate = findViewById(R.id.txtDate);
         txtTime = findViewById(R.id.txtTime);
@@ -56,10 +64,32 @@ public class DonorViewSlot extends AppCompatActivity {
                     for(DataSnapshot data : snapshot.getChildren()) {
                         if(data.getKey().equals(slotId)) {
                             order = data.getValue(Order.class);
-                            donorId = order.getDonorId();
-                            foodId = order.getFoodId();
                         }
                     }
+
+                    donorId = order.getDonorId();
+                    foodId = order.getFoodId();
+
+                    reference2 = FirebaseDatabase.getInstance().getReference("Food").child(donorId);
+                    reference2.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                            for(DataSnapshot data : snapshot.getChildren()) {
+                                if(data.getKey().equals(foodId)) {
+                                    food = data.getValue(Food.class);
+                                }
+                            }
+
+                            qty = order.getQuantity();
+                            String foodName = food.getName();
+                            txtReservedItem.setText(qty + " " + foodName);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                        }
+                    });
                 }
 
                 @Override
@@ -67,33 +97,7 @@ public class DonorViewSlot extends AppCompatActivity {
 
                 }
             });
-            reference2 = FirebaseDatabase.getInstance().getReference("Food").child(donorId);
-            reference2.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                    for(DataSnapshot data : snapshot.getChildren()) {
-                        if(data.getKey().equals(foodId)) {
-                            food = data.getValue(Food.class);
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-                }
-            });
-
-            qty = order.getQuantity();
-            String foodName = food.getName();
-            txtReservedItem.setText(qty + " " + foodName);
         }
-    }
-
-    public void onBackBtn(View view) {
-        Intent intent = new Intent(DonorViewSlot.this, DonorsScheduleActivity.class);
-        startActivity(intent);
-        finish();
     }
 
     public void onDeleteBtn(View view) {
@@ -111,5 +115,13 @@ public class DonorViewSlot extends AppCompatActivity {
         Intent intent = new Intent(DonorViewSlot.this, DonorsScheduleActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        Intent intent = new Intent(DonorViewSlot.this, DonorsScheduleActivity.class);
+        startActivity(intent);
+        finish();
+        return true;
     }
 }

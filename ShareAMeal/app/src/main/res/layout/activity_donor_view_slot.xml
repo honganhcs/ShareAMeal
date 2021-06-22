@@ -6,16 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".DonorViewSlot">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnBack"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="20dp"
-        android:background="@drawable/leftarrow"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:onClick="onBackBtn"/>
-
     <TextView
         android:id="@+id/txtDate"
         android:layout_width="wrap_content"

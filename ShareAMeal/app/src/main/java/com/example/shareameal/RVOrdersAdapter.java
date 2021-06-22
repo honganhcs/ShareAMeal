@@ -72,7 +72,7 @@ public class RVOrdersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         vh.txt_food.setText(order.getFoodName());
         vh.txt_food_quantity.setText("Order quantity: " + order.getQuantity());
-        vh.txt_date_time.setText("Order scheduled at " + order.getStartTime() + " - " + order.getEndTime() + " on " + order.getDate() + ".");
+        vh.txt_date_time.setText("Order scheduled at " + order.getStartTime() + " - " + order.getEndTime() + " on " + order.getDate());
 
         if (order.getFoodImageURL() == null) {
             vh.img_food.setImageResource(R.drawable.dish);

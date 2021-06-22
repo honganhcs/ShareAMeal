@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -35,6 +37,9 @@ public class RecipientViewOrders extends AppCompatActivity implements RVOrdersAd
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipient_view_orders);
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
+        getSupportActionBar().setTitle("View all orders");
 
         recyclerView = findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);

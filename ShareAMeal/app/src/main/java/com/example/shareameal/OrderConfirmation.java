@@ -119,6 +119,8 @@ public class OrderConfirmation extends AppCompatActivity {
         String qty = foodQuantityEdt.getText().toString();
         if(Integer.valueOf(qty) == 0 || TextUtils.isEmpty(qty)) {
             Toast.makeText(OrderConfirmation.this, "Please enter a number larger than 0.", Toast.LENGTH_SHORT).show();
+        } else if(Integer.valueOf(qty) > food.getQuantity()) {
+            Toast.makeText(OrderConfirmation.this, "Please enter at most " + food.getQuantity() + ".", Toast.LENGTH_SHORT).show();
         } else {
             orderQuantity = Integer.valueOf(qty);
 

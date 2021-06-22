@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -23,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class ViewOrder extends AppCompatActivity {
 
-    private Button btnBack, btnCancelOrder;
     private ImageView foodImage;
     private TextView foodNameTxt, foodDescriptionTxt, txtOrderQuantity, txtSchedule, txtAddress;
 
@@ -40,8 +41,11 @@ public class ViewOrder extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_order);
 
-        btnBack = findViewById(R.id.btnBack);
-        btnCancelOrder = findViewById(R.id.btnCancelOrder);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
+        getSupportActionBar().setTitle("View order");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         foodImage = findViewById(R.id.foodImage);
         foodNameTxt = findViewById(R.id.foodNameTxt);
@@ -130,12 +134,6 @@ public class ViewOrder extends AppCompatActivity {
 
     }
 
-    public void onBackBtn(View view) {
-        Intent intent = new Intent(ViewOrder.this, RecipientViewOrders.class);
-        startActivity(intent);
-        finish();
-    }
-
     public void onCancelOrder(View view) {
         //remove order
         reference2.child(slotId).removeValue();
@@ -166,5 +164,13 @@ public class ViewOrder extends AppCompatActivity {
         Intent intent = new Intent(ViewOrder.this, RecipientViewOrders.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        Intent intent = new Intent(ViewOrder.this, RecipientViewOrders.class);
+        startActivity(intent);
+        finish();
+        return true;
     }
 }
