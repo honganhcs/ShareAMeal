@@ -6,6 +6,8 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,6 +46,8 @@ public class AddFoodItemActivity extends AppCompatActivity {
     private Uri imageUri;
     private StorageReference mStorageRef;
 
+    private boolean isImageUploaded, isFoodUpdated;
+
     private EditText foodNameEdt;
     private EditText foodDescriptionEdt;
     private AppCompatButton addFoodItemBtn;
@@ -64,7 +68,13 @@ public class AddFoodItemActivity extends AppCompatActivity {
         uploadImageBtn = findViewById(R.id.uploadImageBtn);
         uploadImageBtn.setClickable(false);
         uploadImageBtn.setEnabled(false);
+        uploadImageBtn.setBackground(getDrawable(R.drawable.disabledbutton));
         foodImage = findViewById(R.id.foodImage);
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
+        getSupportActionBar().setTitle("Add Food Listing");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Getting user id of current user
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -84,6 +94,12 @@ public class AddFoodItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 uploadImage();
+
+                isImageUploaded = true;
+                isFoodUpdated = false;
+                uploadImageBtn.setClickable(false);
+                uploadImageBtn.setEnabled(false);
+                uploadImageBtn.setBackground(getDrawable(R.drawable.disabledbutton));
             }
         });
 
@@ -131,6 +147,7 @@ public class AddFoodItemActivity extends AppCompatActivity {
                             Toast.makeText(AddFoodItemActivity.this, "Food item successfully added", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(AddFoodItemActivity.this, DonateFoodActivity.class);
                             startActivity(intent);
+                            isFoodUpdated = true;
                             finish();
                         }
 
@@ -151,6 +168,7 @@ public class AddFoodItemActivity extends AppCompatActivity {
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
         uploadImageBtn.setClickable(true);
         uploadImageBtn.setEnabled(true);
+        uploadImageBtn.setBackground(getDrawable(R.drawable.button));
     }
 
     @Override
@@ -203,6 +221,26 @@ public class AddFoodItemActivity extends AppCompatActivity {
                     });
         } else {
             Toast.makeText(AddFoodItemActivity.this, "No image selected", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        if (isImageUploaded) {
+            if (!isFoodUpdated) {
+                Toast.makeText(AddFoodItemActivity.this, "Please click on \"Add Food Listing\" down below", Toast.LENGTH_SHORT).show();
+                return true;
+            } else {
+                Intent intent = new Intent(AddFoodItemActivity.this, DonateFoodActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
+            }
+        } else {
+            Intent intent = new Intent(AddFoodItemActivity.this, DonateFoodActivity.class);
+            startActivity(intent);
+            finish();
+            return true;
         }
     }
 }

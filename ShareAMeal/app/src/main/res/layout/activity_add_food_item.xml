@@ -6,29 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".AddFoodItemActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Food Listing"
-        android:textColor="#AF1B1B"
-        android:layout_marginTop="30dp"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ImageView
         android:id="@+id/foodImage"
         android:layout_width="170dp"
         android:layout_height="170dp"
         android:layout_marginRight="160dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/foodimageborder"
+        android:layout_marginTop="150dp"
         android:src="@drawable/dish"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/chooseImageBtn"

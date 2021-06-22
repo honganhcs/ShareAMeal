@@ -60,22 +60,27 @@ public class DonorViewSlot extends AppCompatActivity {
                             foodId = order.getFoodId();
                         }
                     }
-                }
 
-                @Override
-                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                    reference2 = FirebaseDatabase.getInstance().getReference("Foods").child(donorId);
+                    reference2.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                            for(DataSnapshot data : snapshot.getChildren()) {
+                                if(data.getKey().equals(foodId)) {
+                                    food = data.getValue(Food.class);
+                                }
+                            }
 
-                }
-            });
-            reference2 = FirebaseDatabase.getInstance().getReference("Food").child(donorId);
-            reference2.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                    for(DataSnapshot data : snapshot.getChildren()) {
-                        if(data.getKey().equals(foodId)) {
-                            food = data.getValue(Food.class);
+                            qty = order.getQuantity();
+                            String foodName = food.getName();
+                            txtReservedItem.setText(qty + " " + foodName);
                         }
-                    }
+
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                        }
+                    });
                 }
 
                 @Override
@@ -83,10 +88,6 @@ public class DonorViewSlot extends AppCompatActivity {
 
                 }
             });
-
-            qty = order.getQuantity();
-            String foodName = food.getName();
-            txtReservedItem.setText(qty + " " + foodName);
         }
     }
 

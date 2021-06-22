@@ -32,7 +32,7 @@
         <activity android:name=".RecipientUserPageActivity" />
         <activity android:name=".EditFoodItemActivity" android:theme="@style/Theme.MaterialComponents.Light"/>
         <activity android:name=".DonorFoodItemPageActivity" android:theme="@style/Theme.MaterialComponents.Light"> </activity>
-        <activity android:name=".AddFoodItemActivity" />
+        <activity android:name=".AddFoodItemActivity" android:theme="@style/Theme.MaterialComponents.Light"/>
         <activity
             android:name=".DonateFoodActivity"
             android:theme="@style/Theme.MaterialComponents.Light" />
