@@ -17,10 +17,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.NotNull;
+
 public class DonorHomepageActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNav;
-    private TextView userNameTxt;
+    private TextView userNameTxt, reminderQty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class DonorHomepageActivity extends AppCompatActivity {
         });
 
         userNameTxt = findViewById(R.id.userNameTxt);
+        reminderQty = findViewById(R.id.reminderQty);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userid = user.getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
@@ -71,6 +74,21 @@ public class DonorHomepageActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+        });
+        DatabaseReference foodRef = FirebaseDatabase.getInstance().getReference("Foods");
+        foodRef.child(userid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                int totalQty = 0;
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    Food currFood = data.getValue(Food.class);
+                    totalQty += currFood.getQuantity();
+                }
+                reminderQty.setText(String.valueOf(totalQty));
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {}
         });
     }
 }

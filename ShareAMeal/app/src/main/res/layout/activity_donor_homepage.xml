@@ -83,16 +83,29 @@
                     app:layout_constraintTop_toBottomOf="@+id/userRoleIcon" />
 
                 <TextView
-                    android:id="@+id/reminderTxt"
+                    android:id="@+id/reminderQty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:inputType="textMultiLine"
-                    android:text="0 food items waiting to be claimed"
+                    android:text="0"
+                    android:inputType="numberSigned"
                     android:textColor="#AF1B1B"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@+id/reminderIcon"
                     app:layout_constraintStart_toEndOf="@+id/reminderIcon"
+                    app:layout_constraintTop_toTopOf="@+id/reminderIcon"/>
+
+                <TextView
+                    android:id="@+id/reminderTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:inputType="textMultiLine"
+                    android:text="food items waiting to be claimed"
+                    android:textColor="#AF1B1B"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/reminderIcon"
+                    app:layout_constraintStart_toEndOf="@+id/reminderQty"
                     app:layout_constraintTop_toTopOf="@+id/reminderIcon" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
