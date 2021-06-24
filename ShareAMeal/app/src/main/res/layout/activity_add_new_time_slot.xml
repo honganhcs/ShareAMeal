@@ -6,21 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".AddNewTimeSlotActivity">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnBack"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="20dp"
-        android:background="@drawable/leftarrow"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:onClick="onBackBtn"/>
-
     <TextView
         android:id="@+id/txtSelectDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="40dp"
         android:text="Select date:"
         android:textColor="@color/maroon"
         android:textSize="30sp"

@@ -110,6 +110,7 @@ public class ReserveFoodItem extends AppCompatActivity implements RVSlotsAdapter
         bundle.putParcelable("slot", slots.get(position));
         bundle.putString("donorId", donorId);
         bundle.putString("foodId", foodId);
+        bundle.putString("donorName", donorName);
         intent.putExtras(bundle);
         startActivity(intent);
         finish();

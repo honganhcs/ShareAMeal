@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -26,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class OrderConfirmation extends AppCompatActivity {
 
-    private Button btnBack, btnConfirmOrder;
     private ImageView foodImage;
     private TextView foodNameTxt, foodDescriptionTxt, txtCurrentQuantity, txtSchedule, txtAddress;
     private EditText foodQuantityEdt;
@@ -35,7 +36,7 @@ public class OrderConfirmation extends AppCompatActivity {
     private DatabaseReference reference1, reference2, reference3, reference4;
     private Bundle bundle;
     private Slot slot;
-    private String donorId, foodId;
+    private String donorId, foodId, donorName;
     private Food food;
     private User donor;
     private int orderQuantity;
@@ -45,8 +46,11 @@ public class OrderConfirmation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_confirmation);
 
-        btnBack = findViewById(R.id.btnBack);
-        btnConfirmOrder = findViewById(R.id.btnConfirmOrder);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
+        getSupportActionBar().setTitle("Confirm Order");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         foodImage = findViewById(R.id.foodImage);
         foodNameTxt = findViewById(R.id.foodNameTxt);
         foodDescriptionTxt = findViewById(R.id.foodDescriptionTxt);
@@ -60,6 +64,7 @@ public class OrderConfirmation extends AppCompatActivity {
         slot = bundle.getParcelable("slot");
         donorId = bundle.getString("donorId");
         foodId = bundle.getString("foodId");
+        donorName = bundle.getString("donorName");
 
         reference1 = FirebaseDatabase.getInstance().getReference("Foods").child(donorId);
 
@@ -158,11 +163,14 @@ public class OrderConfirmation extends AppCompatActivity {
         }
     }
 
-    public void onBackBtn(View view) {
-        // how do i get back to the Reserve Food Item page for the right food item?
-        // temporary solution:
-        Intent intent = new Intent(OrderConfirmation.this, RVDonors.class);
+    @Override
+    public boolean onSupportNavigateUp() {
+        Intent intent = new Intent(OrderConfirmation.this, ReserveFoodItem.class);
+        intent.putExtra("donorId", donorId);
+        intent.putExtra("foodId", foodId);
+        intent.putExtra("donorName", donorName);
         startActivity(intent);
         finish();
+        return true;
     }
 }

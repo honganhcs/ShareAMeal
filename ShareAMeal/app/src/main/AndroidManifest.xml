@@ -19,11 +19,13 @@
             android:theme="@style/Theme.MaterialComponents.Light"/>
         <activity android:name=".RecipientViewOrders"
             android:theme="@style/Theme.MaterialComponents.Light"/>
-        <activity android:name=".OrderConfirmation" />
+        <activity android:name=".OrderConfirmation"
+            android:theme="@style/Theme.MaterialComponents.Light"/>
         <activity
             android:name=".DonorViewSlot"
             android:theme="@style/Theme.MaterialComponents.Light"/>
-        <activity android:name=".AddNewTimeSlotActivity" />
+        <activity android:name=".AddNewTimeSlotActivity"
+            android:theme="@style/Theme.MaterialComponents.Light"/>
         <activity
             android:name=".DonorsScheduleActivity"
             android:theme="@style/Theme.MaterialComponents.Light"/>
