@@ -42,8 +42,9 @@
         android:foregroundGravity="bottom"
         android:background="#F6DABA"
         app:menu="@menu/menu_bottom_nav_donor"
-        app:itemTextColor="#AF1B1B"
+        app:itemTextColor="@color/menu_select_deselect"
         app:itemIconTint="@drawable/bottom_navigation_selector"
+        app:labelVisibilityMode="labeled"
         />
 
 </RelativeLayout>
