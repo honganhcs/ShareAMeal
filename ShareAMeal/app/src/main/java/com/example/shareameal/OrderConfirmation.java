@@ -28,162 +28,164 @@ import org.jetbrains.annotations.NotNull;
 
 public class OrderConfirmation extends AppCompatActivity {
 
-  private ImageView foodImage;
-  private TextView foodNameTxt, foodDescriptionTxt, txtCurrentQuantity, txtSchedule, txtAddress;
-  private EditText foodQuantityEdt;
+    private ImageView foodImage;
+    private TextView foodNameTxt, foodDescriptionTxt, txtCurrentQuantity, txtSchedule, txtAddress;
+    private EditText foodQuantityEdt;
 
-  // data
-  private DatabaseReference reference1, reference2, reference3, reference4;
-  private Bundle bundle;
-  private Slot slot;
-  private String donorId, foodId, donorName;
-  private Food food;
-  private User donor;
-  private int orderQuantity;
+    // data
+    private DatabaseReference reference1, reference2, reference3, reference4;
+    private Bundle bundle;
+    private Slot slot;
+    private String donorId, foodId, donorName;
+    private Food food;
+    private User donor;
+    private int orderQuantity;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_order_confirmation);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_order_confirmation);
 
-    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-    getSupportActionBar().setTitle("Confirm Order");
-    getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
+        getSupportActionBar().setTitle("Confirm Order");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    foodImage = findViewById(R.id.foodImage);
-    foodNameTxt = findViewById(R.id.foodNameTxt);
-    foodDescriptionTxt = findViewById(R.id.foodDescriptionTxt);
-    txtCurrentQuantity = findViewById(R.id.txtOrderQuantity);
-    txtSchedule = findViewById(R.id.txtSchedule);
-    txtAddress = findViewById(R.id.txtAddress);
-    foodQuantityEdt = findViewById(R.id.foodQuantityEdt);
+        foodImage = findViewById(R.id.foodImage);
+        foodNameTxt = findViewById(R.id.foodNameTxt);
+        foodDescriptionTxt = findViewById(R.id.foodDescriptionTxt);
+        txtCurrentQuantity = findViewById(R.id.txtOrderQuantity);
+        txtSchedule = findViewById(R.id.txtSchedule);
+        txtAddress = findViewById(R.id.txtAddress);
+        foodQuantityEdt = findViewById(R.id.foodQuantityEdt);
 
-    Intent intent = getIntent();
-    bundle = intent.getExtras();
-    slot = bundle.getParcelable("slot");
-    donorId = bundle.getString("donorId");
-    foodId = bundle.getString("foodId");
-    donorName = bundle.getString("donorName");
+        Intent intent = getIntent();
+        bundle = intent.getExtras();
+        slot = bundle.getParcelable("slot");
+        donorId = bundle.getString("donorId");
+        foodId = bundle.getString("foodId");
+        donorName = bundle.getString("donorName");
 
-    reference1 = FirebaseDatabase.getInstance().getReference("Foods").child(donorId);
+        reference1 = FirebaseDatabase.getInstance().getReference("Foods").child(donorId);
 
-    reference1.addValueEventListener(
-        new ValueEventListener() {
-          @Override
-          public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-            for (DataSnapshot data : snapshot.getChildren()) {
-              if (data.getKey().equals(foodId)) {
-                food = data.getValue(Food.class);
-              }
-            }
-
-            if (food.getImageUrl() == null) {
-              foodImage.setImageResource(R.drawable.dish);
-            } else {
-              if (food.getImageUrl().equals("null")) {
-                foodImage.setImageResource(R.drawable.dish);
-              } else {
-                Picasso.get().load(food.getImageUrl()).into(foodImage);
-              }
-            }
-
-            reference2 = FirebaseDatabase.getInstance().getReference("Users");
-
-            reference2.addValueEventListener(
+        reference1.addValueEventListener(
                 new ValueEventListener() {
-                  @Override
-                  public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                    for (DataSnapshot data : snapshot.getChildren()) {
-                      if (data.getKey().equals(donorId)) {
-                        donor = data.getValue(User.class);
-                      }
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        for (DataSnapshot data : snapshot.getChildren()) {
+                            if (data.getKey().equals(foodId)) {
+                                food = data.getValue(Food.class);
+                            }
+                        }
+
+                        if (food.getImageUrl() == null) {
+                            foodImage.setImageResource(R.drawable.dish);
+                        } else {
+                            if (food.getImageUrl().equals("null")) {
+                                foodImage.setImageResource(R.drawable.dish);
+                            } else {
+                                Picasso.get().load(food.getImageUrl()).into(foodImage);
+                            }
+                        }
+
+                        reference2 = FirebaseDatabase.getInstance().getReference("Users");
+
+                        reference2.addValueEventListener(
+                                new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                        for (DataSnapshot data : snapshot.getChildren()) {
+                                            if (data.getKey().equals(donorId)) {
+                                                donor = data.getValue(User.class);
+                                            }
+                                        }
+
+                                        foodNameTxt.setText(food.getName());
+                                        foodDescriptionTxt.setText(food.getDescription());
+                                        txtCurrentQuantity.setText("Current quantity: " + food.getQuantity());
+                                        txtSchedule.setText(
+                                                "Scheduled for collection at:\n"
+                                                        + slot.getStartTime()
+                                                        + " - "
+                                                        + slot.getEndTime()
+                                                        + ", "
+                                                        + slot.getDate());
+                                        txtAddress.setText("Address: " + donor.getAddress());
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                    }
+                                });
                     }
 
-                    foodNameTxt.setText(food.getName());
-                    foodDescriptionTxt.setText(food.getDescription());
-                    txtCurrentQuantity.setText("Current quantity: " + food.getQuantity());
-                    txtSchedule.setText(
-                        "Scheduled for collection at:\n"
-                            + slot.getStartTime()
-                            + " - "
-                            + slot.getEndTime()
-                            + ", "
-                            + slot.getDate());
-                    txtAddress.setText("Address: " + donor.getAddress());
-                  }
-
-                  @Override
-                  public void onCancelled(@NonNull @NotNull DatabaseError error) {}
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                    }
                 });
-          }
-
-          @Override
-          public void onCancelled(@NonNull @NotNull DatabaseError error) {}
-        });
-  }
-
-  public void onConfirmOrder(View view) {
-    String qty = foodQuantityEdt.getText().toString();
-    if (Integer.valueOf(qty) == 0 || TextUtils.isEmpty(qty)) {
-      Toast.makeText(
-              OrderConfirmation.this, "Please enter a number larger than 0.", Toast.LENGTH_SHORT)
-          .show();
-    } else if (Integer.valueOf(qty) > food.getQuantity()) {
-      Toast.makeText(
-              OrderConfirmation.this,
-              "Please enter at most " + food.getQuantity() + ".",
-              Toast.LENGTH_SHORT)
-          .show();
-    } else {
-      orderQuantity = Integer.valueOf(qty);
-
-      // create new order
-      Order order = new Order();
-      order.setDate(slot.getDate());
-      order.setStartTime(slot.getStartTime());
-      order.setEndTime(slot.getEndTime());
-      order.setDonorId(donorId);
-      order.setFoodId(foodId);
-      order.setQuantity(orderQuantity);
-      order.setFoodName(food.getName());
-      order.setFoodImageURL(food.getImageUrl());
-      order.setSlotId(slot.getSlotId());
-
-      FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-      String userId = user.getUid();
-      reference4 = FirebaseDatabase.getInstance().getReference("Orders").child(userId);
-      reference4.child(slot.getSlotId()).setValue(order);
-
-      // update food item
-      food.setQuantity(food.getQuantity() - orderQuantity);
-      reference1.child(foodId).setValue(food);
-
-      // update slot
-      slot.setAvailability(false);
-      slot.setRecipientId(userId);
-      reference3 = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
-      reference3.child(slot.getSlotId()).setValue(slot);
-
-      Toast.makeText(
-              OrderConfirmation.this,
-              "Your order has been successfully created.",
-              Toast.LENGTH_SHORT)
-          .show();
-      Intent intent = new Intent(OrderConfirmation.this, RVDonors.class);
-      startActivity(intent);
-      finish();
     }
-  }
 
-  @Override
-  public boolean onSupportNavigateUp() {
-    Intent intent = new Intent(OrderConfirmation.this, ReserveFoodItem.class);
-    intent.putExtra("donorId", donorId);
-    intent.putExtra("foodId", foodId);
-    intent.putExtra("donorName", donorName);
-    startActivity(intent);
-    finish();
-    return true;
-  }
+    public void onConfirmOrder(View view) {
+        String qty = foodQuantityEdt.getText().toString();
+        if (Integer.valueOf(qty) == 0 || TextUtils.isEmpty(qty)) {
+            Toast.makeText(
+                    OrderConfirmation.this, "Please enter a number larger than 0.", Toast.LENGTH_SHORT)
+                    .show();
+        } else if (Integer.valueOf(qty) > food.getQuantity()) {
+            Toast.makeText(
+                    OrderConfirmation.this,
+                    "Please enter at most " + food.getQuantity() + ".",
+                    Toast.LENGTH_SHORT)
+                    .show();
+        } else {
+            orderQuantity = Integer.valueOf(qty);
+
+            // create new order
+            Order order = new Order();
+            order.setDate(slot.getDate());
+            order.setStartTime(slot.getStartTime());
+            order.setEndTime(slot.getEndTime());
+            order.setDonorId(donorId);
+            order.setFoodId(foodId);
+            order.setQuantity(orderQuantity);
+            order.setFoodName(food.getName());
+            order.setFoodImageURL(food.getImageUrl());
+            order.setSlotId(slot.getSlotId());
+
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String userId = user.getUid();
+            reference4 = FirebaseDatabase.getInstance().getReference("Orders").child(userId);
+            reference4.child(slot.getSlotId()).setValue(order);
+
+            // update food item
+            food.setQuantity(food.getQuantity() - orderQuantity);
+            reference1.child(foodId).setValue(food);
+
+            // update slot
+            slot.setAvailability(false);
+            slot.setRecipientId(userId);
+            reference3 = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
+            reference3.child(slot.getSlotId()).setValue(slot);
+
+            Toast.makeText(
+                    OrderConfirmation.this,
+                    "Your order has been successfully created.",
+                    Toast.LENGTH_SHORT)
+                    .show();
+            Intent intent = new Intent(OrderConfirmation.this, RVDonors.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        Intent intent = new Intent(OrderConfirmation.this, ReserveFoodItem.class);
+        intent.putExtra("donorId", donorId);
+        intent.putExtra("foodId", foodId);
+        intent.putExtra("donorName", donorName);
+        startActivity(intent);
+        finish();
+        return true;
+    }
 }

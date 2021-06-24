@@ -42,220 +42,221 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class RVDonors extends AppCompatActivity {
-  private RecyclerView recyclerView;
-  private BottomNavigationView bottomNav;
+    private RecyclerView recyclerView;
+    private BottomNavigationView bottomNav;
 
-  private DatabaseReference reference;
-  private ArrayList<User> users = new ArrayList<>();
-  private RVDonorsAdapter adapter;
+    private DatabaseReference reference;
+    private ArrayList<User> users = new ArrayList<>();
+    private RVDonorsAdapter adapter;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_rvdonors);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_rvdonors);
 
-    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-    getSupportActionBar().setTitle("Food Donors");
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
+        getSupportActionBar().setTitle("Food Donors");
 
-    recyclerView = findViewById(R.id.rv);
-    recyclerView.setHasFixedSize(true);
-    adapter = new RVDonorsAdapter(this, users);
-    recyclerView.setAdapter(adapter);
-    LinearLayoutManager manager = new LinearLayoutManager(this);
-    recyclerView.setLayoutManager(manager);
-    reference = FirebaseDatabase.getInstance().getReference("Users");
-    loadData();
+        recyclerView = findViewById(R.id.rv);
+        recyclerView.setHasFixedSize(true);
+        adapter = new RVDonorsAdapter(this, users);
+        recyclerView.setAdapter(adapter);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(manager);
+        reference = FirebaseDatabase.getInstance().getReference("Users");
+        loadData();
 
-    bottomNav = findViewById(R.id.bottom_navigation);
-    bottomNav.setSelectedItemId(R.id.claimFood);
-    bottomNav.setOnNavigationItemSelectedListener(
-        new BottomNavigationView.OnNavigationItemSelectedListener() {
-          @Override
-          public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            int curr = item.getItemId();
-            if (curr == R.id.home) {
-              Intent intent = new Intent(RVDonors.this, RecipientHomepageActivity.class);
-              startActivity(intent);
-              finish();
-            } else if (curr == R.id.schedule) {
-              Intent intent = new Intent(RVDonors.this, RecipientViewOrders.class);
-              startActivity(intent);
-              finish();
-            } else if (curr == R.id.profile) {
-              Intent intent = new Intent(RVDonors.this, RecipientUserPageActivity.class);
-              startActivity(intent);
-              finish();
-            }
-            return true;
-          }
-        });
-  }
-
-  private void loadData() {
-    reference.addValueEventListener(
-        new ValueEventListener() {
-          @Override
-          public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-            for (DataSnapshot data : snapshot.getChildren()) {
-              User donor = data.getValue(User.class);
-              if (donor.getUserGroup().equals("donor")) {
-                users.add(donor);
-                adapter.notifyDataSetChanged();
-              }
-            }
-
-            recyclerView = findViewById(R.id.rv);
-            recyclerView.setHasFixedSize(true);
-            adapter = new RVDonorsAdapter(RVDonors.this, users);
-            recyclerView.setAdapter(adapter);
-            LinearLayoutManager manager = new LinearLayoutManager(RVDonors.this);
-            recyclerView.setLayoutManager(manager);
-          }
-
-          @Override
-          public void onCancelled(@NonNull @NotNull DatabaseError error) {}
-        });
-  }
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    MenuInflater inflater = getMenuInflater();
-    inflater.inflate(R.menu.example_menu_changelistings, menu);
-
-    MenuItem searchItem = menu.findItem(R.id.action_search);
-    SearchView searchView = (SearchView) searchItem.getActionView();
-    searchView.setMaxWidth(Integer.MAX_VALUE);
-    searchView.setQueryHint("Search food donor here");
-
-    searchView.setOnQueryTextListener(
-        new SearchView.OnQueryTextListener() {
-          @Override
-          public boolean onQueryTextSubmit(String query) {
-            return false;
-          }
-
-          @Override
-          public boolean onQueryTextChange(String newText) {
-            adapter.getFilter().filter(newText);
-            return false;
-          }
-        });
-    return true;
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    int id = item.getItemId();
-
-    if (id == R.id.action_sort) {
-      showSortDialog();
-      return true;
-    } else if (id == R.id.action_changeListings) {
-      showChangeListingsDialog();
-      return true;
+        bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setSelectedItemId(R.id.claimFood);
+        bottomNav.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        int curr = item.getItemId();
+                        if (curr == R.id.home) {
+                            Intent intent = new Intent(RVDonors.this, RecipientHomepageActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else if (curr == R.id.schedule) {
+                            Intent intent = new Intent(RVDonors.this, RecipientViewOrders.class);
+                            startActivity(intent);
+                            finish();
+                        } else if (curr == R.id.profile) {
+                            Intent intent = new Intent(RVDonors.this, RecipientUserPageActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                        return true;
+                    }
+                });
     }
 
-    return super.onOptionsItemSelected(item);
-  }
-
-  private void showSortDialog() {
-    // Options to display in dialog
-    String[] sortOptions = {"Closest to me"};
-
-    // Create alert dialog
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder
-        .setTitle("Sort by")
-        .setIcon(R.drawable.ic_filter)
-        .setItems(
-            sortOptions,
-            new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                if (which == 0) {
-                  FirebaseUser recipient = FirebaseAuth.getInstance().getCurrentUser();
-                  String recipientId = recipient.getUid();
-                  DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
-                  ref.child(recipientId)
-                      .get()
-                      .addOnCompleteListener(
-                          new OnCompleteListener<DataSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
-                              if (!task.isSuccessful()) {
-                                Log.e("Firebase", "Error getting data", task.getException());
-                              } else {
-                                User user = task.getResult().getValue(User.class);
-                                double recipientAddressLat = user.getAddressLatitude();
-                                double recipientAddressLong = user.getAddressLongitude();
-
-                                Collections.sort(
-                                    users,
-                                    new Comparator<User>() {
-                                      @Override
-                                      public int compare(User o1, User o2) {
-                                        double o1Lat = o1.getAddressLatitude();
-                                        double o1Long = o1.getAddressLongitude();
-                                        double o2Lat = o2.getAddressLatitude();
-                                        double o2Long = o2.getAddressLongitude();
-                                        float[] o1result = new float[1];
-                                        float[] o2result = new float[1];
-                                        Location.distanceBetween(
-                                            recipientAddressLat,
-                                            recipientAddressLong,
-                                            o1Lat,
-                                            o1Long,
-                                            o1result);
-                                        Location.distanceBetween(
-                                            recipientAddressLat,
-                                            recipientAddressLong,
-                                            o2Lat,
-                                            o2Long,
-                                            o2result);
-                                        float o1distance = o1result[0];
-                                        float o2distance = o2result[0];
-                                        if (o1distance > o2distance) {
-                                          return 1;
-                                        } else if (o1distance == o2distance) {
-                                          return 0;
-                                        } else {
-                                          return -1;
-                                        }
-                                      }
-                                    });
-
+    private void loadData() {
+        reference.addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        for (DataSnapshot data : snapshot.getChildren()) {
+                            User donor = data.getValue(User.class);
+                            if (donor.getUserGroup().equals("donor")) {
+                                users.add(donor);
                                 adapter.notifyDataSetChanged();
-                              }
                             }
-                          });
-                }
-              }
-            });
-    builder.show();
-  }
+                        }
 
-  private void showChangeListingsDialog() {
-    String[] options = {"View by food donors", "View by donated foods"};
+                        recyclerView = findViewById(R.id.rv);
+                        recyclerView.setHasFixedSize(true);
+                        adapter = new RVDonorsAdapter(RVDonors.this, users);
+                        recyclerView.setAdapter(adapter);
+                        LinearLayoutManager manager = new LinearLayoutManager(RVDonors.this);
+                        recyclerView.setLayoutManager(manager);
+                    }
 
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder
-        .setTitle("Choose Listing")
-        .setIcon(R.drawable.ic_sort_visible)
-        .setItems(
-            options,
-            new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                if (which == 0) {
-                  Toast.makeText(RVDonors.this, "Already viewing food donors", Toast.LENGTH_SHORT)
-                      .show();
-                } else if (which == 1) {
-                  Intent intent = new Intent(RVDonors.this, RVDonatedFoodListings.class);
-                  startActivity(intent);
-                  finish();
-                }
-              }
-            });
-    builder.show();
-  }
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                    }
+                });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.example_menu_changelistings, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setQueryHint("Search food donor here");
+
+        searchView.setOnQueryTextListener(
+                new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        adapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_sort) {
+            showSortDialog();
+            return true;
+        } else if (id == R.id.action_changeListings) {
+            showChangeListingsDialog();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showSortDialog() {
+        // Options to display in dialog
+        String[] sortOptions = {"Closest to me"};
+
+        // Create alert dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder
+                .setTitle("Sort by")
+                .setIcon(R.drawable.ic_filter)
+                .setItems(
+                        sortOptions,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (which == 0) {
+                                    FirebaseUser recipient = FirebaseAuth.getInstance().getCurrentUser();
+                                    String recipientId = recipient.getUid();
+                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
+                                    ref.child(recipientId)
+                                            .get()
+                                            .addOnCompleteListener(
+                                                    new OnCompleteListener<DataSnapshot>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                                                            if (!task.isSuccessful()) {
+                                                                Log.e("Firebase", "Error getting data", task.getException());
+                                                            } else {
+                                                                User user = task.getResult().getValue(User.class);
+                                                                double recipientAddressLat = user.getAddressLatitude();
+                                                                double recipientAddressLong = user.getAddressLongitude();
+
+                                                                Collections.sort(
+                                                                        users,
+                                                                        new Comparator<User>() {
+                                                                            @Override
+                                                                            public int compare(User o1, User o2) {
+                                                                                double o1Lat = o1.getAddressLatitude();
+                                                                                double o1Long = o1.getAddressLongitude();
+                                                                                double o2Lat = o2.getAddressLatitude();
+                                                                                double o2Long = o2.getAddressLongitude();
+                                                                                float[] o1result = new float[1];
+                                                                                float[] o2result = new float[1];
+                                                                                Location.distanceBetween(
+                                                                                        recipientAddressLat,
+                                                                                        recipientAddressLong,
+                                                                                        o1Lat,
+                                                                                        o1Long,
+                                                                                        o1result);
+                                                                                Location.distanceBetween(
+                                                                                        recipientAddressLat,
+                                                                                        recipientAddressLong,
+                                                                                        o2Lat,
+                                                                                        o2Long,
+                                                                                        o2result);
+                                                                                float o1distance = o1result[0];
+                                                                                float o2distance = o2result[0];
+                                                                                if (o1distance > o2distance) {
+                                                                                    return 1;
+                                                                                } else if (o1distance == o2distance) {
+                                                                                    return 0;
+                                                                                } else {
+                                                                                    return -1;
+                                                                                }
+                                                                            }
+                                                                        });
+
+                                                                adapter.notifyDataSetChanged();
+                                                            }
+                                                        }
+                                                    });
+                                }
+                            }
+                        });
+        builder.show();
+    }
+
+    private void showChangeListingsDialog() {
+        String[] options = {"View by food donors", "View by donated foods"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder
+                .setTitle("Choose Listing")
+                .setIcon(R.drawable.ic_sort_visible)
+                .setItems(
+                        options,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (which == 0) {
+                                    Toast.makeText(RVDonors.this, "Already viewing food donors", Toast.LENGTH_SHORT)
+                                            .show();
+                                } else if (which == 1) {
+                                    Intent intent = new Intent(RVDonors.this, RVDonatedFoodListings.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }
+                        });
+        builder.show();
+    }
 }
