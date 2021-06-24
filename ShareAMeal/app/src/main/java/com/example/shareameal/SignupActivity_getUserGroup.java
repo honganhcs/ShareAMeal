@@ -19,42 +19,49 @@ import com.google.firebase.database.FirebaseDatabase;
 
 // To get basic user information after account creation
 public class SignupActivity_getUserGroup extends AppCompatActivity {
-    private RadioGroup rgUserGroups;
-    private Button nextBtn;
-    private String userGroup;
+  private RadioGroup rgUserGroups;
+  private Button nextBtn;
+  private String userGroup;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup_get_user_group);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_signup_get_user_group);
 
-        // Initialise widgets
-        rgUserGroups = findViewById(R.id.rgUserGroups);
-        nextBtn = findViewById(R.id.nextBtn);
+    // Initialise widgets
+    rgUserGroups = findViewById(R.id.rgUserGroups);
+    nextBtn = findViewById(R.id.nextBtn);
 
-        // Make edit fields for address uneditable if user is a money donor
-        rgUserGroups.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.recipientBtn) {
-                    userGroup = "recipient";
-                } else {
-                    userGroup = "donor";
-                }
+    // Make edit fields for address uneditable if user is a money donor
+    rgUserGroups.setOnCheckedChangeListener(
+        new RadioGroup.OnCheckedChangeListener() {
+          @Override
+          public void onCheckedChanged(RadioGroup group, int checkedId) {
+            if (checkedId == R.id.recipientBtn) {
+              userGroup = "recipient";
+            } else {
+              userGroup = "donor";
             }
+          }
         });
 
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (userGroup == null) {
-                    Toast.makeText(SignupActivity_getUserGroup.this, "Please select one of the above options", Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent intent = new Intent(SignupActivity_getUserGroup.this, SignupActivity_getUserName.class);
-                    intent.putExtra("userGroup", userGroup);
-                    startActivity(intent);
-                }
+    nextBtn.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            if (userGroup == null) {
+              Toast.makeText(
+                      SignupActivity_getUserGroup.this,
+                      "Please select one of the above options",
+                      Toast.LENGTH_SHORT)
+                  .show();
+            } else {
+              Intent intent =
+                  new Intent(SignupActivity_getUserGroup.this, SignupActivity_getUserName.class);
+              intent.putExtra("userGroup", userGroup);
+              startActivity(intent);
             }
+          }
         });
-    }
+  }
 }

@@ -12,38 +12,43 @@ import android.widget.Toast;
 
 public class SignupActivity_getUserName extends AppCompatActivity {
 
-    private String userGroup, username, restaurant;
-    private EditText edtUsername, edtRestaurant;
-    private Button nextBtn;
+  private String userGroup, username, restaurant;
+  private EditText edtUsername, edtRestaurant;
+  private Button nextBtn;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup_get_user_name);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_signup_get_user_name);
 
-        Intent intent = getIntent();
-        userGroup = intent.getStringExtra("userGroup");
+    Intent intent = getIntent();
+    userGroup = intent.getStringExtra("userGroup");
 
-        edtUsername = findViewById(R.id.edtUsername);
-        edtRestaurant = findViewById(R.id.edtRestaurant);
+    edtUsername = findViewById(R.id.edtUsername);
+    edtRestaurant = findViewById(R.id.edtRestaurant);
 
-        nextBtn = findViewById(R.id.nextBtn1);
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                username = edtUsername.getText().toString().trim();
-                restaurant = edtRestaurant.getText().toString().trim();
-                if (TextUtils.isEmpty(username)) {
-                    Toast.makeText(SignupActivity_getUserName.this, "Please fill in your username", Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent intent = new Intent(SignupActivity_getUserName.this, SignupActivity_getAddress.class);
-                    intent.putExtra("userGroup", userGroup);
-                    intent.putExtra("username", username);
-                    intent.putExtra("restaurant", restaurant);
-                    startActivity(intent);
-                }
+    nextBtn = findViewById(R.id.nextBtn1);
+    nextBtn.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            username = edtUsername.getText().toString().trim();
+            restaurant = edtRestaurant.getText().toString().trim();
+            if (TextUtils.isEmpty(username)) {
+              Toast.makeText(
+                      SignupActivity_getUserName.this,
+                      "Please fill in your username",
+                      Toast.LENGTH_SHORT)
+                  .show();
+            } else {
+              Intent intent =
+                  new Intent(SignupActivity_getUserName.this, SignupActivity_getAddress.class);
+              intent.putExtra("userGroup", userGroup);
+              intent.putExtra("username", username);
+              intent.putExtra("restaurant", restaurant);
+              startActivity(intent);
             }
+          }
         });
-
-    }
+  }
 }
