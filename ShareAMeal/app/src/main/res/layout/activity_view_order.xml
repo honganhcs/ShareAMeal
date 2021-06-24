@@ -16,7 +16,6 @@
             android:id="@+id/foodImage"
             android:layout_width="170dp"
             android:layout_height="170dp"
-            android:background="@drawable/foodimageborder"
             android:src="@drawable/dish"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
