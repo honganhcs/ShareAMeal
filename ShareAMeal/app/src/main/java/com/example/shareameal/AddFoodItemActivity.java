@@ -50,6 +50,7 @@ public class AddFoodItemActivity extends AppCompatActivity {
 
     private EditText foodNameEdt;
     private EditText foodDescriptionEdt;
+    private EditText foodQuantityEdt;
     private AppCompatButton addFoodItemBtn;
     private String imageUrl;
 
@@ -107,6 +108,7 @@ public class AddFoodItemActivity extends AppCompatActivity {
 
         foodNameEdt = findViewById(R.id.foodNameEdt);
         foodDescriptionEdt = findViewById(R.id.descriptionEdt);
+        foodQuantityEdt = findViewById(R.id.foodQuantityEdt);
         addFoodItemBtn = findViewById(R.id.addFoodItemBtn);
 
         addFoodItemBtn.setOnClickListener(
@@ -120,8 +122,6 @@ public class AddFoodItemActivity extends AppCompatActivity {
                                     .show();
                         } else {
                             String description = foodDescriptionEdt.getText().toString().trim();
-                            int quantity = 0;
-
                             DatabaseReference database =
                                     FirebaseDatabase.getInstance().getReference("Foods").child(userId);
 
@@ -134,7 +134,12 @@ public class AddFoodItemActivity extends AppCompatActivity {
                                 food.setDescription(description);
                             }
 
-                            food.setQuantity(quantity);
+                            String newFoodQty = foodQuantityEdt.getText().toString();
+                            if (TextUtils.isEmpty(newFoodQty)) {
+                                food.setQuantity(0);
+                            } else {
+                                food.setQuantity(Integer.valueOf(newFoodQty));
+                            }
 
                             if (imageUrl == null) {
                                 food.setImageUrl("null");
@@ -164,11 +169,7 @@ public class AddFoodItemActivity extends AppCompatActivity {
 
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError error) {
-                                            Toast.makeText(
-                                                    AddFoodItemActivity.this,
-                                                    "Food item failed to add",
-                                                    Toast.LENGTH_SHORT)
-                                                    .show();
+
                                         }
                                     });
                         }

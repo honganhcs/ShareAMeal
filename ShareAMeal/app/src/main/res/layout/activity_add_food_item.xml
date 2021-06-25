@@ -1,82 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddFoodItemActivity">
 
-    <ImageView
-        android:id="@+id/foodImage"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
-        android:layout_marginRight="160dp"
-        android:layout_marginTop="150dp"
-        android:src="@drawable/dish"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/chooseImageBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="choose image"
-        android:textColor="@color/white"
-        android:background="@drawable/button"
-        android:ems="8"
-        android:layout_marginLeft="30dp"
-        android:layout_marginBottom="50dp"
-        app:layout_constraintBottom_toBottomOf="@+id/foodImage"
-        app:layout_constraintStart_toEndOf="@+id/foodImage"
-        app:layout_constraintTop_toTopOf="@+id/foodImage" />
+        <ImageView
+            android:id="@+id/foodImage"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_marginRight="160dp"
+            android:layout_marginTop="150dp"
+            android:src="@drawable/dish"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/uploadImageBtn"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:text="confirm image choice"
-        android:textColor="@color/white"
-        android:background="@drawable/button"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/chooseImageBtn"
-        app:layout_constraintStart_toStartOf="@+id/chooseImageBtn"
-        app:layout_constraintTop_toBottomOf="@+id/chooseImageBtn" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/chooseImageBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="choose image"
+            android:textColor="@color/white"
+            android:background="@drawable/button"
+            android:ems="8"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="50dp"
+            app:layout_constraintBottom_toBottomOf="@+id/foodImage"
+            app:layout_constraintStart_toEndOf="@+id/foodImage"
+            app:layout_constraintTop_toTopOf="@+id/foodImage" />
 
-    <EditText
-        android:id="@+id/foodNameEdt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:ems="18"
-        android:hint="Food Name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/foodImage" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/uploadImageBtn"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="confirm image choice"
+            android:textColor="@color/white"
+            android:background="@drawable/button"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/chooseImageBtn"
+            app:layout_constraintStart_toStartOf="@+id/chooseImageBtn"
+            app:layout_constraintTop_toBottomOf="@+id/chooseImageBtn" />
 
-    <EditText
-        android:id="@+id/descriptionEdt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="18"
-        android:hint="Description (Optional)"
-        android:inputType="textMultiLine|textCapSentences"
-        app:layout_constraintEnd_toEndOf="@+id/foodNameEdt"
-        app:layout_constraintStart_toStartOf="@+id/foodNameEdt"
-        app:layout_constraintTop_toBottomOf="@+id/foodNameEdt" />
+        <EditText
+            android:id="@+id/foodNameEdt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:ems="18"
+            android:hint="Food Name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/foodImage" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/addFoodItemBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="Add Food Listing"
-        android:textColor="@color/white"
-        android:ems="10"
-        android:background="@drawable/button2"
-        app:layout_constraintEnd_toEndOf="@+id/descriptionEdt"
-        app:layout_constraintHorizontal_bias="0.489"
-        app:layout_constraintStart_toStartOf="@+id/descriptionEdt"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionEdt" />
+        <EditText
+            android:id="@+id/descriptionEdt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="18"
+            android:hint="Description (Optional)"
+            android:inputType="textMultiLine|textCapSentences"
+            app:layout_constraintEnd_toEndOf="@+id/foodNameEdt"
+            app:layout_constraintStart_toStartOf="@+id/foodNameEdt"
+            app:layout_constraintTop_toBottomOf="@+id/foodNameEdt" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/foodQuantityHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Quantity: "
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/descriptionEdt" />
+
+        <EditText
+            android:id="@+id/foodQuantityEdt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="2"
+            android:hint="0"
+            android:digits="0123456789"
+            android:inputType="number"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/foodQuantityHeader"
+            app:layout_constraintStart_toStartOf="@+id/foodQuantityHeader"
+            app:layout_constraintTop_toBottomOf="@+id/foodQuantityHeader" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/addFoodItemBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/button2"
+            android:ems="10"
+            android:text="Add Food Listing"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/descriptionEdt"
+            app:layout_constraintHorizontal_bias="0.489"
+            app:layout_constraintStart_toStartOf="@+id/descriptionEdt"
+            app:layout_constraintTop_toBottomOf="@+id/foodQuantityEdt" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
