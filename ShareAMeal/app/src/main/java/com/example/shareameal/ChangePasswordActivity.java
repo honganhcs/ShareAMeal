@@ -7,6 +7,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -70,6 +71,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         changePwBtn = findViewById(R.id.changePwBtn);
         changePwBtn.setClickable(false);
         changePwBtn.setEnabled(false);
+        changePwBtn.setBackground(getDrawable(R.drawable.disabledbutton));
         oldPwEdt = findViewById(R.id.oldPwEdt);
         newPwEdt = findViewById(R.id.newPwEdt);
         changeOldPwVisibility = findViewById(R.id.changeOldPwVisibility);
@@ -137,9 +139,11 @@ public class ChangePasswordActivity extends AppCompatActivity {
                         if (s.length() >= 6) {
                             changePwBtn.setClickable(true);
                             changePwBtn.setEnabled(true);
+                            changePwBtn.setBackground(getDrawable(R.drawable.button2));
                         } else {
                             changePwBtn.setClickable(false);
                             changePwBtn.setEnabled(false);
+                            changePwBtn.setBackground(getDrawable(R.drawable.disabledbutton));
                         }
                     }
 
@@ -157,42 +161,46 @@ public class ChangePasswordActivity extends AppCompatActivity {
                         String oldPw = oldPwEdt.getText().toString();
                         String newPw = newPwEdt.getText().toString();
 
-                        AuthCredential credential = EmailAuthProvider.getCredential(email, oldPw);
-                        user.reauthenticate(credential)
-                                .addOnCompleteListener(
-                                        new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull @NotNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    user.updatePassword(newPw)
-                                                            .addOnCompleteListener(
-                                                                    new OnCompleteListener<Void>() {
-                                                                        @Override
-                                                                        public void onComplete(@NonNull @NotNull Task<Void> task) {
-                                                                            if (task.isSuccessful()) {
-                                                                                Toast.makeText(
-                                                                                        ChangePasswordActivity.this,
-                                                                                        "Password updated",
-                                                                                        Toast.LENGTH_SHORT)
-                                                                                        .show();
-                                                                            } else {
-                                                                                Toast.makeText(
-                                                                                        ChangePasswordActivity.this,
-                                                                                        "Error: Password not updated",
-                                                                                        Toast.LENGTH_SHORT)
-                                                                                        .show();
+                        if (TextUtils.isEmpty(oldPw)) {
+                            Toast.makeText(ChangePasswordActivity.this, "Please enter old password", Toast.LENGTH_SHORT).show();
+                        } else {
+                            AuthCredential credential = EmailAuthProvider.getCredential(email, oldPw);
+                            user.reauthenticate(credential)
+                                    .addOnCompleteListener(
+                                            new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        user.updatePassword(newPw)
+                                                                .addOnCompleteListener(
+                                                                        new OnCompleteListener<Void>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                                                                if (task.isSuccessful()) {
+                                                                                    Toast.makeText(
+                                                                                            ChangePasswordActivity.this,
+                                                                                            "Password updated",
+                                                                                            Toast.LENGTH_SHORT)
+                                                                                            .show();
+                                                                                } else {
+                                                                                    Toast.makeText(
+                                                                                            ChangePasswordActivity.this,
+                                                                                            "Error: Password not updated",
+                                                                                            Toast.LENGTH_SHORT)
+                                                                                            .show();
+                                                                                }
                                                                             }
-                                                                        }
-                                                                    });
-                                                } else {
-                                                    Toast.makeText(
-                                                            ChangePasswordActivity.this,
-                                                            "Wrong current password",
-                                                            Toast.LENGTH_SHORT)
-                                                            .show();
+                                                                        });
+                                                    } else {
+                                                        Toast.makeText(
+                                                                ChangePasswordActivity.this,
+                                                                "Wrong current password",
+                                                                Toast.LENGTH_SHORT)
+                                                                .show();
+                                                    }
                                                 }
-                                            }
-                                        });
+                                            });
+                        }
                     }
                 });
     }
