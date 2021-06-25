@@ -205,11 +205,7 @@ public class AddNewTimeSlotActivity extends AppCompatActivity {
 
                         @Override
                         public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                            Toast.makeText(
-                                    AddNewTimeSlotActivity.this,
-                                    "Time slot failed to be added.",
-                                    Toast.LENGTH_SHORT)
-                                    .show();
+
                         }
                     });
         }
