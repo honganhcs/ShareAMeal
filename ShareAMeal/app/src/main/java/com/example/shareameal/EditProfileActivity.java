@@ -8,6 +8,8 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -39,6 +41,10 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 public class EditProfileActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
 
@@ -46,6 +52,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private ImageView profilePicImg;
     private Uri imageUri;
     private StorageReference mStorageRef;
+    private double latitude, longitude;
 
     // Purpose of these boolean values is to ensure user update the profile after he/she has
     // confirmed on the image choice for the profile picture
@@ -264,31 +271,46 @@ public class EditProfileActivity extends AppCompatActivity {
                                 user.setImageUrl(imageUrl);
                             }
 
-                            databaseReference1.setValue(user);
-                            databaseReference1.addValueEventListener(
-                                    new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            Toast.makeText(
-                                                    EditProfileActivity.this,
-                                                    "Profile information successfully updated",
-                                                    Toast.LENGTH_SHORT)
-                                                    .show();
-                                            updateProfileInfoBtn.setClickable(false);
-                                            updateProfileInfoBtn.setEnabled(false);
-                                            updateProfileInfoBtn.setBackground(getDrawable(R.drawable.disabledbutton));
-                                            isProfileUpdated = true;
-                                        }
+                            Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                            try {
+                                List addressList = geocoder.getFromLocationName(newAddress, 1);
+                                if (addressList != null && addressList.size() > 0) {
+                                    Address addressItem = (Address) addressList.get(0);
+                                    longitude = addressItem.getLongitude();
+                                    latitude = addressItem.getLatitude();
 
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-                                            Toast.makeText(
-                                                    EditProfileActivity.this,
-                                                    "Profile information failed to update",
-                                                    Toast.LENGTH_SHORT)
-                                                    .show();
-                                        }
-                                    });
+                                    user.setAddressLatitude(latitude);
+                                    user.setAddressLongitude(longitude);
+
+                                    databaseReference1.setValue(user);
+                                    databaseReference1.addValueEventListener(
+                                            new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    Toast.makeText(
+                                                            EditProfileActivity.this,
+                                                            "Profile information successfully updated",
+                                                            Toast.LENGTH_SHORT)
+                                                            .show();
+                                                    updateProfileInfoBtn.setClickable(false);
+                                                    updateProfileInfoBtn.setEnabled(false);
+                                                    updateProfileInfoBtn.setBackground(getDrawable(R.drawable.disabledbutton));
+                                                    isProfileUpdated = true;
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {}
+                                            });
+                                } else {
+                                    Toast.makeText(
+                                            EditProfileActivity.this,
+                                            "Please provide a valid address",
+                                            Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 });
