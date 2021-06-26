@@ -147,7 +147,9 @@ public class ViewOrder extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                         for (DataSnapshot data : snapshot.getChildren()) {
-                            slot = data.getValue(Slot.class);
+                            if(data.getKey().equals(slotId)) {
+                                slot = data.getValue(Slot.class);
+                            }
                         }
                         slot.setAvailability(true);
                         slot.setRecipientId(null);
