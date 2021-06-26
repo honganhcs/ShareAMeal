@@ -104,27 +104,29 @@ public class RVDonatedFoodListingsAdapter extends RecyclerView.Adapter<RecyclerV
                                                 }
                                             }
 
-                                            DatabaseReference usersRef =
-                                                    FirebaseDatabase.getInstance().getReference("Users");
-                                            usersRef
-                                                    .child(donorId)
-                                                    .addValueEventListener(
-                                                            new ValueEventListener() {
-                                                                @Override
-                                                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                                                    User user = snapshot.getValue(User.class);
-                                                                    if (user.getRestaurant() == null
-                                                                            || TextUtils.isEmpty(user.getRestaurant())) {
-                                                                        vh.txt_food_donor.setText(user.getName());
-                                                                    } else {
-                                                                        vh.txt_food_donor.setText(user.getRestaurant());
+                                            if (donorId != null) {
+                                                DatabaseReference usersRef =
+                                                        FirebaseDatabase.getInstance().getReference("Users");
+                                                usersRef
+                                                        .child(donorId)
+                                                        .addValueEventListener(
+                                                                new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                                                        User user = snapshot.getValue(User.class);
+                                                                        if (user.getRestaurant() == null
+                                                                                || TextUtils.isEmpty(user.getRestaurant())) {
+                                                                            vh.txt_food_donor.setText(user.getName());
+                                                                        } else {
+                                                                            vh.txt_food_donor.setText(user.getRestaurant());
+                                                                        }
                                                                     }
-                                                                }
 
-                                                                @Override
-                                                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                                                                }
-                                                            });
+                                                                    @Override
+                                                                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                                                    }
+                                                                });
+                                            }
                                         }
 
                                         @Override
