@@ -144,4 +144,12 @@ public class RecipientUserPageActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(RecipientUserPageActivity.this, RecipientHomepageActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

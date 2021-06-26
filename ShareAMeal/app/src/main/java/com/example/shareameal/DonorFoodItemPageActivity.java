@@ -180,4 +180,12 @@ public class DonorFoodItemPageActivity extends AppCompatActivity {
         finish();
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(DonorFoodItemPageActivity.this, DonateFoodActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

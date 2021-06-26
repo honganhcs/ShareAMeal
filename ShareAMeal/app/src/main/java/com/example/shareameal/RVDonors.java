@@ -259,4 +259,12 @@ public class RVDonors extends AppCompatActivity {
                         });
         builder.show();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(RVDonors.this, RecipientHomepageActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

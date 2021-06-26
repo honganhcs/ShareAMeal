@@ -432,4 +432,40 @@ public class EditProfileActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (isImageUploaded) {
+            if (!isProfileUpdated) {
+                Toast.makeText(
+                        EditProfileActivity.this,
+                        "Please click on \"Update Profile Information\" down below",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            } else {
+                if (userGroup.equals("donor")) {
+                    Intent intent = new Intent(EditProfileActivity.this, DonorUserPageActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent =
+                            new Intent(EditProfileActivity.this, RecipientUserPageActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        } else {
+            if (userGroup.equals("donor")) {
+                Intent intent = new Intent(EditProfileActivity.this, DonorUserPageActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Intent intent =
+                        new Intent(EditProfileActivity.this, RecipientUserPageActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+    }
 }

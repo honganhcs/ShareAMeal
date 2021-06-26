@@ -78,4 +78,9 @@ public class RecipientHomepageActivity extends AppCompatActivity {
                             }
                         });
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
 }

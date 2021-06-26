@@ -73,7 +73,8 @@
                 android:background="@drawable/edittext"
                 android:ems="18"
                 android:hint="Building/House Number (If applicable)"
-                android:inputType="numberSigned" />
+                android:inputType="text"
+                android:digits="qwertzuiopasdfghjklyxcvbnm1234567890"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout

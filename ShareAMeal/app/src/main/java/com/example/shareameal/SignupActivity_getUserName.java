@@ -51,4 +51,9 @@ public class SignupActivity_getUserName extends AppCompatActivity {
                     }
                 });
     }
+
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(SignupActivity_getUserName.this, "Please complete account registration process!", Toast.LENGTH_SHORT).show();
+    }
 }

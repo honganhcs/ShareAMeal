@@ -64,4 +64,12 @@ public class SignupActivity_getUserGroup extends AppCompatActivity {
                     }
                 });
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(SignupActivity_getUserGroup.this, SignupActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

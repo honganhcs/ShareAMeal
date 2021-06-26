@@ -254,6 +254,14 @@ public class AddFoodItemActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(AddFoodItemActivity.this, DonateFoodActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
     public boolean onSupportNavigateUp() {
         if (isImageUploaded) {
             if (!isFoodUpdated) {

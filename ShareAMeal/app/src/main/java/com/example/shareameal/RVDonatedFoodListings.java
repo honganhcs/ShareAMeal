@@ -249,4 +249,12 @@ public class RVDonatedFoodListings extends AppCompatActivity {
                         });
         builder.show();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(RVDonatedFoodListings.this, RVDonors.class);
+        startActivity(intent);
+        finish();
+    }
 }

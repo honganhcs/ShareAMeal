@@ -239,4 +239,12 @@ public class DonateFoodActivity extends AppCompatActivity {
                         });
         builder.show();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(DonateFoodActivity.this, DonorHomepageActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

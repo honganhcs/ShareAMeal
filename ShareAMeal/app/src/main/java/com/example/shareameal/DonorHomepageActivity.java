@@ -98,4 +98,9 @@ public class DonorHomepageActivity extends AppCompatActivity {
                             }
                         });
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
 }
