@@ -140,4 +140,12 @@ public class DonorUserPageActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(DonorUserPageActivity.this, DonorHomepageActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

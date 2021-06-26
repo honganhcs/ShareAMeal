@@ -108,4 +108,12 @@ public class RecipientViewOrders extends AppCompatActivity
         startActivity(intent);
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(RecipientViewOrders.this, RecipientHomepageActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

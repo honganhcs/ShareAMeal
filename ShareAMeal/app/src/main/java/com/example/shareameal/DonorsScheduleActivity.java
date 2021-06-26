@@ -124,4 +124,12 @@ public class DonorsScheduleActivity extends AppCompatActivity
         startActivity(intent);
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(DonorsScheduleActivity.this, DonorHomepageActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
