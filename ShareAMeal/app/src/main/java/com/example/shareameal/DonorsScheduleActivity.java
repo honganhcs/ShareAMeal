@@ -44,7 +44,7 @@ public class DonorsScheduleActivity extends AppCompatActivity
         setContentView(R.layout.activity_donors_schedule);
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-        getSupportActionBar().setTitle("View all time slots");
+        getSupportActionBar().setTitle("View time slots for food collection");
 
         recyclerView = findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);

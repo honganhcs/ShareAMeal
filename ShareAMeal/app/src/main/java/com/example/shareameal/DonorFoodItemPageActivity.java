@@ -75,7 +75,7 @@ public class DonorFoodItemPageActivity extends AppCompatActivity {
         }
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-        getSupportActionBar().setTitle("Food Listing");
+        getSupportActionBar().setTitle("View food listing");
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

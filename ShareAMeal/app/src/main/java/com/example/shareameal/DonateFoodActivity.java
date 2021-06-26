@@ -60,7 +60,7 @@ public class DonateFoodActivity extends AppCompatActivity {
         }
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-        getSupportActionBar().setTitle("Food Listings");
+        getSupportActionBar().setTitle("View food listings");
 
         // Initialising bottom navigation bar
         bottomNav = findViewById(R.id.bottom_navigation);

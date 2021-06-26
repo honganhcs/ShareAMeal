@@ -40,7 +40,7 @@ public class RecipientViewOrders extends AppCompatActivity
         setContentView(R.layout.activity_recipient_view_orders);
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-        getSupportActionBar().setTitle("View all orders");
+        getSupportActionBar().setTitle("View current orders");
 
         recyclerView = findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);

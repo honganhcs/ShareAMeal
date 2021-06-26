@@ -172,7 +172,7 @@ public class OrderConfirmation extends AppCompatActivity {
                     "Your order has been successfully created.",
                     Toast.LENGTH_SHORT)
                     .show();
-            Intent intent = new Intent(OrderConfirmation.this, RVDonors.class);
+            Intent intent = new Intent(OrderConfirmation.this, RecipientViewOrders.class);
             startActivity(intent);
             finish();
         }

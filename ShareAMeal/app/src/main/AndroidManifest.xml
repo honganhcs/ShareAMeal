@@ -29,8 +29,10 @@
         <activity
             android:name=".DonorsScheduleActivity"
             android:theme="@style/Theme.MaterialComponents.Light"/>
-        <activity android:name=".ChangePasswordActivity" />
-        <activity android:name=".EditProfileActivity" />
+        <activity android:name=".ChangePasswordActivity"
+            android:theme="@style/Theme.MaterialComponents.Light"/>
+        <activity android:name=".EditProfileActivity"
+            android:theme="@style/Theme.MaterialComponents.Light"/>
         <activity android:name=".ReserveFoodItem" android:theme="@style/Theme.MaterialComponents.Light"/>
         <activity
             android:name=".RVFoodItems"

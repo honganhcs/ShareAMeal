@@ -8,6 +8,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -57,7 +58,7 @@ public class EditProfileActivity extends AppCompatActivity {
     // Purpose of these boolean values is to ensure user update the profile after he/she has
     // confirmed on the image choice for the profile picture
     private boolean isImageUploaded, isProfileUpdated;
-    private AppCompatButton backBtn, updateProfileInfoBtn;
+    private AppCompatButton updateProfileInfoBtn;
     private EditText usernameEdt, addressEdt, restaurantEdt;
     private String userGroup, imageUrl, oldImageUrl;
     private TextInputLayout restaurantWrapper;
@@ -73,10 +74,14 @@ public class EditProfileActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
+        getSupportActionBar().setTitle("Edit profile");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         String userId = currentUser.getUid();
 
-        backBtn = findViewById(R.id.backBtn);
         updateProfileInfoBtn = findViewById(R.id.updateProfileInfoBtn);
         usernameEdt = findViewById(R.id.usernameEdt);
         addressEdt = findViewById(R.id.addressEdt);
@@ -314,44 +319,6 @@ public class EditProfileActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-        backBtn.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (isImageUploaded) {
-                            if (!isProfileUpdated) {
-                                Toast.makeText(
-                                        EditProfileActivity.this,
-                                        "Please click on \"Update Profile Information\" down below",
-                                        Toast.LENGTH_SHORT)
-                                        .show();
-                            } else {
-                                if (userGroup.equals("donor")) {
-                                    Intent intent = new Intent(EditProfileActivity.this, DonorUserPageActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    Intent intent =
-                                            new Intent(EditProfileActivity.this, RecipientUserPageActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            }
-                        } else {
-                            if (userGroup.equals("donor")) {
-                                Intent intent = new Intent(EditProfileActivity.this, DonorUserPageActivity.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                Intent intent =
-                                        new Intent(EditProfileActivity.this, RecipientUserPageActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
-                        }
-                    }
-                });
     }
 
     private void openFileChooser() {
@@ -428,5 +395,41 @@ public class EditProfileActivity extends AppCompatActivity {
         } else {
             Toast.makeText(EditProfileActivity.this, "No image selected", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        if (isImageUploaded) {
+            if (!isProfileUpdated) {
+                Toast.makeText(
+                        EditProfileActivity.this,
+                        "Please click on \"Update Profile Information\" down below",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            } else {
+                if (userGroup.equals("donor")) {
+                    Intent intent = new Intent(EditProfileActivity.this, DonorUserPageActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent =
+                            new Intent(EditProfileActivity.this, RecipientUserPageActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        } else {
+            if (userGroup.equals("donor")) {
+                Intent intent = new Intent(EditProfileActivity.this, DonorUserPageActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Intent intent =
+                        new Intent(EditProfileActivity.this, RecipientUserPageActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+        return true;
     }
 }

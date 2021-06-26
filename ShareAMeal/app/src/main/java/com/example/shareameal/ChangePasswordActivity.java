@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -31,7 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 public class ChangePasswordActivity extends AppCompatActivity {
-    private AppCompatButton backBtn, changePwBtn;
+    private AppCompatButton changePwBtn;
     private EditText oldPwEdt, newPwEdt;
     private ImageView changeOldPwVisibility, changeNewPwVisibility;
     private boolean isOldPwVisible, isNewPwVisible;
@@ -47,6 +49,11 @@ public class ChangePasswordActivity extends AppCompatActivity {
             Intent intent = new Intent(ChangePasswordActivity.this, LoginActivity.class);
             startActivity(intent);
         }
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
+        getSupportActionBar().setTitle("Change password");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         String userId = currentUser.getUid();
@@ -67,7 +74,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
                             }
                         });
 
-        backBtn = findViewById(R.id.backBtn);
         changePwBtn = findViewById(R.id.changePwBtn);
         changePwBtn.setClickable(false);
         changePwBtn.setEnabled(false);
@@ -76,23 +82,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
         newPwEdt = findViewById(R.id.newPwEdt);
         changeOldPwVisibility = findViewById(R.id.changeOldPwVisibility);
         changeNewPwVisibility = findViewById(R.id.changeNewPwVisibility);
-
-        backBtn.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (userGroup.equals("donor")) {
-                            Intent intent = new Intent(ChangePasswordActivity.this, DonorUserPageActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            Intent intent =
-                                    new Intent(ChangePasswordActivity.this, RecipientUserPageActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    }
-                });
 
         isOldPwVisible = false;
         changeOldPwVisibility.setOnClickListener(
@@ -203,5 +192,20 @@ public class ChangePasswordActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        if(userGroup.equals("donor")) {
+            Intent intent = new Intent(ChangePasswordActivity.this, DonorUserPageActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            Intent intent =
+                    new Intent(ChangePasswordActivity.this, RecipientUserPageActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        return true;
     }
 }
