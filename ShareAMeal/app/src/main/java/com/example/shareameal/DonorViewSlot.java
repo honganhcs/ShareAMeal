@@ -123,4 +123,12 @@ public class DonorViewSlot extends AppCompatActivity {
         finish();
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(DonorViewSlot.this, DonorsScheduleActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

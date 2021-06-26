@@ -188,4 +188,15 @@ public class OrderConfirmation extends AppCompatActivity {
         finish();
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(OrderConfirmation.this, ReserveFoodItem.class);
+        intent.putExtra("donorId", donorId);
+        intent.putExtra("foodId", foodId);
+        intent.putExtra("donorName", donorName);
+        startActivity(intent);
+        finish();
+    }
 }

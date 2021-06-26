@@ -177,4 +177,12 @@ public class ViewOrder extends AppCompatActivity {
         finish();
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(ViewOrder.this, RecipientViewOrders.class);
+        startActivity(intent);
+        finish();
+    }
 }

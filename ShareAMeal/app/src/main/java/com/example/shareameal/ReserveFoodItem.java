@@ -126,4 +126,14 @@ public class ReserveFoodItem extends AppCompatActivity
         finish();
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(ReserveFoodItem.this, RVFoodItems.class);
+        intent.putExtra("donorId", donorId);
+        intent.putExtra("donorName", donorName);
+        startActivity(intent);
+        finish();
+    }
 }

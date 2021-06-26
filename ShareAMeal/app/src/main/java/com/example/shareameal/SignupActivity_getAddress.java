@@ -131,4 +131,10 @@ public class SignupActivity_getAddress extends AppCompatActivity {
                     }
                 });
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Toast.makeText(SignupActivity_getAddress.this, "Please complete account registration process!", Toast.LENGTH_SHORT).show();
+    }
 }

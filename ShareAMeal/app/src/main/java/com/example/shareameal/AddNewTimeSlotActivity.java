@@ -218,4 +218,12 @@ public class AddNewTimeSlotActivity extends AppCompatActivity {
         finish();
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(AddNewTimeSlotActivity.this, DonorsScheduleActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

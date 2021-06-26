@@ -364,4 +364,39 @@ public class EditFoodItemActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Bundle bundle = this.getIntent().getExtras();
+        if (isImageUploaded) {
+            if (!isFoodUpdated) {
+                Toast.makeText(
+                        EditFoodItemActivity.this,
+                        "Please click on \"Edit Food Listing\" down below",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            } else {
+                Intent intent = new Intent(EditFoodItemActivity.this, DonorFoodItemPageActivity.class);
+                if (isFoodUpdated) {
+                    bundle.putParcelable("food", food);
+                } else {
+                    bundle.putParcelable("food", oldFood);
+                }
+                intent.putExtras(bundle);
+                startActivity(intent);
+                finish();
+            }
+        } else {
+            Intent intent = new Intent(EditFoodItemActivity.this, DonorFoodItemPageActivity.class);
+            if (isFoodUpdated) {
+                bundle.putParcelable("food", food);
+            } else {
+                bundle.putParcelable("food", oldFood);
+            }
+            intent.putExtras(bundle);
+            startActivity(intent);
+            finish();
+        }
+    }
 }

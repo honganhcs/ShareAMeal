@@ -196,7 +196,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        if(userGroup.equals("donor")) {
+        if (userGroup.equals("donor")) {
             Intent intent = new Intent(ChangePasswordActivity.this, DonorUserPageActivity.class);
             startActivity(intent);
             finish();
@@ -207,5 +207,20 @@ public class ChangePasswordActivity extends AppCompatActivity {
             finish();
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (userGroup.equals("donor")) {
+            Intent intent = new Intent(ChangePasswordActivity.this, DonorUserPageActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            Intent intent =
+                    new Intent(ChangePasswordActivity.this, RecipientUserPageActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }
