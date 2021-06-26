@@ -68,6 +68,8 @@ public class SignupActivity_getUserGroup extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Toast.makeText(SignupActivity_getUserGroup.this, "Please complete account registration process!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(SignupActivity_getUserGroup.this, SignupActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
