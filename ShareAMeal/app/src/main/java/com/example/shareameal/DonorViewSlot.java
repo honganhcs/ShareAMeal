@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +41,9 @@ public class DonorViewSlot extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        donorId = user.getUid();
+
         txtDate = findViewById(R.id.txtDate);
         txtTime = findViewById(R.id.txtTime);
         txtReserved = findViewById(R.id.txtReserved);
@@ -65,7 +70,6 @@ public class DonorViewSlot extends AppCompatActivity {
                             for (DataSnapshot data : snapshot.getChildren()) {
                                 if (data.getKey().equals(slotId)) {
                                     order = data.getValue(Order.class);
-                                    donorId = order.getDonorId();
                                     foodId = order.getFoodId();
                                 }
                             }
