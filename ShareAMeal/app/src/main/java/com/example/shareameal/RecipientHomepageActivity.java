@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,10 +17,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
+
 public class RecipientHomepageActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNav;
-    private TextView userNameTxt;
+    private TextView userNameTxt, reminderTxt;
+    private int numOrdersLeft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,11 @@ public class RecipientHomepageActivity extends AppCompatActivity {
             Intent intent = new Intent(RecipientHomepageActivity.this, LoginActivity.class);
             startActivity(intent);
         }
+
+        Calendar calendar = Calendar.getInstance();
+        int currentYear = calendar.get(Calendar.YEAR);
+        int currentMonth = calendar.get(Calendar.MONTH);
+        int currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(
@@ -60,9 +67,12 @@ public class RecipientHomepageActivity extends AppCompatActivity {
                 });
 
         userNameTxt = findViewById(R.id.userNameTxt);
+        reminderTxt = findViewById(R.id.reminderTxt);
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userid = user.getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+
         reference
                 .child(userid)
                 .addListenerForSingleValueEvent(
@@ -71,6 +81,21 @@ public class RecipientHomepageActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 User user = snapshot.getValue(User.class);
                                 userNameTxt.setText(user.getName());
+
+                                if (user.getYear() != currentYear || user.getMonth() != currentMonth
+                                   || user.getDayOfMonth() != currentDayOfMonth) {
+                                    user.setYear(currentYear);
+                                    user.setMonth(currentMonth);
+                                    user.setDayOfMonth(currentDayOfMonth);
+                                    user.setNumOrdersLeft(3);
+                                    numOrdersLeft = 3;
+                                    reference.child(userid).setValue(user);
+
+                                } else {
+                                    numOrdersLeft = user.getNumOrdersLeft();
+                                }
+
+                                reminderTxt.setText("Daily claimable food items left: " + numOrdersLeft);
                             }
 
                             @Override

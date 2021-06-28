@@ -55,11 +55,15 @@ public class SignupActivity_getUserGroup extends AppCompatActivity {
                                     "Please select one of the above options",
                                     Toast.LENGTH_SHORT)
                                     .show();
-                        } else {
+                        } else if (userGroup.equals("donor")){
                             Intent intent =
                                     new Intent(SignupActivity_getUserGroup.this, SignupActivity_getUserName.class);
-                            intent.putExtra("userGroup", userGroup);
                             startActivity(intent);
+                            finish();
+                        } else if (userGroup.equals("recipient")){
+                            Intent intent = new Intent(SignupActivity_getUserGroup.this, SignUp_getUserNameRecipients.class);
+                            startActivity(intent);
+                            finish();
                         }
                     }
                 });

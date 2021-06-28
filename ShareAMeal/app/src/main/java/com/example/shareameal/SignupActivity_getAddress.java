@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,7 +37,9 @@ public class SignupActivity_getAddress extends AppCompatActivity {
         Intent intent = getIntent();
         userGroup = intent.getStringExtra("userGroup");
         username = intent.getStringExtra("username");
-        restaurant = intent.getStringExtra("restaurant");
+        if(userGroup.equals("donor")) {
+            restaurant = intent.getStringExtra("restaurant");
+        }
 
         edtUnit = findViewById(R.id.edtUnit);
         edtBuilding = findViewById(R.id.edtBuilding);
@@ -81,6 +84,14 @@ public class SignupActivity_getAddress extends AppCompatActivity {
                             user.setUserGroup(userGroup);
                             user.setName(username);
                             user.setRestaurant(restaurant);
+
+                            if(userGroup.equals("recipient")) {
+                                Calendar calendar = Calendar.getInstance();
+                                user.setYear(calendar.get(Calendar.YEAR));
+                                user.setMonth(calendar.get(Calendar.MONTH));
+                                user.setDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
+                                user.setNumOrdersLeft(3);
+                            }
 
                             if (TextUtils.isEmpty(building) && TextUtils.isEmpty(unit)) {
                                 address = street + " Singapore " + pCode;

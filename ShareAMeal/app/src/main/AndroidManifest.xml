@@ -11,29 +11,37 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShareAMeal">
+        <activity android:name=".SignUp_getUserNameRecipients"></activity>
         <activity
             android:name=".RVDonatedFoodListings"
             android:theme="@style/Theme.MaterialComponents.Light" />
         <activity
             android:name=".ViewOrder"
-            android:theme="@style/Theme.MaterialComponents.Light"/>
-        <activity android:name=".RecipientViewOrders"
-            android:theme="@style/Theme.MaterialComponents.Light"/>
-        <activity android:name=".OrderConfirmation"
-            android:theme="@style/Theme.MaterialComponents.Light"/>
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity
+            android:name=".RecipientViewOrders"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity
+            android:name=".OrderConfirmation"
+            android:theme="@style/Theme.MaterialComponents.Light" />
         <activity
             android:name=".DonorViewSlot"
-            android:theme="@style/Theme.MaterialComponents.Light"/>
-        <activity android:name=".AddNewTimeSlotActivity"
-            android:theme="@style/Theme.MaterialComponents.Light"/>
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity
+            android:name=".AddNewTimeSlotActivity"
+            android:theme="@style/Theme.MaterialComponents.Light" />
         <activity
             android:name=".DonorsScheduleActivity"
-            android:theme="@style/Theme.MaterialComponents.Light"/>
-        <activity android:name=".ChangePasswordActivity"
-            android:theme="@style/Theme.MaterialComponents.Light"/>
-        <activity android:name=".EditProfileActivity"
-            android:theme="@style/Theme.MaterialComponents.Light"/>
-        <activity android:name=".ReserveFoodItem" android:theme="@style/Theme.MaterialComponents.Light"/>
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity
+            android:name=".ChangePasswordActivity"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity
+            android:name=".EditProfileActivity"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity
+            android:name=".ReserveFoodItem"
+            android:theme="@style/Theme.MaterialComponents.Light" />
         <activity
             android:name=".RVFoodItems"
             android:theme="@style/Theme.MaterialComponents.Light" />
@@ -41,9 +49,15 @@
             android:name=".RVDonors"
             android:theme="@style/Theme.MaterialComponents.Light" />
         <activity android:name=".RecipientUserPageActivity" />
-        <activity android:name=".EditFoodItemActivity" android:theme="@style/Theme.MaterialComponents.Light"/>
-        <activity android:name=".DonorFoodItemPageActivity" android:theme="@style/Theme.MaterialComponents.Light"> </activity>
-        <activity android:name=".AddFoodItemActivity" android:theme="@style/Theme.MaterialComponents.Light"/>
+        <activity
+            android:name=".EditFoodItemActivity"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity
+            android:name=".DonorFoodItemPageActivity"
+            android:theme="@style/Theme.MaterialComponents.Light"></activity>
+        <activity
+            android:name=".AddFoodItemActivity"
+            android:theme="@style/Theme.MaterialComponents.Light" />
         <activity
             android:name=".DonateFoodActivity"
             android:theme="@style/Theme.MaterialComponents.Light" />

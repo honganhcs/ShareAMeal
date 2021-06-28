@@ -26,6 +26,8 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Calendar;
+
 public class OrderConfirmation extends AppCompatActivity {
 
     private ImageView foodImage;
@@ -36,10 +38,11 @@ public class OrderConfirmation extends AppCompatActivity {
     private DatabaseReference reference1, reference2, reference3, reference4;
     private Bundle bundle;
     private Slot slot;
-    private String donorId, foodId, donorName;
+    private String donorId, foodId, donorName, recipientId;
     private Food food;
-    private User donor;
+    private User donor, recipient;
     private int orderQuantity;
+    private int numOrdersLeft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,13 @@ public class OrderConfirmation extends AppCompatActivity {
         donorId = bundle.getString("donorId");
         foodId = bundle.getString("foodId");
         donorName = bundle.getString("donorName");
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        recipientId = user.getUid();
+        Calendar calendar = Calendar.getInstance();
+        int currentYear = calendar.get(Calendar.YEAR);
+        int currentMonth = calendar.get(Calendar.MONTH);
+        int currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
         reference1 = FirebaseDatabase.getInstance().getReference("Foods").child(donorId);
 
@@ -98,6 +108,10 @@ public class OrderConfirmation extends AppCompatActivity {
                                             if (data.getKey().equals(donorId)) {
                                                 donor = data.getValue(User.class);
                                             }
+                                            if (data.getKey().equals(recipientId)) {
+                                                recipient = data.getValue(User.class);
+                                                numOrdersLeft = recipient.getNumOrdersLeft();
+                                            }
                                         }
 
                                         foodNameTxt.setText(food.getName());
@@ -126,55 +140,63 @@ public class OrderConfirmation extends AppCompatActivity {
     }
 
     public void onConfirmOrder(View view) {
-        String qty = foodQuantityEdt.getText().toString();
-        if (Integer.valueOf(qty) == 0 || TextUtils.isEmpty(qty)) {
-            Toast.makeText(
-                    OrderConfirmation.this, "Please enter a number larger than 0.", Toast.LENGTH_SHORT)
-                    .show();
-        } else if (Integer.valueOf(qty) > food.getQuantity()) {
-            Toast.makeText(
-                    OrderConfirmation.this,
-                    "Please enter at most " + food.getQuantity() + ".",
-                    Toast.LENGTH_SHORT)
-                    .show();
+        if(numOrdersLeft == 0) {
+            Toast.makeText(OrderConfirmation.this, "You cannot create any more orders today as you have reached your daily limit.", Toast.LENGTH_SHORT).show();
         } else {
-            orderQuantity = Integer.valueOf(qty);
+            String qty = foodQuantityEdt.getText().toString();
+            if (Integer.valueOf(qty) == 0 || TextUtils.isEmpty(qty)) {
+                Toast.makeText(
+                        OrderConfirmation.this, "Please enter a number larger than 0.", Toast.LENGTH_SHORT)
+                        .show();
+            } else if (Integer.valueOf(qty) > food.getQuantity()) {
+                Toast.makeText(
+                        OrderConfirmation.this,
+                        "Please enter at most " + food.getQuantity() + ".",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            } else {
+                orderQuantity = Integer.valueOf(qty);
 
-            // create new order
-            Order order = new Order();
-            order.setDate(slot.getDate());
-            order.setStartTime(slot.getStartTime());
-            order.setEndTime(slot.getEndTime());
-            order.setDonorId(donorId);
-            order.setFoodId(foodId);
-            order.setQuantity(orderQuantity);
-            order.setFoodName(food.getName());
-            order.setFoodImageURL(food.getImageUrl());
-            order.setSlotId(slot.getSlotId());
+                // create new order
+                Order order = new Order();
+                order.setDate(slot.getDate());
+                order.setStartTime(slot.getStartTime());
+                order.setEndTime(slot.getEndTime());
+                order.setDonorId(donorId);
+                order.setFoodId(foodId);
+                order.setQuantity(orderQuantity);
+                order.setFoodName(food.getName());
+                order.setFoodImageURL(food.getImageUrl());
+                order.setSlotId(slot.getSlotId());
 
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            String userId = user.getUid();
-            reference4 = FirebaseDatabase.getInstance().getReference("Orders").child(userId);
-            reference4.child(slot.getSlotId()).setValue(order);
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String userId = user.getUid();
+                reference4 = FirebaseDatabase.getInstance().getReference("Orders").child(userId);
+                reference4.child(slot.getSlotId()).setValue(order);
 
-            // update food item
-            food.setQuantity(food.getQuantity() - orderQuantity);
-            reference1.child(foodId).setValue(food);
+                // update food item
+                food.setQuantity(food.getQuantity() - orderQuantity);
+                reference1.child(foodId).setValue(food);
 
-            // update slot
-            slot.setAvailability(false);
-            slot.setRecipientId(userId);
-            reference3 = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
-            reference3.child(slot.getSlotId()).setValue(slot);
+                // update slot
+                slot.setAvailability(false);
+                slot.setRecipientId(userId);
+                reference3 = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
+                reference3.child(slot.getSlotId()).setValue(slot);
 
-            Toast.makeText(
-                    OrderConfirmation.this,
-                    "Your order has been successfully created.",
-                    Toast.LENGTH_SHORT)
-                    .show();
-            Intent intent = new Intent(OrderConfirmation.this, RecipientViewOrders.class);
-            startActivity(intent);
-            finish();
+                // update recipient info
+                recipient.setNumOrdersLeft(numOrdersLeft - 1);
+                reference2.child(recipientId).setValue(recipient);
+
+                Toast.makeText(
+                        OrderConfirmation.this,
+                        "Your order has been successfully created.",
+                        Toast.LENGTH_SHORT)
+                        .show();
+                Intent intent = new Intent(OrderConfirmation.this, RecipientViewOrders.class);
+                startActivity(intent);
+                finish();
+            }
         }
     }
 

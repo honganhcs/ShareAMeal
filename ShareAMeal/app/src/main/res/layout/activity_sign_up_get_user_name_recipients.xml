@@ -52,51 +52,6 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/txtRestaurant"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="The name of my food service is:"
-        android:textColor="#af1b1b"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtUsername"
-        app:layout_constraintVertical_bias="0.310" />
-
-    <TextView
-        android:id="@+id/txtOptional"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="(optional)"
-        android:textColor="#af1b1b"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtRestaurant" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/edtWrapperRestaurant"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtOptional">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtRestaurant"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edittext"
-            android:ems="18"
-            android:hint="Restaurant" />
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/nextBtn1"

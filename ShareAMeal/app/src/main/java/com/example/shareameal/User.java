@@ -1,18 +1,46 @@
 package com.example.shareameal;
 
-import com.google.firebase.database.Query;
-
 public class User {
     private String userGroup;
     private String name;
-    private String restaurant;
     private String address;
     private String userId;
     private String imageUrl;
     private double addressLatitude;
     private double addressLongitude;
 
+    //for donors only
+    private String restaurant;
+
+    //for recipients only
+    private int year, month, dayOfMonth;
+    private int numOrdersLeft;
+
     public User() {
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public int getDayOfMonth() {
+        return dayOfMonth;
+    }
+
+    public void setDayOfMonth(int dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
     }
 
     public void setUserGroup(String userGroup) {
@@ -45,6 +73,14 @@ public class User {
 
     public void setAddressLongitude(double addressLongitude) {
         this.addressLongitude = addressLongitude;
+    }
+
+    public void setNumOrdersLeft(int numOrdersLeft) {
+        this.numOrdersLeft = numOrdersLeft;
+    }
+
+    public int getNumOrdersLeft() {
+        return numOrdersLeft;
     }
 
     public String getUserGroup() {

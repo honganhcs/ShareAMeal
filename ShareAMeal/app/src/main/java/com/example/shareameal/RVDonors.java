@@ -38,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -48,6 +49,7 @@ public class RVDonors extends AppCompatActivity {
     private DatabaseReference reference;
     private ArrayList<User> users = new ArrayList<>();
     private RVDonorsAdapter adapter;
+    private int numOrdersLeft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,43 @@ public class RVDonors extends AppCompatActivity {
         recyclerView.setLayoutManager(manager);
         reference = FirebaseDatabase.getInstance().getReference("Users");
         loadData();
+
+        // get current userId to check the number of items they can still claim
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = user.getUid();
+        Calendar calendar = Calendar.getInstance();
+        int currentYear = calendar.get(Calendar.YEAR);
+        int currentMonth = calendar.get(Calendar.MONTH);
+        int currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+        reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                if (user.getYear() != currentYear || user.getMonth() != currentMonth
+                        || user.getDayOfMonth() != currentDayOfMonth) {
+                    user.setYear(currentYear);
+                    user.setMonth(currentMonth);
+                    user.setDayOfMonth(currentDayOfMonth);
+                    user.setNumOrdersLeft(3);
+                    numOrdersLeft = 3;
+                    reference.child(userId).setValue(user);
+
+                } else {
+                    numOrdersLeft = user.getNumOrdersLeft();
+                }
+
+                if(numOrdersLeft == 0) {
+                    Toast.makeText(RVDonors.this, "You cannot create any more orders today as you have reached your daily limit.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+
 
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setSelectedItemId(R.id.claimFood);
