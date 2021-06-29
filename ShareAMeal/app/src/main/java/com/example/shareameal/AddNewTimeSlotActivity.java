@@ -183,6 +183,12 @@ public class AddNewTimeSlotActivity extends AppCompatActivity {
             slot.setDate(date);
             slot.setStartTime(startTime);
             slot.setEndTime(endTime);
+            slot.setYear(Year);
+            slot.setMonth(Month);
+            slot.setDayOfMonth(Day);
+            slot.setStartHour(startHour);
+            slot.setStartMinute(startMinute);
+
             slot.setAvailability(true);
             slot.setRecipientId("");
             slot.setSlotId(slotId);

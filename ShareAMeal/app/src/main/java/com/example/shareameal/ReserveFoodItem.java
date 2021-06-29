@@ -21,6 +21,8 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ReserveFoodItem extends AppCompatActivity
         implements RVSlotsAdapter.OnSlotClickListener {
@@ -94,6 +96,36 @@ public class ReserveFoodItem extends AppCompatActivity
                                 slots.add(slot);
                             }
                         }
+                        Collections.sort(slots, new Comparator<Slot>() {
+                            @Override
+                            public int compare(Slot o1, Slot o2) {
+                                if(o1.getYear() < o2.getYear()) {
+                                    return -1;
+                                } else if (o1.getYear() > o2.getYear()) {
+                                    return 1;
+                                } else {
+                                    if(o1.getMonth() < o2.getMonth()) {
+                                        return -1;
+                                    } else if (o1.getMonth() > o2.getMonth()) {
+                                        return 1;
+                                    } else {
+                                        if(o1.getDayOfMonth() < o2.getDayOfMonth()) {
+                                            return -1;
+                                        } else if(o1.getDayOfMonth() > o2.getDayOfMonth()) {
+                                            return 1;
+                                        } else {
+                                            if(o1.getStartHour() < o2.getStartHour()) {
+                                                return -1;
+                                            } else if (o1.getStartHour() > o2.getStartHour()) {
+                                                return 1;
+                                            } else {
+                                                return 0;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
                         adapter.setItems(slots);
                         adapter.notifyDataSetChanged();
                     }

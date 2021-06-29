@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,6 +24,8 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class RecipientViewOrders extends AppCompatActivity
         implements RVOrdersAdapter.OnOrderClickListener {
@@ -55,6 +58,8 @@ public class RecipientViewOrders extends AppCompatActivity
         reference = FirebaseDatabase.getInstance().getReference("Orders").child(userId);
 
         loadData();
+
+        Toast.makeText(RecipientViewOrders.this, "Orders are in chronological order.", Toast.LENGTH_SHORT).show();
 
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setSelectedItemId(R.id.schedule);
@@ -89,6 +94,36 @@ public class RecipientViewOrders extends AppCompatActivity
                         for (DataSnapshot data : snapshot.getChildren()) {
                             orders.add(data.getValue(Order.class));
                         }
+                        Collections.sort(orders, new Comparator<Order>() {
+                            @Override
+                            public int compare(Order o1, Order o2) {
+                                if(o1.getYear() < o2.getYear()) {
+                                    return -1;
+                                } else if (o1.getYear() > o2.getYear()) {
+                                    return 1;
+                                } else {
+                                    if(o1.getMonth() < o2.getMonth()) {
+                                        return -1;
+                                    } else if (o1.getMonth() > o2.getMonth()) {
+                                        return 1;
+                                    } else {
+                                        if(o1.getDayOfMonth() < o2.getDayOfMonth()) {
+                                            return -1;
+                                        } else if(o1.getDayOfMonth() > o2.getDayOfMonth()) {
+                                            return 1;
+                                        } else {
+                                            if(o1.getStartHour() < o2.getStartHour()) {
+                                                return -1;
+                                            } else if (o1.getStartHour() > o2.getStartHour()) {
+                                                return 1;
+                                            } else {
+                                                return 0;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
                         adapter.setItems(orders);
                         adapter.notifyDataSetChanged();
                     }

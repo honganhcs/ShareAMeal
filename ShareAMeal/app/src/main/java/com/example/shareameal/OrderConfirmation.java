@@ -71,10 +71,6 @@ public class OrderConfirmation extends AppCompatActivity {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         recipientId = user.getUid();
-        Calendar calendar = Calendar.getInstance();
-        int currentYear = calendar.get(Calendar.YEAR);
-        int currentMonth = calendar.get(Calendar.MONTH);
-        int currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
         reference1 = FirebaseDatabase.getInstance().getReference("Foods").child(donorId);
 
@@ -168,6 +164,11 @@ public class OrderConfirmation extends AppCompatActivity {
                 order.setFoodName(food.getName());
                 order.setFoodImageURL(food.getImageUrl());
                 order.setSlotId(slot.getSlotId());
+                order.setYear(slot.getYear());
+                order.setMonth(slot.getMonth());
+                order.setDayOfMonth(slot.getDayOfMonth());
+                order.setStartHour(slot.getStartHour());
+                order.setStartMinute(slot.getStartMinute());
 
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 String userId = user.getUid();

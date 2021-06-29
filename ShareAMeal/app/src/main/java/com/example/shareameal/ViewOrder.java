@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,11 +29,11 @@ public class ViewOrder extends AppCompatActivity {
     private ImageView foodImage;
     private TextView foodNameTxt, foodDescriptionTxt, txtOrderQuantity, txtSchedule, txtAddress;
     private DatabaseReference reference1, reference2, reference3, reference4;
-    private String donorId, foodId, slotId;
+    private String donorId, foodId, slotId, recipientId;
     private Order order;
     private Slot slot;
     private Food food;
-    private User donor;
+    private User donor, recipient;
     private int orderQuantity;
 
     @Override
@@ -51,6 +52,9 @@ public class ViewOrder extends AppCompatActivity {
         txtOrderQuantity = findViewById(R.id.txtOrderQuantity);
         txtSchedule = findViewById(R.id.txtSchedule);
         txtAddress = findViewById(R.id.txtAddress);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        recipientId = user.getUid();
 
         Intent intent = getIntent();
 
@@ -101,6 +105,9 @@ public class ViewOrder extends AppCompatActivity {
                                                         for (DataSnapshot data : snapshot.getChildren()) {
                                                             if (data.getKey().equals(donorId)) {
                                                                 donor = data.getValue(User.class);
+                                                            }
+                                                            if (data.getKey().equals(recipientId)) {
+                                                                recipient = data.getValue(User.class);
                                                             }
                                                         }
 
@@ -164,6 +171,15 @@ public class ViewOrder extends AppCompatActivity {
         // update food quantity
         food.setQuantity(food.getQuantity() + orderQuantity);
         reference1.child(foodId).setValue(food);
+
+        // update daily orders left
+        int numOrdersLeft = recipient.getNumOrdersLeft();
+        if(numOrdersLeft < 3) {
+            recipient.setNumOrdersLeft(numOrdersLeft + 1);
+        }
+        reference3.child(recipientId).setValue(recipient);
+
+        Toast.makeText(ViewOrder.this, "Your order has been successfully cancelled.", Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(ViewOrder.this, RecipientViewOrders.class);
         startActivity(intent);
