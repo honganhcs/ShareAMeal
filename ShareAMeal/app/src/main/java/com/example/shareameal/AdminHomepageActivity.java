@@ -41,7 +41,9 @@ public class AdminHomepageActivity extends AppCompatActivity {
                 } else if (curr == R.id.verifications) {
 
                 } else if (curr == R.id.profile) {
-
+                    Intent intent = new Intent(AdminHomepageActivity.this, AdminUserPageActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
                 return true;
             }

@@ -200,9 +200,13 @@ public class ChangePasswordActivity extends AppCompatActivity {
             Intent intent = new Intent(ChangePasswordActivity.this, DonorUserPageActivity.class);
             startActivity(intent);
             finish();
-        } else {
+        } else if (userGroup.equals("recipient")) {
             Intent intent =
                     new Intent(ChangePasswordActivity.this, RecipientUserPageActivity.class);
+            startActivity(intent);
+            finish();
+        } else if (userGroup.equals("admin")) {
+            Intent intent = new Intent(ChangePasswordActivity.this, AdminUserPageActivity.class);
             startActivity(intent);
             finish();
         }
@@ -216,9 +220,13 @@ public class ChangePasswordActivity extends AppCompatActivity {
             Intent intent = new Intent(ChangePasswordActivity.this, DonorUserPageActivity.class);
             startActivity(intent);
             finish();
-        } else {
+        } else if (userGroup.equals("recipient")) {
             Intent intent =
                     new Intent(ChangePasswordActivity.this, RecipientUserPageActivity.class);
+            startActivity(intent);
+            finish();
+        } else if (userGroup.equals("admin")) {
+            Intent intent = new Intent(ChangePasswordActivity.this, AdminUserPageActivity.class);
             startActivity(intent);
             finish();
         }
