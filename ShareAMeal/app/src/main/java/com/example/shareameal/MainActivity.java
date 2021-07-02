@@ -56,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
                                         Intent intent = new Intent(MainActivity.this, RecipientHomepageActivity.class);
                                         startActivity(intent);
                                         finish();
+                                    } else if (user.getUserGroup().equals("admin")) {
+                                        Intent intent = new Intent(MainActivity.this, AdminHomepageActivity.class);
+                                        startActivity(intent);
+                                        finish();
                                     }
                                 }
                             }

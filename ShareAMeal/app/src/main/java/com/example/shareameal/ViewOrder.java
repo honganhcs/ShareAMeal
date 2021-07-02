@@ -2,6 +2,7 @@ package com.example.shareameal;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -35,6 +36,7 @@ public class ViewOrder extends AppCompatActivity {
     private Food food;
     private User donor, recipient;
     private int orderQuantity;
+    private AppCompatButton btnReport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +143,19 @@ public class ViewOrder extends AppCompatActivity {
                     public void onCancelled(@NonNull @NotNull DatabaseError error) {
                     }
                 });
+
+        btnReport = findViewById(R.id.btnReport);
+        btnReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewOrder.this, ReportDonorActivity.class);
+                intent.putExtra("donorId", donorId);
+                intent.putExtra("slotId", slotId);
+                intent.putExtra("foodId", foodId);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     public void onCancelOrder(View view) {

@@ -11,7 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShareAMeal">
-        <activity android:name=".SignUp_getUserNameRecipients"></activity>
+        <activity
+            android:name=".ReportDonorActivity"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity android:name=".AdminHomepageActivity" />
+        <activity android:name=".SignUp_getUserNameRecipients" />
         <activity
             android:name=".RVDonatedFoodListings"
             android:theme="@style/Theme.MaterialComponents.Light" />
@@ -54,7 +58,7 @@
             android:theme="@style/Theme.MaterialComponents.Light" />
         <activity
             android:name=".DonorFoodItemPageActivity"
-            android:theme="@style/Theme.MaterialComponents.Light"></activity>
+            android:theme="@style/Theme.MaterialComponents.Light" />
         <activity
             android:name=".AddFoodItemActivity"
             android:theme="@style/Theme.MaterialComponents.Light" />
