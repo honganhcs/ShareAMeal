@@ -145,6 +145,7 @@ public class ReportDonorActivity extends AppCompatActivity {
                     report.setMinute(minute);
 
                     String reportId = database.push().getKey();
+                    report.setReportId(reportId);
                     database.child(reportId).setValue(report);
 
                     database.addValueEventListener(new ValueEventListener() {

@@ -84,6 +84,7 @@ public class SignupActivity_getAddress extends AppCompatActivity {
                             user.setUserGroup(userGroup);
                             user.setName(username);
                             user.setRestaurant(restaurant);
+                            user.setNumberOfReports(0);
 
                             if(userGroup.equals("recipient")) {
                                 Calendar calendar = Calendar.getInstance();

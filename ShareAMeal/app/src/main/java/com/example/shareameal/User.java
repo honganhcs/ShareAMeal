@@ -8,6 +8,7 @@ public class User {
     private String imageUrl;
     private double addressLatitude;
     private double addressLongitude;
+    private int numberOfReports;
 
     //for donors only
     private String restaurant;
@@ -37,6 +38,14 @@ public class User {
 
     public int getDayOfMonth() {
         return dayOfMonth;
+    }
+
+    public void setNumberOfReports(int numberOfReports) {
+        this.numberOfReports = numberOfReports;
+    }
+
+    public int getNumberOfReports() {
+        return numberOfReports;
     }
 
     public void setDayOfMonth(int dayOfMonth) {

@@ -112,7 +112,9 @@ public class AdminUserPageActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
                 int curr = item.getItemId();
                 if (curr == R.id.reports) {
-
+                    Intent intent = new Intent(AdminUserPageActivity.this, AdminViewReportedDonors.class);
+                    startActivity(intent);
+                    finish();
                 } else if (curr == R.id.verifications) {
 
                 } else if (curr == R.id.home) {

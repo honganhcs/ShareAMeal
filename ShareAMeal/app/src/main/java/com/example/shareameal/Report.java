@@ -7,6 +7,7 @@ public class Report implements Parcelable {
     private String slotId;
     private String recipientId;
     private String donorId;
+    private String reportId;
     private String reportContent;
     private String reportImageUrl;
     private String reportTime;
@@ -24,6 +25,10 @@ public class Report implements Parcelable {
 
     public void setDonorId(String donorId) {
         this.donorId = donorId;
+    }
+
+    public void setReportId(String reportId) {
+        this.reportId = reportId;
     }
 
     public void setReportContent(String reportContent) {
@@ -68,6 +73,10 @@ public class Report implements Parcelable {
 
     public String getDonorId() {
         return donorId;
+    }
+
+    public String getReportId() {
+        return reportId;
     }
 
     public String getReportContent() {

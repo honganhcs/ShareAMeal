@@ -11,7 +11,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShareAMeal">
-        <activity android:name=".AdminUserPageActivity"></activity>
+        <activity
+            android:name=".ReviewReport"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity
+            android:name=".AdminViewReports"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity
+            android:name=".AdminViewReportedDonors"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity android:name=".AdminUserPageActivity" />
         <activity
             android:name=".ReportDonorActivity"
             android:theme="@style/Theme.MaterialComponents.Light" />
