@@ -172,13 +172,6 @@ public class ViewOrder extends AppCompatActivity {
         food.setQuantity(food.getQuantity() + orderQuantity);
         reference1.child(foodId).setValue(food);
 
-        // update daily orders left
-        int numOrdersLeft = recipient.getNumOrdersLeft();
-        if(numOrdersLeft < 3) {
-            recipient.setNumOrdersLeft(numOrdersLeft + 1);
-        }
-        reference3.child(recipientId).setValue(recipient);
-
         Toast.makeText(ViewOrder.this, "Your order has been successfully cancelled.", Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(ViewOrder.this, RecipientViewOrders.class);

@@ -90,7 +90,7 @@ public class AddNewTimeSlotActivity extends AppCompatActivity {
 
         int style = AlertDialog.THEME_HOLO_LIGHT;
 
-        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
+        datePickerDialog = new DatePickerDialog(AddNewTimeSlotActivity.this, style, dateSetListener, year, month, day);
     }
 
     private String makeDateString(int day, int month, int year) {
@@ -118,6 +118,7 @@ public class AddNewTimeSlotActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    //on click function for Start Time textview
     public void openStartPicker(View view) {
         TimePickerDialog.OnTimeSetListener listener =
                 new TimePickerDialog.OnTimeSetListener() {
@@ -130,11 +131,12 @@ public class AddNewTimeSlotActivity extends AppCompatActivity {
                     }
                 };
         TimePickerDialog timePickerDialog =
-                new TimePickerDialog(this, listener, startHour, startMinute, true);
+                new TimePickerDialog(AddNewTimeSlotActivity.this, listener, startHour, startMinute, true);
         timePickerDialog.setTitle("Select start time:");
         timePickerDialog.show();
     }
 
+    //on click function for End Time textview
     public void openEndPicker(View view) {
         TimePickerDialog.OnTimeSetListener listener =
                 new TimePickerDialog.OnTimeSetListener() {
@@ -147,7 +149,7 @@ public class AddNewTimeSlotActivity extends AppCompatActivity {
                     }
                 };
         TimePickerDialog timePickerDialog =
-                new TimePickerDialog(this, listener, endHour, endMinute, true);
+                new TimePickerDialog(AddNewTimeSlotActivity.this, listener, endHour, endMinute, true);
         timePickerDialog.setTitle("Select end time:");
         timePickerDialog.show();
     }
