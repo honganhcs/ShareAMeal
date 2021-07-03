@@ -36,6 +36,7 @@ public class AddNewTimeSlotActivity extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private Button btnDatePicker;
     private Button btnStartPicker, btnEndPicker;
+    private com.wdullaer.materialdatetimepicker.time.TimePickerDialog startTimePickerDialog, endTimePickerDialog;
 
     // data
     private FirebaseUser user;
@@ -90,7 +91,7 @@ public class AddNewTimeSlotActivity extends AppCompatActivity {
 
         int style = AlertDialog.THEME_HOLO_LIGHT;
 
-        datePickerDialog = new DatePickerDialog(AddNewTimeSlotActivity.this, style, dateSetListener, year, month, day);
+        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
     }
 
     private String makeDateString(int day, int month, int year) {
@@ -118,40 +119,44 @@ public class AddNewTimeSlotActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    //on click function for Start Time textview
     public void openStartPicker(View view) {
-        TimePickerDialog.OnTimeSetListener listener =
-                new TimePickerDialog.OnTimeSetListener() {
+        Calendar now = Calendar.getInstance();
+
+        com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener listener =
+                new com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener() {
                     @Override
-                    public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
-                        startHour = selectedHour;
-                        startMinute = selectedMinute;
-                        btnStartPicker.setText(
-                                String.format(Locale.getDefault(), "%02d:%02d", startHour, startMinute));
+                    public void onTimeSet(com.wdullaer.materialdatetimepicker.time.TimePickerDialog view, int hourOfDay, int minute, int second) {
+                        startHour = hourOfDay;
+                        startMinute = minute;
+                        btnStartPicker.setText(String.format(Locale.getDefault(), "%02d:%02d", startHour, startMinute));
                     }
                 };
-        TimePickerDialog timePickerDialog =
-                new TimePickerDialog(AddNewTimeSlotActivity.this, listener, startHour, startMinute, true);
-        timePickerDialog.setTitle("Select start time:");
-        timePickerDialog.show();
+        startTimePickerDialog = com.wdullaer.materialdatetimepicker.time.TimePickerDialog.newInstance(
+                listener, now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), false);
+        startTimePickerDialog.setThemeDark(false);
+        startTimePickerDialog.setTitle("Select start time:");
+        startTimePickerDialog.setTimeInterval(1, 30, 60);
+        startTimePickerDialog.show(getSupportFragmentManager(), "startTimePickerDialog");
     }
 
-    //on click function for End Time textview
     public void openEndPicker(View view) {
-        TimePickerDialog.OnTimeSetListener listener =
-                new TimePickerDialog.OnTimeSetListener() {
+        Calendar now = Calendar.getInstance();
+
+        com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener listener =
+                new com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener() {
                     @Override
-                    public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
-                        endHour = selectedHour;
-                        endMinute = selectedMinute;
-                        btnEndPicker.setText(
-                                String.format(Locale.getDefault(), "%02d:%02d", endHour, endMinute));
+                    public void onTimeSet(com.wdullaer.materialdatetimepicker.time.TimePickerDialog view, int hourOfDay, int minute, int second) {
+                        endHour = hourOfDay;
+                        endMinute = minute;
+                        btnEndPicker.setText(String.format(Locale.getDefault(), "%02d:%02d", endHour, endMinute));
                     }
                 };
-        TimePickerDialog timePickerDialog =
-                new TimePickerDialog(AddNewTimeSlotActivity.this, listener, endHour, endMinute, true);
-        timePickerDialog.setTitle("Select end time:");
-        timePickerDialog.show();
+        endTimePickerDialog = com.wdullaer.materialdatetimepicker.time.TimePickerDialog.newInstance(
+                listener, now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), false);
+        endTimePickerDialog.setThemeDark(false);
+        endTimePickerDialog.setTitle("Select start time:");
+        endTimePickerDialog.setTimeInterval(1, 30, 60);
+        endTimePickerDialog.show(getSupportFragmentManager(), "endTimePickerDialog");
     }
 
     public void onBtnCreateSlotClick(View view) {
