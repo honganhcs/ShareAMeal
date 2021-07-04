@@ -1,6 +1,7 @@
 package com.example.shareameal;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,10 +66,14 @@ public class RVSlotsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Slot slot = list.get(position);
         vh.txt_date.setText(slot.getDate());
         vh.txt_time.setText(slot.getStartTime() + " to " + slot.getEndTime());
-        if (slot.isAvailability()) {
+        if (slot.getNumRecipients() == 0) {
             vh.txt_availability.setText("Not Reserved");
+        } else if (slot.getNumRecipients() == 3){
+            vh.txt_availability.setText("Fully Reserved");
+        } else if (slot.getNumRecipients() == 1){
+            vh.txt_availability.setText("2 More Reservations Allowed");
         } else {
-            vh.txt_availability.setText("Reserved");
+            vh.txt_availability.setText("1 More Reservation Allowed");
         }
     }
 

@@ -9,7 +9,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,15 +20,24 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class DonorViewSlot extends AppCompatActivity {
 
+    //widgets
     private TextView txtDate, txtTime, txtReserved, txtReservedItem;
+
+    //data
     private Slot slot;
-    private Order order;
+    private String donorId, slotId;
+
+    private HashMap<String, Order> recipientIdToOrder;
     private Food food;
+
     private DatabaseReference reference1, reference2, reference3;
-    private String donorId, recipientId, foodId, slotId;
-    private int qty;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,79 +49,118 @@ public class DonorViewSlot extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        donorId = user.getUid();
-
         txtDate = findViewById(R.id.txtDate);
         txtTime = findViewById(R.id.txtTime);
         txtReserved = findViewById(R.id.txtReserved);
         txtReservedItem = findViewById(R.id.txtReservedItem);
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        donorId = user.getUid();
+
+        reference1 = FirebaseDatabase.getInstance().getReference("Orders");
+
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         slot = bundle.getParcelable("slot");
-        recipientId = slot.getRecipientId();
         slotId = slot.getSlotId();
 
         txtDate.setText("Date: " + slot.getDate());
         txtTime.setText("Time: " + slot.getStartTime() + " - " + slot.getEndTime());
-        txtReserved.setText(slot.isAvailability() ? "Not Reserved" : "Reserved for Donation of:");
+        txtReserved.setText(slot.getNumRecipients() == 0 ? "Not Reserved" : "Reserved for Donation of:");
 
-        if (slot.isAvailability()) {
+        if (slot.getNumRecipients() == 0) {
             txtReservedItem.setText("");
         } else {
-            reference1 = FirebaseDatabase.getInstance().getReference("Orders").child(recipientId);
-            reference1.addValueEventListener(
-                    new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                            for (DataSnapshot data : snapshot.getChildren()) {
-                                if (data.getKey().equals(slotId)) {
-                                    order = data.getValue(Order.class);
-                                    foodId = order.getFoodId();
+            ArrayList<String> items = new ArrayList<>();
+            String[] recipientIds = {slot.getRecipientId1(), slot.getRecipientId2(), slot.getRecipientId3()};
+
+            for(int i = 0; i < 2; i++) {
+                String recipientId = recipientIds[i];
+                if(recipientId != null) {
+                    reference1.child(recipientId).addValueEventListener(
+                            new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                    for (DataSnapshot data : snapshot.getChildren()) {
+                                        if (data.getKey().equals(slotId)) {
+                                            Order order = data.getValue(Order.class);
+                                            recipientIdToOrder.put(recipientId, order);
+                                            String item = order.getQuantity() + " " + order.getFoodName() + "\n";
+                                            items.add(item);
+                                        }
+                                    }
                                 }
-                            }
 
-                            reference2 = FirebaseDatabase.getInstance().getReference("Foods").child(donorId);
-                            reference2.addValueEventListener(
-                                    new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                            for (DataSnapshot data : snapshot.getChildren()) {
-                                                if (data.getKey().equals(foodId)) {
-                                                    food = data.getValue(Food.class);
-                                                }
-                                            }
-
-                                            qty = order.getQuantity();
-                                            String foodName = food.getName();
-                                            txtReservedItem.setText(qty + " " + foodName);
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                                        }
-                                    });
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                        }
-                    });
+                                @Override
+                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                }
+                            });
+                }
+            }
+            String itemsText = "";
+            for(int i = 0; i < items.size(); i++) {
+                itemsText = itemsText + items.get(i);
+            }
+            txtReservedItem.setText(itemsText);
         }
     }
 
     public void onDeleteBtn(View view) {
-        reference3 = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
+        reference2 = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
         // remove slot
-        reference3.child(slotId).removeValue();
+        reference2.child(slotId).removeValue();
 
-        // remove order
-        reference1.child(slotId).removeValue();
+        // remove orders & update food quantities
+        reference3 = FirebaseDatabase.getInstance().getReference("Foods").child(donorId);
 
-        // update food quantity
-        food.setQuantity(food.getQuantity() + qty);
-        reference2.child(foodId).setValue(food);
+        if(slot.getRecipientId1() != null) {
+            Order order = recipientIdToOrder.get(slot.getRecipientId1());
+            reference3.child(order.getFoodId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    food = snapshot.getValue(Food.class);
+                    food.setQuantity(food.getQuantity() + order.getQuantity());
+                    reference3.child(order.getFoodId()).setValue(food);
+                    reference1.child(slot.getRecipientId1()).child(slotId).removeValue();
+                }
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
+        }
+        if(slot.getRecipientId2() != null) {
+            Order order = recipientIdToOrder.get(slot.getRecipientId2());
+            reference3.child(order.getFoodId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    food = snapshot.getValue(Food.class);
+                    food.setQuantity(food.getQuantity() + order.getQuantity());
+                    reference3.child(order.getFoodId()).setValue(food);
+                    reference1.child(slot.getRecipientId2()).child(slotId).removeValue();
+                }
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
+        }
+        if(slot.getRecipientId3() != null) {
+            Order order = recipientIdToOrder.get(slot.getRecipientId3());
+            reference3.child(order.getFoodId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    food = snapshot.getValue(Food.class);
+                    food.setQuantity(food.getQuantity() + order.getQuantity());
+                    reference3.child(order.getFoodId()).setValue(food);
+                    reference1.child(slot.getRecipientId3()).child(slotId).removeValue();
+                }
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
+        }
 
         Intent intent = new Intent(DonorViewSlot.this, DonorsScheduleActivity.class);
         startActivity(intent);

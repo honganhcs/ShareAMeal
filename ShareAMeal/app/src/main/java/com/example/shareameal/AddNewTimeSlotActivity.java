@@ -184,23 +184,36 @@ public class AddNewTimeSlotActivity extends AppCompatActivity {
 
             DatabaseReference reference =
                     FirebaseDatabase.getInstance().getReference("Slots").child(userId);
-            String slotId = reference.push().getKey();
+            int numSlots = ((endHour - startHour) * 60 + endMinute - startMinute) / 30;
 
-            Slot slot = new Slot();
-            slot.setDate(date);
-            slot.setStartTime(startTime);
-            slot.setEndTime(endTime);
-            slot.setYear(Year);
-            slot.setMonth(Month);
-            slot.setDayOfMonth(Day);
-            slot.setStartHour(startHour);
-            slot.setStartMinute(startMinute);
+            String end = startTime;
+            for (int i = 0; i < numSlots; i++) {
+                int startM = (startMinute + 30 * i) % 60;
+                int startH = startHour + (startMinute + 30 * i) / 60;
+                int endM = (startM + 30) % 60;
+                int endH = startH + (startM + 30) / 60;
+                // start and end time in string form for each slot
+                String start = end;
+                end = String.format(Locale.getDefault(), "%02d:%02d", endH, endM);
 
-            slot.setAvailability(true);
-            slot.setRecipientId("");
-            slot.setSlotId(slotId);
+                // push new slot to database:
+                String slotId = reference.push().getKey();
+                Slot slot = new Slot();
 
-            reference.child(slotId).setValue(slot);
+                slot.setDate(date);
+                slot.setStartTime(start);
+                slot.setEndTime(end);
+                slot.setYear(Year);
+                slot.setMonth(Month);
+                slot.setDayOfMonth(Day);
+                slot.setStartHour(startH);
+                slot.setStartMinute(startM);
+                slot.setNumRecipients(0);
+
+                slot.setSlotId(slotId);
+
+                reference.child(slotId).setValue(slot);
+            }
 
             reference.addValueEventListener(
                     new ValueEventListener() {
@@ -208,7 +221,7 @@ public class AddNewTimeSlotActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                             Toast.makeText(
                                     AddNewTimeSlotActivity.this,
-                                    "Time slot successfully added.",
+                                    "Time slots successfully added.",
                                     Toast.LENGTH_SHORT)
                                     .show();
                             Intent intent = new Intent(AddNewTimeSlotActivity.this, DonorsScheduleActivity.class);

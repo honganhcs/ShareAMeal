@@ -8,13 +8,50 @@ import androidx.annotation.RequiresApi;
 
 public class Slot implements Parcelable {
 
-    private String date, startTime, endTime, recipientId, slotId;
-    private int year, month, dayOfMonth, startHour, startMinute;
-    private boolean availability;
+    private String date, startTime, endTime, slotId;
+    private String recipientId1, recipientId2, recipientId3;
+    private int year;
+    private int month;
+    private int dayOfMonth;
+    private int startHour;
+    private int startMinute;
+    private int numRecipients;
 
     public Slot() {
     }
 
+    public int getNumRecipients() {
+        return numRecipients;
+    }
+
+    public void setNumRecipients(int numRecipients) {
+        this.numRecipients = numRecipients;
+    }
+
+
+    public String getRecipientId1() {
+        return recipientId1;
+    }
+
+    public void setRecipientId1(String recipientId1) {
+        this.recipientId1 = recipientId1;
+    }
+
+    public String getRecipientId2() {
+        return recipientId2;
+    }
+
+    public void setRecipientId2(String recipientId2) {
+        this.recipientId2 = recipientId2;
+    }
+
+    public String getRecipientId3() {
+        return recipientId3;
+    }
+
+    public void setRecipientId3(String recipientId3) {
+        this.recipientId3 = recipientId3;
+    }
 
     public int getYear() {
         return year;
@@ -84,22 +121,6 @@ public class Slot implements Parcelable {
         this.endTime = endTime;
     }
 
-    public String getRecipientId() {
-        return recipientId;
-    }
-
-    public void setRecipientId(String recipientId) {
-        this.recipientId = recipientId;
-    }
-
-    public boolean isAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(boolean availability) {
-        this.availability = availability;
-    }
-
     public void setSlotId(String slotId) {
         this.slotId = slotId;
     }
@@ -115,9 +136,16 @@ public class Slot implements Parcelable {
         dest.writeString(date);
         dest.writeString(startTime);
         dest.writeString(endTime);
-        dest.writeString(recipientId);
         dest.writeString(slotId);
-        dest.writeBoolean(availability);
+        dest.writeString(recipientId1);
+        dest.writeString(recipientId2);
+        dest.writeString(recipientId3);
+        dest.writeInt(year);
+        dest.writeInt(month);
+        dest.writeInt(dayOfMonth);
+        dest.writeInt(startHour);
+        dest.writeInt(startMinute);
+        dest.writeInt(numRecipients);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -125,9 +153,16 @@ public class Slot implements Parcelable {
         this.date = in.readString();
         this.startTime = in.readString();
         this.endTime = in.readString();
-        this.recipientId = in.readString();
         this.slotId = in.readString();
-        this.availability = in.readBoolean();
+        this.recipientId1 = in.readString();
+        this.recipientId2 = in.readString();
+        this.recipientId3 = in.readString();
+        this.year = in.readInt();
+        this.month = in.readInt();
+        this.dayOfMonth = in.readInt();
+        this.startHour = in.readInt();
+        this.startMinute = in.readInt();
+        this.numRecipients = in.readInt();
     }
 
     public static final Creator<Slot> CREATOR =

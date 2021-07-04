@@ -92,7 +92,7 @@ public class ReserveFoodItem extends AppCompatActivity
                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                         for (DataSnapshot data : snapshot.getChildren()) {
                             Slot slot = data.getValue(Slot.class);
-                            if (slot.isAvailability()) {
+                            if (slot.getNumRecipients() < 3) {
                                 slots.add(slot);
                             }
                         }

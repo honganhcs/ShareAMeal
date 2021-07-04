@@ -158,8 +158,14 @@ public class ViewOrder extends AppCompatActivity {
                                 slot = data.getValue(Slot.class);
                             }
                         }
-                        slot.setAvailability(true);
-                        slot.setRecipientId(null);
+                        slot.setNumRecipients(slot.getNumRecipients() - 1);
+                        if(slot.getRecipientId1().equals(recipientId)) {
+                            slot.setRecipientId1(null);
+                        } else if(slot.getRecipientId2().equals(recipientId)) {
+                            slot.setRecipientId2(null);
+                        } else if(slot.getRecipientId3().equals(recipientId)) {
+                            slot.setRecipientId3(null);
+                        }
                         reference4.child(slotId).setValue(slot);
                     }
 

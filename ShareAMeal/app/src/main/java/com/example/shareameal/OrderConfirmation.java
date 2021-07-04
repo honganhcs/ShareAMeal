@@ -180,8 +180,14 @@ public class OrderConfirmation extends AppCompatActivity {
                 reference1.child(foodId).setValue(food);
 
                 // update slot
-                slot.setAvailability(false);
-                slot.setRecipientId(userId);
+                slot.setNumRecipients(slot.getNumRecipients() + 1);
+                if(slot.getRecipientId1() == null) {
+                    slot.setRecipientId1(recipientId);
+                } else if(slot.getRecipientId2() == null) {
+                    slot.setRecipientId2(recipientId);
+                } else if(slot.getRecipientId3() == null) {
+                    slot.setRecipientId3(recipientId);
+                }
                 reference3 = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
                 reference3.child(slot.getSlotId()).setValue(slot);
 
