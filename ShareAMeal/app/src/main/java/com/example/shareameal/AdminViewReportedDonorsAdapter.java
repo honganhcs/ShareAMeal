@@ -87,7 +87,11 @@ public class AdminViewReportedDonorsAdapter extends RecyclerView.Adapter<Recycle
         reportsRef.child(donorId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                vh.txt_donor_reportsNum.setText(String.valueOf(snapshot.getChildrenCount()) + " Unreviewed Reports");
+                if (snapshot.getChildrenCount() == 1) {
+                    vh.txt_donor_reportsNum.setText(String.valueOf(snapshot.getChildrenCount()) + " Unreviewed Report");
+                } else {
+                    vh.txt_donor_reportsNum.setText(String.valueOf(snapshot.getChildrenCount()) + " Unreviewed Reports");
+                }
             }
 
             @Override

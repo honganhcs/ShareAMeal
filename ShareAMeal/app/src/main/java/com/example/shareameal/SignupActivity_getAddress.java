@@ -92,6 +92,9 @@ public class SignupActivity_getAddress extends AppCompatActivity {
                                 user.setMonth(calendar.get(Calendar.MONTH));
                                 user.setDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
                                 user.setNumOrdersLeft(3);
+                                user.setVerificationState(0);
+                            } else {
+                                user.setVerificationState(2);
                             }
 
                             if (TextUtils.isEmpty(building) && TextUtils.isEmpty(unit)) {

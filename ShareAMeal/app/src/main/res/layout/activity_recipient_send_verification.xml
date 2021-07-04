@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RecipientSendVerification">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:text="Please either upload an image or a PDF file of an official document stating your income level, and fill in your monthly income in the field below."
+            android:textColor="#AF1B1B"
+            android:textSize="16sp"
+            android:ems="18"
+            android:layout_marginTop="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/PDFheader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="Upload PDF / Image"
+            android:textColor="#AF1B1B"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/description"
+            app:layout_constraintTop_toBottomOf="@+id/description" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/selectFileBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:text="Select File"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:ems="12"
+            android:layout_marginTop="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/PDFheader" />
+
+        <TextView
+            android:id="@+id/uploadStatusTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No file is selected"
+            android:textColor="#AF1B1B"
+            android:textSize="16sp"
+            android:textAlignment="center"
+            android:inputType="textMultiLine"
+            android:ems="18"
+            android:layout_marginTop="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/selectFileBtn" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/uploadFileBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:text="Upload File"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:ems="12"
+            android:layout_marginTop="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/uploadStatusTxt" />
+
+        <ProgressBar
+            android:id="@+id/progress_circular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/uploadFileBtn"
+            app:layout_constraintStart_toEndOf="@+id/uploadFileBtn"
+            app:layout_constraintTop_toTopOf="@+id/uploadFileBtn" />
+
+        <TextView
+            android:id="@+id/header2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="State Monthly Income"
+            android:textColor="#AF1B1B"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/description"
+            app:layout_constraintTop_toBottomOf="@+id/uploadFileBtn" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginRight="3dp"
+            app:layout_constraintBottom_toBottomOf="@+id/incomeLevelEdt"
+            app:layout_constraintEnd_toStartOf="@+id/incomeLevelEdt"
+            app:layout_constraintTop_toTopOf="@+id/incomeLevelEdt" />
+
+        <EditText
+            android:id="@+id/incomeLevelEdt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:ems="10"
+            android:textAlignment="center"
+            android:inputType="number"
+            android:hint="0"
+            android:digits="0123456789."
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/header2" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/submitBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button2"
+            android:layout_marginVertical="40dp"
+            android:text="Submit"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/incomeLevelEdt" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

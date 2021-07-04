@@ -17,6 +17,9 @@ public class User {
     private int year, month, dayOfMonth;
     private int numOrdersLeft;
 
+    // 0 - has not verified yet, 1 - in process of checking verification, 2 - verified, 3 - rejected, 4 - unclear document(s)
+    private int verificationState;
+
     public User() {
     }
 
@@ -46,6 +49,14 @@ public class User {
 
     public int getNumberOfReports() {
         return numberOfReports;
+    }
+
+    public void setVerificationState(int verificationState) {
+        this.verificationState = verificationState;
+    }
+
+    public int getVerificationState() {
+        return verificationState;
     }
 
     public void setDayOfMonth(int dayOfMonth) {
