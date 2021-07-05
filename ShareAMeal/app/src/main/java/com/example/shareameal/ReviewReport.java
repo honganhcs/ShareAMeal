@@ -27,6 +27,7 @@ import com.squareup.picasso.Picasso;
 import org.jetbrains.annotations.NotNull;
 
 public class ReviewReport extends AppCompatActivity {
+    private final int MAX_ALLOWED_NUMBER_OF_REPORTS = 3;
     private ImageView foodImage, reportImage;
     private TextView foodNameTxt, foodDescriptionTxt, txtOrderQuantity, txtSchedule, reportContentTxt;
     private String donorId, recipientId, slotId, reportId;
@@ -60,11 +61,12 @@ public class ReviewReport extends AppCompatActivity {
         DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("Orders");
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
         DatabaseReference foodsRef = FirebaseDatabase.getInstance().getReference("Foods");
+        DatabaseReference slotsRef = FirebaseDatabase.getInstance().getReference("Slots");
 
-        ordersRef.child(recipientId).child(slotId).addValueEventListener(new ValueEventListener() {
+        ordersRef.child(recipientId).child(slotId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                Order order = snapshot.getValue(Order.class);
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                Order order = task.getResult().getValue(Order.class);
                 if (order.getFoodImageURL() == null) {
                     foodImage.setImageResource(R.drawable.dish128);
                 } else {
@@ -77,15 +79,12 @@ public class ReviewReport extends AppCompatActivity {
                 foodNameTxt.setText(order.getFoodName());
                 String foodId = order.getFoodId();
 
-                foodsRef.child(donorId).child(foodId).addValueEventListener(new ValueEventListener() {
+                foodsRef.child(donorId).child(foodId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        Food food = snapshot.getValue(Food.class);
+                    public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                        Food food = task.getResult().getValue(Food.class);
                         foodDescriptionTxt.setText(food.getDescription());
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {}
                 });
 
                 txtOrderQuantity.setText("Collected quantity:\n" + String.valueOf(order.getQuantity()));
@@ -114,9 +113,6 @@ public class ReviewReport extends AppCompatActivity {
                     }
                 });
             }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {}
         });
 
         rejectReportBtn = findViewById(R.id.rejectReportBtn);
@@ -149,6 +145,39 @@ public class ReviewReport extends AppCompatActivity {
                             int numOfReports = user.getNumberOfReports();
                             numOfReports += 1;
                             usersRef.child(donorId).child("numberOfReports").setValue(numOfReports);
+
+                            // Delete user's food listings, slots, orders and reports from the database
+                            if (numOfReports >= MAX_ALLOWED_NUMBER_OF_REPORTS) {
+                                if (reportsRef.child(donorId) != null) {
+                                    reportsRef.child(donorId).removeValue();
+                                }
+                                if (foodsRef.child(donorId) != null) {
+                                    foodsRef.child(donorId).removeValue();
+                                }
+                                slotsRef.child(donorId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                                        DataSnapshot resultSnapshot = task.getResult();
+                                        for (DataSnapshot data : resultSnapshot.getChildren()) {
+                                            Slot currSlot = data.getValue(Slot.class);
+                                            String slotId = currSlot.getSlotId();
+                                            ordersRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                                                    DataSnapshot resultSnapshot1 = task.getResult();
+                                                    for (DataSnapshot data1 : resultSnapshot1.getChildren()) {
+                                                        String recipientId = data1.getKey();
+                                                        if (ordersRef.child(recipientId).child(slotId) != null) {
+                                                            ordersRef.child(recipientId).child(slotId).removeValue();
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                                slotsRef.child(donorId).removeValue();
+                            }
                         }
                     }
                 });

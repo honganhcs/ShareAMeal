@@ -18,10 +18,10 @@
                 android:id="@+id/numberOfReportsTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Number of Reports: "
+                android:text="Number of Reports to Check: "
                 android:textColor="#C45508"
                 android:textSize="20sp"
-                android:layout_marginTop="200dp"
+                android:layout_marginTop="250dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -39,43 +39,18 @@
                 app:layout_constraintTop_toBottomOf="@+id/numberOfReportsTitle" />
 
             <TextView
-                android:id="@+id/numberOfUsersToBlockTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Number of Users to Block: "
-                android:textColor="#C45508"
-                android:textSize="20sp"
-                android:layout_marginTop="70dp"
-                app:layout_constraintEnd_toEndOf="@+id/numberOfReportsTitle"
-                app:layout_constraintStart_toStartOf="@+id/numberOfReportsTitle"
-                app:layout_constraintTop_toBottomOf="@+id/numberOfReportsTitle" />
-
-            <TextView
-                android:id="@+id/numberOfUsersToBlock"
-                android:layout_width="125dp"
-                android:layout_height="0dp"
-                android:inputType="numberSigned"
-                android:text="0"
-                android:textColor="#C45508"
-                android:textSize="20sp"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="@+id/numberOfUsersToBlockTitle"
-                app:layout_constraintStart_toStartOf="@+id/numberOfUsersToBlockTitle"
-                app:layout_constraintTop_toBottomOf="@+id/numberOfUsersToBlockTitle" />
-
-            <TextView
                 android:id="@+id/numberOfRecipientsToVerifyTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="80dp"
                 android:layout_marginBottom="70dp"
                 android:text="Number of Recipients to Verify: "
                 android:textColor="#C45508"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/numberOfUsersToBlockTitle"
-                app:layout_constraintStart_toStartOf="@+id/numberOfUsersToBlockTitle"
-                app:layout_constraintTop_toBottomOf="@+id/numberOfUsersToBlockTitle" />
+                app:layout_constraintEnd_toEndOf="@+id/numberOfReportsTitle"
+                app:layout_constraintStart_toStartOf="@+id/numberOfReportsTitle"
+                app:layout_constraintTop_toBottomOf="@+id/numberOfReportsTitle" />
 
             <TextView
                 android:id="@+id/numberOfRecipientsToVerify"

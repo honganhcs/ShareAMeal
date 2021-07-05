@@ -12,6 +12,7 @@ public class User {
 
     //for donors only
     private String restaurant;
+    private int numberOfPoints;
 
     //for recipients only
     private int year, month, dayOfMonth;
@@ -57,6 +58,14 @@ public class User {
 
     public int getVerificationState() {
         return verificationState;
+    }
+
+    public void setNumberOfPoints(int numberOfPoints) {
+        this.numberOfPoints = numberOfPoints;
+    }
+
+    public int getNumberOfPoints() {
+        return numberOfPoints;
     }
 
     public void setDayOfMonth(int dayOfMonth) {

@@ -135,7 +135,7 @@ public class RecipientUserPageActivity extends AppCompatActivity {
                                 startActivity(intent);
                                 finish();
                             } else {
-                                Toast.makeText(RecipientUserPageActivity.this, "Not allowed to access this page", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RecipientUserPageActivity.this, "Not allowed access to this page", Toast.LENGTH_SHORT).show();
                                 bottomNav.setSelectedItemId(R.id.profile);
                             }
                         } else if (curr == R.id.schedule) {
@@ -144,7 +144,7 @@ public class RecipientUserPageActivity extends AppCompatActivity {
                                 startActivity(intent);
                                 finish();
                             } else {
-                                Toast.makeText(RecipientUserPageActivity.this, "Not allowed to access this page", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RecipientUserPageActivity.this, "Not allowed access to this page", Toast.LENGTH_SHORT).show();
                                 bottomNav.setSelectedItemId(R.id.profile);
                             }
                         } else if (curr == R.id.home) {

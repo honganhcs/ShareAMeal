@@ -136,7 +136,12 @@ public class ReportDonorActivity extends AppCompatActivity {
                     int hour = curr.get(Calendar.HOUR_OF_DAY);
                     int minute = curr.get(Calendar.MINUTE);
 
-                    String date = month + " " + day + " " + year + " " + hour + ":" + minute;
+                    String date;
+                    if (minute < 10) {
+                        date = month + " " + day + " " + year + " " + hour + ":0" + minute;
+                    } else {
+                        date = month + " " + day + " " + year + " " + hour + ":" + minute;
+                    }
                     report.setReportTime(date);
                     report.setYear(year);
                     report.setMonth(monthInt);

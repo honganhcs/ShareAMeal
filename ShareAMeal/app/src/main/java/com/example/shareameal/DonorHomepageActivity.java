@@ -2,12 +2,17 @@ package com.example.shareameal;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,6 +28,8 @@ public class DonorHomepageActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNav;
     private TextView userNameTxt, reminderQty;
+    private int numberOfReports;
+    private ConstraintLayout donorBlockedMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,31 +43,9 @@ public class DonorHomepageActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        int curr = item.getItemId();
-                        if (curr == R.id.food) {
-                            Intent intent = new Intent(DonorHomepageActivity.this, DonateFoodActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else if (curr == R.id.schedule) {
-                            Intent intent = new Intent(DonorHomepageActivity.this, DonorsScheduleActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else if (curr == R.id.profile) {
-                            Intent intent = new Intent(DonorHomepageActivity.this, DonorUserPageActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                        return true;
-                    }
-                });
-
         userNameTxt = findViewById(R.id.userNameTxt);
         reminderQty = findViewById(R.id.reminderQty);
+        donorBlockedMsg = findViewById(R.id.donorBlockedMsg);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userid = user.getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
@@ -72,6 +57,11 @@ public class DonorHomepageActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 User user = snapshot.getValue(User.class);
                                 userNameTxt.setText(user.getName());
+                                numberOfReports = user.getNumberOfReports();
+
+                                if (numberOfReports < 3) {
+                                    donorBlockedMsg.setVisibility(View.GONE);
+                                }
                             }
 
                             @Override
@@ -97,10 +87,39 @@ public class DonorHomepageActivity extends AppCompatActivity {
                             public void onCancelled(@NonNull @NotNull DatabaseError error) {
                             }
                         });
+
+        bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        int curr = item.getItemId();
+                        if (curr == R.id.food) {
+                            if (numberOfReports < 3) {
+                                Intent intent = new Intent(DonorHomepageActivity.this, DonateFoodActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(DonorHomepageActivity.this, "You are not allowed access to this page", Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (curr == R.id.schedule) {
+                            if (numberOfReports < 3) {
+                                Intent intent = new Intent(DonorHomepageActivity.this, DonorsScheduleActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(DonorHomepageActivity.this, "You are not allowed access to this page", Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (curr == R.id.profile) {
+                            Intent intent = new Intent(DonorHomepageActivity.this, DonorUserPageActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                        return true;
+                    }
+                });
     }
 
     @Override
-    public void onBackPressed() {
-
-    }
+    public void onBackPressed() {}
 }

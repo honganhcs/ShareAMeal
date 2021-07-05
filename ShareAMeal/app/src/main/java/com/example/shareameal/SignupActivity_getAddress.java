@@ -95,6 +95,7 @@ public class SignupActivity_getAddress extends AppCompatActivity {
                                 user.setVerificationState(0);
                             } else {
                                 user.setVerificationState(2);
+                                user.setNumberOfPoints(0);
                             }
 
                             if (TextUtils.isEmpty(building) && TextUtils.isEmpty(unit)) {

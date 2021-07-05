@@ -26,6 +26,7 @@ public class DonorUserPageActivity extends AppCompatActivity {
     private TextView recordsTxt, editProfileTxt, changePasswordTxt, logoutTxt;
     private TextView userNameTxt;
     private ImageView userProfilePic;
+    private int numberOfReports;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,7 @@ public class DonorUserPageActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 User user = snapshot.getValue(User.class);
                                 userNameTxt.setText(user.getName());
+                                numberOfReports = user.getNumberOfReports();
 
                                 String imageUrl = user.getImageUrl();
                                 if (imageUrl == null) {
@@ -124,13 +126,21 @@ public class DonorUserPageActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         int curr = item.getItemId();
                         if (curr == R.id.food) {
-                            Intent intent = new Intent(DonorUserPageActivity.this, DonateFoodActivity.class);
-                            startActivity(intent);
-                            finish();
+                            if (numberOfReports < 3) {
+                                Intent intent = new Intent(DonorUserPageActivity.this, DonateFoodActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(DonorUserPageActivity.this, "You are not allowed access to this page", Toast.LENGTH_SHORT).show();
+                            }
                         } else if (curr == R.id.schedule) {
-                            Intent intent = new Intent(DonorUserPageActivity.this, DonorsScheduleActivity.class);
-                            startActivity(intent);
-                            finish();
+                            if (numberOfReports < 3) {
+                                Intent intent = new Intent(DonorUserPageActivity.this, DonorsScheduleActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(DonorUserPageActivity.this, "You are not allowed access to this page", Toast.LENGTH_SHORT).show();
+                            }
                         } else if (curr == R.id.home) {
                             Intent intent = new Intent(DonorUserPageActivity.this, DonorHomepageActivity.class);
                             startActivity(intent);

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class AdminHomepageActivity extends AppCompatActivity {
     private BottomNavigationView bottomNav;
-    private TextView numberOfReportsTxt, numberOfUsersToBlockTxt, numberOfRecipientsToVerifyTxt;
+    private TextView numberOfReportsTxt, numberOfRecipientsToVerifyTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +59,9 @@ public class AdminHomepageActivity extends AppCompatActivity {
         });
 
         numberOfReportsTxt = findViewById(R.id.numberOfReports);
-        numberOfUsersToBlockTxt = findViewById(R.id.numberOfUsersToBlock);
         numberOfRecipientsToVerifyTxt = findViewById(R.id.numberOfRecipientsToVerify);
 
         DatabaseReference reportsRef = FirebaseDatabase.getInstance().getReference("Reports");
-        DatabaseReference reportedUsersRef = FirebaseDatabase.getInstance().getReference("ReportedUsers");
         DatabaseReference verificationsRef = FirebaseDatabase.getInstance().getReference("Verifications");
 
         reportsRef.addValueEventListener(new ValueEventListener() {
