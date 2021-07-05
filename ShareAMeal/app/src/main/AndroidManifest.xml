@@ -13,6 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShareAMeal">
         <activity
+            android:name=".ReviewVerification"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity
+            android:name=".AdminViewVerifications"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity
             android:name=".RecipientSendVerification"
             android:theme="@style/Theme.MaterialComponents.Light" />
         <activity

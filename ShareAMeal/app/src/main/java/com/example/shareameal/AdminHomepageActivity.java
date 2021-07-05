@@ -46,7 +46,9 @@ public class AdminHomepageActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else if (curr == R.id.verifications) {
-
+                    Intent intent = new Intent(AdminHomepageActivity.this, AdminViewVerifications.class);
+                    startActivity(intent);
+                    finish();
                 } else if (curr == R.id.profile) {
                     Intent intent = new Intent(AdminHomepageActivity.this, AdminUserPageActivity.class);
                     startActivity(intent);
@@ -85,6 +87,20 @@ public class AdminHomepageActivity extends AppCompatActivity {
                         public void onCancelled(@NonNull @NotNull DatabaseError error) {}
                     });
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {}
+        });
+
+        verificationsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                ArrayList<Integer> tempList = new ArrayList<>();
+                for (DataSnapshot data: snapshot.getChildren()) {
+                    tempList.add(1);
+                }
+                numberOfRecipientsToVerifyTxt.setText(String.valueOf(tempList.size()));
             }
 
             @Override

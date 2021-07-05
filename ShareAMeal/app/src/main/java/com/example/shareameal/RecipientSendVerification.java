@@ -48,12 +48,14 @@ import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Calendar;
+
 public class RecipientSendVerification extends AppCompatActivity {
     private AppCompatButton selectFileBtn, uploadFileBtn, submitBtn;
     private TextView uploadStatusTxt;
     private Uri fileUri;
     private ProgressBar progressBar;
-    private String userId, fileUrl;
+    private String userId, fileUrl, fileExtension;
     private EditText incomeLevelEdt;
 
     private FirebaseStorage storage;
@@ -127,8 +129,26 @@ public class RecipientSendVerification extends AppCompatActivity {
                     DatabaseReference verificationsRef = database.getReference("Verifications").child(userId);
                     Verification ver = new Verification();
                     ver.setFileUrl(fileUrl);
+                    ver.setFileExtension(fileExtension);
                     ver.setMonthlyIncome(Double.valueOf(monthlyIncomeText));
                     ver.setRecipientId(userId);
+
+                    Calendar curr = Calendar.getInstance();
+                    int year = curr.get(Calendar.YEAR);
+                    int monthInt = curr.get(Calendar.MONTH) + 1;
+                    String month = getMonthFormat(monthInt);
+                    int day = curr.get(Calendar.DAY_OF_MONTH);
+                    int hour = curr.get(Calendar.HOUR_OF_DAY);
+                    int minute = curr.get(Calendar.MINUTE);
+
+                    String date = month + " " + day + " " + year + " " + hour + ":" + minute;
+                    ver.setVerificationTime(date);
+                    ver.setYear(year);
+                    ver.setMonth(monthInt);
+                    ver.setDay(day);
+                    ver.setHour(hour);
+                    ver.setMinute(minute);
+
                     verificationsRef.setValue(ver);
 
                     verificationsRef.addValueEventListener(new ValueEventListener() {
@@ -149,6 +169,23 @@ public class RecipientSendVerification extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private String getMonthFormat(int month) {
+        if (month == 1) return "Jan";
+        if (month == 2) return "Feb";
+        if (month == 3) return "Mar";
+        if (month == 4) return "Apr";
+        if (month == 5) return "May";
+        if (month == 6) return "Jun";
+        if (month == 7) return "Jul";
+        if (month == 8) return "Aug";
+        if (month == 9) return "Sep";
+        if (month == 10) return "Oct";
+        if (month == 11) return "Nov";
+        if (month == 12) return "Dec";
+        // should never happen
+        return "Jan";
     }
 
     private void selectPDF() {
@@ -192,6 +229,7 @@ public class RecipientSendVerification extends AppCompatActivity {
     private void uploadFile(Uri fileUri) {
         progressBar.setVisibility(View.VISIBLE);
         final String fileName = System.currentTimeMillis() + "." + getFileExtension(fileUri);
+        fileExtension = getFileExtension(fileUri);
         StorageReference mySto = storage.getReference().child("VerificationUploads");
 
         mySto.child(userId).child(fileName).putFile(fileUri)

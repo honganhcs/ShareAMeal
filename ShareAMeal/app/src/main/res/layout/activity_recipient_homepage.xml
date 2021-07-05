@@ -100,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
-                    android:text="We are sorry to inform you that your income level is higher than the maximum allowed income level of a recipient."
+                    android:text="We are sorry to inform you that your income level is higher than the maximum allowed income level of a recipient. Hence, you are unable to access the food claiming system."
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold"
