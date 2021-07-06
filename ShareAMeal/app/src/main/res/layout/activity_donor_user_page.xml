@@ -46,17 +46,29 @@
                 app:layout_constraintTop_toBottomOf="@+id/userProfilePic" />
 
             <TextView
+                android:id="@+id/donatedFoodsQtyHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:text="Quantity of Donated Food Items:"
+                android:textColor="#AF1B1B"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="@+id/userNameTxt"
+                app:layout_constraintStart_toStartOf="@+id/userNameTxt"
+                app:layout_constraintTop_toBottomOf="@+id/userNameTxt" />
+
+            <TextView
+                android:id="@+id/donatedFoodsQtyTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:text="0 food items donated"
+                android:text="All-time: 20, This Week: 5"
                 android:textColor="#AF1B1B"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/userNameTxt"
                 app:layout_constraintStart_toStartOf="@+id/userNameTxt"
-                app:layout_constraintTop_toBottomOf="@+id/userNameTxt" />
+                app:layout_constraintTop_toBottomOf="@+id/donatedFoodsQtyHeader" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
