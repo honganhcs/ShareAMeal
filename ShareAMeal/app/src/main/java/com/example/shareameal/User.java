@@ -13,6 +13,7 @@ public class User {
     //for donors only
     private String restaurant;
     private int numberOfPoints;
+    private int numberOfWeeklyPoints;
 
     //for recipients only
     private int year, month, dayOfMonth;
@@ -66,6 +67,14 @@ public class User {
 
     public int getNumberOfPoints() {
         return numberOfPoints;
+    }
+
+    public void setNumberOfWeeklyPoints(int numberOfWeeklyPoints) {
+        this.numberOfWeeklyPoints = numberOfWeeklyPoints;
+    }
+
+    public int getNumberOfWeeklyPoints() {
+        return numberOfWeeklyPoints;
     }
 
     public void setDayOfMonth(int dayOfMonth) {

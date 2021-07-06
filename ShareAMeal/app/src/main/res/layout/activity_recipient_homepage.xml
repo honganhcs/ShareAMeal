@@ -246,7 +246,7 @@
                 android:id="@+id/refreshTimestampTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Last Refreshed At: 7 Jul 2021 10:00"
+                android:text="Last Refreshed At: "
                 android:textColor="#C45508"
                 android:textSize="15sp"
                 android:inputType="textMultiLine"
@@ -264,6 +264,17 @@
                 android:layout_marginLeft="25dp"
                 app:layout_constraintStart_toStartOf="@+id/refreshTimestampTxt"
                 app:layout_constraintTop_toBottomOf="@+id/refreshTimestampTxt" />
+
+            <TextView
+                android:id="@+id/weeklyStatusTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="#C45508"
+                android:textSize="15sp"
+                android:inputType="textMultiLine"
+                app:layout_constraintStart_toStartOf="@+id/leaderboardOneTxt"
+                app:layout_constraintTop_toBottomOf="@+id/leaderboardOneTxt" />
 
             <ImageView
                 android:id="@+id/leaderboardOneFirstPlaceIcon"
@@ -284,7 +295,7 @@
                 android:text="1. Placeholder1"
                 android:textSize="17sp"
                 app:layout_constraintStart_toEndOf="@+id/leaderboardOneFirstPlaceIcon"
-                app:layout_constraintTop_toBottomOf="@+id/leaderboardOneTxt" />
+                app:layout_constraintTop_toBottomOf="@+id/weeklyStatusTxt" />
 
             <TextView
                 android:id="@+id/leaderboardOneFirstQtyTxt"
