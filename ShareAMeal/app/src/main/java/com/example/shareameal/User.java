@@ -6,6 +6,7 @@ public class User {
     private String address;
     private String userId;
     private String imageUrl;
+    private String fcmToken;
     private double addressLatitude;
     private double addressLongitude;
 
@@ -113,5 +114,13 @@ public class User {
 
     public double getAddressLongitude() {
         return addressLongitude;
+    }
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 }
