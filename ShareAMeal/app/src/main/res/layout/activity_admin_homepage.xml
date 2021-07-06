@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AdminHomepageActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/numberOfReportsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Number of Reports to Check: "
+                android:textColor="#C45508"
+                android:textSize="20sp"
+                android:layout_marginTop="250dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/numberOfReports"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberSigned"
+                android:text="0"
+                android:textColor="#C45508"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/numberOfReportsTitle"
+                app:layout_constraintStart_toStartOf="@+id/numberOfReportsTitle"
+                app:layout_constraintTop_toBottomOf="@+id/numberOfReportsTitle" />
+
+            <TextView
+                android:id="@+id/numberOfRecipientsToVerifyTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:layout_marginBottom="70dp"
+                android:text="Number of Recipients to Verify: "
+                android:textColor="#C45508"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/numberOfReportsTitle"
+                app:layout_constraintStart_toStartOf="@+id/numberOfReportsTitle"
+                app:layout_constraintTop_toBottomOf="@+id/numberOfReportsTitle" />
+
+            <TextView
+                android:id="@+id/numberOfRecipientsToVerify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberSigned"
+                android:text="0"
+                android:textColor="#C45508"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/numberOfRecipientsToVerifyTitle"
+                app:layout_constraintStart_toStartOf="@+id/numberOfRecipientsToVerifyTitle"
+                app:layout_constraintTop_toBottomOf="@+id/numberOfRecipientsToVerifyTitle" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:foregroundGravity="bottom"
+        android:background="#F6DABA"
+        app:menu="@menu/menu_bottom_nav_admin"
+        app:itemTextColor="@color/menu_select_deselect"
+        app:itemIconTint="@drawable/bottom_navigation_selector"
+        app:labelVisibilityMode="labeled"
+        />
+
+</RelativeLayout>

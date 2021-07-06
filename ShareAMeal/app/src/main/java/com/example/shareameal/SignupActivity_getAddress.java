@@ -84,6 +84,7 @@ public class SignupActivity_getAddress extends AppCompatActivity {
                             user.setUserGroup(userGroup);
                             user.setName(username);
                             user.setRestaurant(restaurant);
+                            user.setNumberOfReports(0);
 
                             if(userGroup.equals("recipient")) {
                                 Calendar calendar = Calendar.getInstance();
@@ -91,6 +92,10 @@ public class SignupActivity_getAddress extends AppCompatActivity {
                                 user.setMonth(calendar.get(Calendar.MONTH));
                                 user.setDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
                                 user.setNumOrdersLeft(3);
+                                user.setVerificationState(0);
+                            } else {
+                                user.setVerificationState(2);
+                                user.setNumberOfPoints(0);
                             }
 
                             if (TextUtils.isEmpty(building) && TextUtils.isEmpty(unit)) {

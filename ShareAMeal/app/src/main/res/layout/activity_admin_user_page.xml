@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AdminUserPageActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottom_navigation"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/userProfilePic"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_marginTop="50dp"
+                android:src="@drawable/profile128px"
+                app:civ_border_color="#CEA267"
+                app:civ_border_width="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/userNameTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:text="Placeholder Name"
+                android:textColor="#AF1B1B"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/userProfilePic"
+                app:layout_constraintStart_toStartOf="@+id/userProfilePic"
+                app:layout_constraintTop_toBottomOf="@+id/userProfilePic" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:text="ADMIN"
+                android:textColor="#AF1B1B"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/userNameTxt"
+                app:layout_constraintStart_toStartOf="@+id/userNameTxt"
+                app:layout_constraintTop_toBottomOf="@+id/userNameTxt" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/editProfileIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/pencil"
+                android:layout_marginTop="40dp"
+                app:layout_constraintEnd_toStartOf="@+id/editProfileTxt"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/editProfileTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="200dp"
+                android:text="Edit Profile"
+                android:textColor="#C45508"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/editProfileIcon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/editProfileIcon" />
+
+            <ImageView
+                android:id="@+id/changePasswordIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:src="@drawable/padlock"
+                app:layout_constraintEnd_toEndOf="@+id/editProfileIcon"
+                app:layout_constraintStart_toStartOf="@+id/editProfileIcon"
+                app:layout_constraintTop_toBottomOf="@+id/editProfileIcon" />
+
+            <TextView
+                android:id="@+id/changePasswordTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Change Password"
+                android:textColor="#C45508"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/changePasswordIcon"
+                app:layout_constraintStart_toStartOf="@+id/editProfileTxt"
+                app:layout_constraintTop_toTopOf="@+id/changePasswordIcon" />
+
+            <ImageView
+                android:id="@+id/logoutIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:src="@drawable/logout"
+                app:layout_constraintEnd_toEndOf="@+id/changePasswordIcon"
+                app:layout_constraintStart_toStartOf="@+id/changePasswordIcon"
+                app:layout_constraintTop_toBottomOf="@+id/changePasswordIcon" />
+
+            <TextView
+                android:id="@+id/logoutTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Log Out"
+                android:textColor="#C45508"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/logoutIcon"
+                app:layout_constraintStart_toStartOf="@+id/changePasswordTxt"
+                app:layout_constraintTop_toTopOf="@+id/logoutIcon" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:foregroundGravity="bottom"
+        android:background="#F6DABA"
+        app:menu="@menu/menu_bottom_nav_admin"
+        app:itemTextColor="@color/menu_select_deselect"
+        app:itemIconTint="@drawable/bottom_navigation_selector"
+        app:labelVisibilityMode="labeled"
+        />
+
+</RelativeLayout>

@@ -48,6 +48,24 @@ public class DonorsScheduleActivity extends AppCompatActivity
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
         getSupportActionBar().setTitle("View time slots for food collection");
 
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
+        String donorId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        usersRef.child(donorId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                int numberOfReports = user.getNumberOfReports();
+                if (numberOfReports >= 3) {
+                    Intent intent = new Intent(DonorsScheduleActivity.this, DonorHomepageActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {}
+        });
+
         recyclerView = findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(this);

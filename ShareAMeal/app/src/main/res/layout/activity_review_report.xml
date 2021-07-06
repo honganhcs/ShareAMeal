@@ -4,22 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ViewOrder">
+    tools:context=".ReviewReport">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
-        >
+        android:layout_height="wrap_content" >
 
-        <ImageView
-            android:id="@+id/foodImage"
-            android:layout_width="170dp"
-            android:layout_height="170dp"
-            android:src="@drawable/dish"
+        <TextView
+            android:id="@+id/orderHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Details of Reported Order"
+            android:textColor="#C45508"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            android:layout_marginTop="50dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/foodImage"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/dish"
+            android:layout_marginTop="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/orderHeader" />
 
         <TextView
             android:id="@+id/foodNameTxt"
@@ -58,9 +70,8 @@
             android:layout_marginTop="30dp"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
-            android:text="Order quantity:"
+            android:text="Collected quantity: \n0"
             android:textSize="17sp"/>
-
 
         <TextView
             android:id="@+id/txtSchedule"
@@ -71,51 +82,72 @@
             app:layout_constraintRight_toRightOf="parent"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
-            android:text="Scheduled for collection at: \nDate and Time"
+            android:text="Recipient collected order at: \nDate and Time"
             android:inputType="textMultiLine"
             android:textSize="17sp" />
 
-
-
         <TextView
-            android:id="@+id/txtAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:textSize="17sp"
-            android:text="Address: This is the address of the donor where the recipient will collect the food item."
-            android:inputType="textMultiLine"
-            app:layout_constraintTop_toBottomOf="@id/txtSchedule"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
-
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnCancelOrder"
+            android:id="@+id/reportHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/button2"
-            android:ems="9"
-            android:onClick="onCancelOrder"
-            android:text="CANCEL ORDER"
-            android:textColor="@color/white"
-            android:textSize="25sp"
+            android:text="Details of Submitted Report"
+            android:textColor="#C45508"
+            android:textSize="23sp"
             android:textStyle="bold"
+            android:layout_marginTop="50dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtAddress" />
+            app:layout_constraintTop_toBottomOf="@+id/txtSchedule" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnReport"
+        <ImageView
+            android:id="@+id/reportImage"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/ic_baseline_insert_photo_128"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reportHeader" />
+
+        <TextView
+            android:id="@+id/reportContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Report"
+            android:inputType="textMultiLine"
+            android:text="Description: This is the report description."
+            android:textSize="17sp"
             android:layout_marginTop="30dp"
-            app:layout_constraintEnd_toEndOf="@+id/btnCancelOrder"
-            app:layout_constraintStart_toStartOf="@+id/btnCancelOrder"
-            app:layout_constraintTop_toBottomOf="@+id/btnCancelOrder" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/reportImage" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/rejectReportBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/button2"
+            android:ems="10"
+            android:text="Reject report"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reportContent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/acceptReportBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:ems="10"
+            android:text="Report is valid"
+            android:textColor="@color/white"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rejectReportBtn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

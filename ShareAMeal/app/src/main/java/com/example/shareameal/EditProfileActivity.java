@@ -411,9 +411,13 @@ public class EditProfileActivity extends AppCompatActivity {
                     Intent intent = new Intent(EditProfileActivity.this, DonorUserPageActivity.class);
                     startActivity(intent);
                     finish();
-                } else {
+                } else if (userGroup.equals("recipient")) {
                     Intent intent =
                             new Intent(EditProfileActivity.this, RecipientUserPageActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (userGroup.equals("admin")) {
+                    Intent intent = new Intent(EditProfileActivity.this, AdminUserPageActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -423,9 +427,13 @@ public class EditProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent(EditProfileActivity.this, DonorUserPageActivity.class);
                 startActivity(intent);
                 finish();
-            } else {
+            } else if (userGroup.equals("recipient")) {
                 Intent intent =
                         new Intent(EditProfileActivity.this, RecipientUserPageActivity.class);
+                startActivity(intent);
+                finish();
+            } else if (userGroup.equals("admin")) {
+                Intent intent = new Intent(EditProfileActivity.this, AdminUserPageActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -448,9 +456,13 @@ public class EditProfileActivity extends AppCompatActivity {
                     Intent intent = new Intent(EditProfileActivity.this, DonorUserPageActivity.class);
                     startActivity(intent);
                     finish();
-                } else {
+                } else if (userGroup.equals("recipient")) {
                     Intent intent =
                             new Intent(EditProfileActivity.this, RecipientUserPageActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (userGroup.equals("admin")) {
+                    Intent intent = new Intent(EditProfileActivity.this, AdminUserPageActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -460,9 +472,13 @@ public class EditProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent(EditProfileActivity.this, DonorUserPageActivity.class);
                 startActivity(intent);
                 finish();
-            } else {
+            } else if (userGroup.equals("recipient")) {
                 Intent intent =
                         new Intent(EditProfileActivity.this, RecipientUserPageActivity.class);
+                startActivity(intent);
+                finish();
+            } else if (userGroup.equals("admin")) {
+                Intent intent = new Intent(EditProfileActivity.this, AdminUserPageActivity.class);
                 startActivity(intent);
                 finish();
             }

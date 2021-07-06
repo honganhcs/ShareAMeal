@@ -18,6 +18,33 @@
             android:layout_height="wrap_content">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/donorBlockedMsg"
+                android:layout_width="370dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button2"
+                android:alpha="0.9"
+                android:layout_marginTop="40dp"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:text="Due to a number of verified reports made against you, your account will be suspended until further notice. You are now currently unable to access the food donation system."
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
                 android:layout_width="370dp"
                 android:layout_height="160dp"
@@ -25,7 +52,7 @@
                 android:background="@drawable/homepagefloat"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/donorBlockedMsg">
 
                 <ImageView
                     android:id="@+id/userNameIcon"
@@ -124,6 +151,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
             <TextView
+                android:id="@+id/refreshTimestampTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Refreshed At: 7 Jul 2021 10:00"
+                android:textColor="#C45508"
+                android:textSize="15sp"
+                android:inputType="textMultiLine"
+                app:layout_constraintStart_toStartOf="@+id/leaderboardTxt"
+                app:layout_constraintTop_toBottomOf="@+id/leaderboardTxt" />
+
+            <TextView
                 android:id="@+id/leaderboardOneTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -133,7 +171,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="25dp"
                 app:layout_constraintStart_toStartOf="@+id/leaderboardTxt"
-                app:layout_constraintTop_toBottomOf="@+id/leaderboardTxt" />
+                app:layout_constraintTop_toBottomOf="@+id/refreshTimestampTxt" />
 
             <ImageView
                 android:id="@+id/leaderboardOneFirstPlaceIcon"
