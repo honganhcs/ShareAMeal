@@ -243,6 +243,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
             <TextView
+                android:id="@+id/refreshTimestampTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Refreshed At: 7 Jul 2021 10:00"
+                android:textColor="#C45508"
+                android:textSize="15sp"
+                android:inputType="textMultiLine"
+                app:layout_constraintStart_toStartOf="@+id/leaderboardTxt"
+                app:layout_constraintTop_toBottomOf="@+id/leaderboardTxt" />
+
+            <TextView
                 android:id="@+id/leaderboardOneTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -251,8 +262,8 @@
                 android:textColor="#C45508"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="25dp"
-                app:layout_constraintStart_toStartOf="@+id/leaderboardTxt"
-                app:layout_constraintTop_toBottomOf="@+id/leaderboardTxt" />
+                app:layout_constraintStart_toStartOf="@+id/refreshTimestampTxt"
+                app:layout_constraintTop_toBottomOf="@+id/refreshTimestampTxt" />
 
             <ImageView
                 android:id="@+id/leaderboardOneFirstPlaceIcon"
