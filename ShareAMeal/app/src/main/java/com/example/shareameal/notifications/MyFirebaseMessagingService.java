@@ -14,6 +14,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.example.shareameal.LoginActivity;
 import com.example.shareameal.MainActivity;
 import com.example.shareameal.R;
 import com.example.shareameal.User;
@@ -42,6 +43,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void sendRegistrationToServer(String token) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            Intent intent = new Intent(MyFirebaseMessagingService.this, LoginActivity.class);
+            startActivity(intent);
+        }
         String userid = user.getUid();
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");

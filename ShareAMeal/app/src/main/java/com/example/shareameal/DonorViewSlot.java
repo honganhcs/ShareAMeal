@@ -6,10 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +25,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.FutureTask;
 
 public class DonorViewSlot extends AppCompatActivity {
 
@@ -73,35 +80,202 @@ public class DonorViewSlot extends AppCompatActivity {
         } else {
             ArrayList<String> items = new ArrayList<>();
             String[] recipientIds = {slot.getRecipientId1(), slot.getRecipientId2(), slot.getRecipientId3()};
+            recipientIdToOrder = new HashMap<>();
 
-            for(int i = 0; i < 2; i++) {
-                String recipientId = recipientIds[i];
-                if(recipientId != null) {
-                    reference1.child(recipientId).addValueEventListener(
-                            new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                    for (DataSnapshot data : snapshot.getChildren()) {
-                                        if (data.getKey().equals(slotId)) {
-                                            Order order = data.getValue(Order.class);
-                                            recipientIdToOrder.put(recipientId, order);
-                                            String item = order.getQuantity() + " " + order.getFoodName() + "\n";
-                                            items.add(item);
-                                        }
+            if(slot.getRecipientId1() != null) {
+                String recipientId = slot.getRecipientId1();
+                reference1.child(recipientId).child(slotId).addListenerForSingleValueEvent(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                Order order = snapshot.getValue(Order.class);
+                                recipientIdToOrder.put(recipientId, order);
+                                String item = order.getQuantity() + " " + order.getFoodName() + "\n";
+                                items.add(item);
+                                if(slot.getRecipientId2() != null) {
+                                    String recipientId = slot.getRecipientId2();
+                                    reference1.child(recipientId).child(slotId).addListenerForSingleValueEvent(
+                                            new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                                    Order order = snapshot.getValue(Order.class);
+                                                    recipientIdToOrder.put(recipientId, order);
+                                                    String item = order.getQuantity() + " " + order.getFoodName() + "\n";
+                                                    items.add(item);
+                                                    if (slot.getRecipientId3() != null) {
+                                                        String recipientId = slot.getRecipientId3();
+                                                        reference1.child(recipientId).child(slotId).addListenerForSingleValueEvent(
+                                                                new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                                                        Order order = snapshot.getValue(Order.class);
+                                                                        recipientIdToOrder.put(recipientId, order);
+                                                                        String item = order.getQuantity() + " " + order.getFoodName() + "\n";
+                                                                        items.add(item);
+                                                                        String itemsText = "";
+
+                                                                        for(int i = 0; i < items.size(); i++) {
+                                                                            itemsText = new StringBuilder().append(itemsText).append(items.get(i)).toString();
+                                                                        }
+                                                                        txtReservedItem.setText(itemsText);
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                                                    }
+                                                                });
+                                                    } else {
+                                                        String itemsText = "";
+
+                                                        for(int i = 0; i < items.size(); i++) {
+                                                            itemsText = new StringBuilder().append(itemsText).append(items.get(i)).toString();
+                                                        }
+                                                        txtReservedItem.setText(itemsText);
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                                }
+                                            });
+                                } else if(slot.getRecipientId3() != null) {
+                                String recipientId = slot.getRecipientId3();
+                                reference1.child(recipientId).child(slotId).addListenerForSingleValueEvent(
+                                        new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                                Order order = snapshot.getValue(Order.class);
+                                                recipientIdToOrder.put(recipientId, order);
+                                                String item = order.getQuantity() + " " + order.getFoodName() + "\n";
+                                                items.add(item);
+                                                String itemsText = "";
+
+                                                for(int i = 0; i < items.size(); i++) {
+                                                    itemsText = new StringBuilder().append(itemsText).append(items.get(i)).toString();
+                                                }
+                                                txtReservedItem.setText(itemsText);
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                            }
+                                        });
+                                } else {
+                                    String itemsText = "";
+
+                                    for(int i = 0; i < items.size(); i++) {
+                                        itemsText = new StringBuilder().append(itemsText).append(items.get(i)).toString();
                                     }
+                                    txtReservedItem.setText(itemsText);
                                 }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                            }
+                        });
+            } else if(slot.getRecipientId2() != null) {
+                String recipientId = slot.getRecipientId2();
+                reference1.child(recipientId).child(slotId).addListenerForSingleValueEvent(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                Order order = snapshot.getValue(Order.class);
+                                recipientIdToOrder.put(recipientId, order);
+                                String item = order.getQuantity() + " " + order.getFoodName() + "\n";
+                                items.add(item);
+                                if (slot.getRecipientId3() != null) {
+                                    String recipientId = slot.getRecipientId3();
+                                    reference1.child(recipientId).child(slotId).addListenerForSingleValueEvent(
+                                            new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                                    Order order = snapshot.getValue(Order.class);
+                                                    recipientIdToOrder.put(recipientId, order);
+                                                    String item = order.getQuantity() + " " + order.getFoodName() + "\n";
+                                                    items.add(item);
+                                                    String itemsText = "";
 
-                                @Override
-                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                                    for(int i = 0; i < items.size(); i++) {
+                                                        itemsText = new StringBuilder().append(itemsText).append(items.get(i)).toString();
+                                                    }
+                                                    txtReservedItem.setText(itemsText);
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                                }
+                                            });
+                                } else {
+                                    String itemsText = "";
+
+                                    for(int i = 0; i < items.size(); i++) {
+                                        itemsText = new StringBuilder().append(itemsText).append(items.get(i)).toString();
+                                    }
+                                    txtReservedItem.setText(itemsText);
                                 }
-                            });
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                            }
+                        });
+            } else if (slot.getRecipientId3() != null) {
+                String recipientId = slot.getRecipientId3();
+                reference1.child(recipientId).child(slotId).addListenerForSingleValueEvent(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                Order order = snapshot.getValue(Order.class);
+                                recipientIdToOrder.put(recipientId, order);
+                                String item = order.getQuantity() + " " + order.getFoodName() + "\n";
+                                items.add(item);
+                                String itemsText = "";
+
+                                for(int i = 0; i < items.size(); i++) {
+                                    itemsText = new StringBuilder().append(itemsText).append(items.get(i)).toString();
+                                }
+                                txtReservedItem.setText(itemsText);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                            }
+                        });
+            } else {
+                String itemsText = "";
+
+                for(int i = 0; i < items.size(); i++) {
+                    itemsText = new StringBuilder().append(itemsText).append(items.get(i)).toString();
                 }
+                txtReservedItem.setText(itemsText);
             }
-            String itemsText = "";
-            for(int i = 0; i < items.size(); i++) {
-                itemsText = itemsText + items.get(i);
-            }
-            txtReservedItem.setText(itemsText);
+
+//            for (int i = 0; i < 3; i++) {
+//                String recipientId = recipientIds[i];
+//                if (recipientId != null) {
+//                    reference1.child(recipientId).child(slotId).addListenerForSingleValueEvent(
+//                            new ValueEventListener() {
+//                                @Override
+//                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+//                                    Order order = snapshot.getValue(Order.class);
+//                                    recipientIdToOrder.put(recipientId, order);
+//                                    String item = order.getQuantity() + " " + order.getFoodName() + "\n";
+//                                    items.add(item);
+//                                }
+//
+//                                @Override
+//                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+//                                }
+//                            });
+//                }
+//            }
+//
+//            String itemsText = "";
+//
+//            for(int i = 0; i < items.size(); i++) {
+//                itemsText = new StringBuilder().append(itemsText).append(items.get(i)).toString();
+//            }
+//            txtReservedItem.setText(itemsText);
         }
     }
 

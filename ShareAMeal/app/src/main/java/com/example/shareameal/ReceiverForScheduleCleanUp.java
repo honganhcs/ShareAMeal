@@ -28,7 +28,6 @@ public class ReceiverForScheduleCleanUp extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         // code for schedule clean up
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -102,7 +101,7 @@ public class ReceiverForScheduleCleanUp extends BroadcastReceiver {
 
     public void setAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, ReceiverForScheduleCleanUp.class);
+        Intent intent = new Intent("com.example.shareameal.START_CLEANUP");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
         Calendar cal = Calendar.getInstance();
         // adjust the intervals for the cleanup
@@ -111,7 +110,7 @@ public class ReceiverForScheduleCleanUp extends BroadcastReceiver {
     }
 
     public void cancelAlarm(Context context) {
-        Intent intent = new Intent(context, ReceiverForScheduleCleanUp.class);
+        Intent intent = new Intent("com.example.shareameal.START_CLEANUP");
         PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(sender);

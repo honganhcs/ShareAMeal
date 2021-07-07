@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="40dp">
+        android:paddingBottom="100dp">
 
         <TextView
             android:id="@+id/txtDate"
@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
-            android:layout_marginTop="200dp"/>
+            android:layout_marginTop="100dp"/>
 
         <TextView
             android:id="@+id/txtTime"
