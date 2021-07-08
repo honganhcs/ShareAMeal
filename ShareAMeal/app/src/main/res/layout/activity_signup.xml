@@ -124,4 +124,16 @@
             android:textStyle="bold" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/adminSignUpTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click here to sign up as an admin"
+        android:textColor="#303C6C"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

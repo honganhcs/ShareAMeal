@@ -58,7 +58,9 @@ public class AdminViewReportedDonors extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else if (curr == R.id.verifications) {
-
+                    Intent intent = new Intent(AdminViewReportedDonors.this, AdminViewVerifications.class);
+                    startActivity(intent);
+                    finish();
                 } else if (curr == R.id.profile) {
                     Intent intent = new Intent(AdminViewReportedDonors.this, AdminUserPageActivity.class);
                     startActivity(intent);
