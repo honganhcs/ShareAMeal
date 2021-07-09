@@ -38,7 +38,7 @@ public class OrderConfirmation extends AppCompatActivity {
     private DatabaseReference reference1, reference2, reference3, reference4;
     private Bundle bundle;
     private Slot slot;
-    private String donorId, foodId, donorName, recipientId;
+    private String donorId, foodId, donorName, recipientId, prevScreen;
     private Food food;
     private User donor, recipient;
     private int orderQuantity;
@@ -70,6 +70,7 @@ public class OrderConfirmation extends AppCompatActivity {
         donorId = bundle.getString("donorId");
         foodId = bundle.getString("foodId");
         donorName = bundle.getString("donorName");
+        prevScreen = bundle.getString("prevScreen");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         recipientId = user.getUid();
@@ -209,6 +210,7 @@ public class OrderConfirmation extends AppCompatActivity {
         intent.putExtra("donorId", donorId);
         intent.putExtra("foodId", foodId);
         intent.putExtra("donorName", donorName);
+        intent.putExtra("prevScreen", prevScreen);
         startActivity(intent);
         finish();
         return true;
@@ -221,6 +223,7 @@ public class OrderConfirmation extends AppCompatActivity {
         intent.putExtra("donorId", donorId);
         intent.putExtra("foodId", foodId);
         intent.putExtra("donorName", donorName);
+        intent.putExtra("prevScreen", prevScreen);
         startActivity(intent);
         finish();
     }

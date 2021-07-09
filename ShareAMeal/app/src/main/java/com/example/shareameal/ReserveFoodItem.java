@@ -147,6 +147,7 @@ public class ReserveFoodItem extends AppCompatActivity
         bundle.putString("donorId", donorId);
         bundle.putString("foodId", foodId);
         bundle.putString("donorName", donorName);
+        bundle.putString("prevScreen", prevScreen);
         intent.putExtras(bundle);
         startActivity(intent);
         finish();
