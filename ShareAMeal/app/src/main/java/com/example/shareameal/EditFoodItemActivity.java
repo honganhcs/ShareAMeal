@@ -17,6 +17,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -32,6 +33,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
@@ -55,6 +57,7 @@ public class EditFoodItemActivity extends AppCompatActivity {
     private AppCompatButton editFoodItemBtn;
     private String imageUrl, foodId;
     private Food oldFood, food;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +93,9 @@ public class EditFoodItemActivity extends AppCompatActivity {
         foodNameEdt = findViewById(R.id.foodNameEdt);
         foodDescriptionEdt = findViewById(R.id.descriptionEdt);
         editFoodItemBtn = findViewById(R.id.editFoodItemBtn);
+
+        progressBar = findViewById(R.id.progress_circular);
+        progressBar.setVisibility(View.GONE);
 
         // "Edit Food Listing" button is clickable only after any of the fields are updated
         foodNameEdt.addTextChangedListener(
@@ -287,6 +293,7 @@ public class EditFoodItemActivity extends AppCompatActivity {
         if (imageUri != null) {
             StorageReference fileReference =
                     mStorageRef.child(System.currentTimeMillis() + "." + getFileExtension(imageUri));
+            progressBar.setVisibility(View.VISIBLE);
             fileReference
                     .putFile(imageUri)
                     .continueWithTask(
@@ -310,12 +317,14 @@ public class EditFoodItemActivity extends AppCompatActivity {
                                         Toast.makeText(
                                                 EditFoodItemActivity.this, "Upload successful", Toast.LENGTH_LONG)
                                                 .show();
+                                        progressBar.setVisibility(View.GONE);
                                     } else {
                                         Toast.makeText(
                                                 EditFoodItemActivity.this,
                                                 "Upload failed: " + task.getException().getMessage(),
                                                 Toast.LENGTH_LONG)
                                                 .show();
+                                        progressBar.setVisibility(View.GONE);
                                     }
                                 }
                             })
@@ -325,6 +334,7 @@ public class EditFoodItemActivity extends AppCompatActivity {
                                 public void onFailure(@NonNull Exception e) {
                                     Toast.makeText(EditFoodItemActivity.this, e.getMessage(), Toast.LENGTH_LONG)
                                             .show();
+                                    progressBar.setVisibility(View.GONE);
                                 }
                             });
         } else {

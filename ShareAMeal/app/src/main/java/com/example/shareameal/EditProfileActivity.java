@@ -20,6 +20,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -62,6 +63,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText usernameEdt, addressEdt, restaurantEdt;
     private String userGroup, imageUrl, oldImageUrl;
     private TextInputLayout restaurantWrapper, addressWrapper;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,8 @@ public class EditProfileActivity extends AppCompatActivity {
         addressWrapper = findViewById(R.id.addressWrapper);
         restaurantEdt = findViewById(R.id.restaurantEdt);
         restaurantWrapper = findViewById(R.id.restaurantWrapper);
+        progressBar = findViewById(R.id.progress_circular);
+        progressBar.setVisibility(View.GONE);
 
         // "Update Profile Info" button is clickable only after any of the fields are updated
         usernameEdt.addTextChangedListener(
@@ -413,6 +417,7 @@ public class EditProfileActivity extends AppCompatActivity {
         if (imageUri != null) {
             StorageReference fileReference =
                     mStorageRef.child(System.currentTimeMillis() + "." + getFileExtension(imageUri));
+            progressBar.setVisibility(View.VISIBLE);
             fileReference
                     .putFile(imageUri)
                     .continueWithTask(
@@ -435,12 +440,14 @@ public class EditProfileActivity extends AppCompatActivity {
                                         imageUrl = downloadUri.toString();
                                         Toast.makeText(EditProfileActivity.this, "Upload successful", Toast.LENGTH_LONG)
                                                 .show();
+                                        progressBar.setVisibility(View.GONE);
                                     } else {
                                         Toast.makeText(
                                                 EditProfileActivity.this,
                                                 "Upload failed: " + task.getException().getMessage(),
                                                 Toast.LENGTH_LONG)
                                                 .show();
+                                        progressBar.setVisibility(View.GONE);
                                     }
                                 }
                             })
@@ -450,6 +457,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                 public void onFailure(@NonNull Exception e) {
                                     Toast.makeText(EditProfileActivity.this, e.getMessage(), Toast.LENGTH_LONG)
                                             .show();
+                                    progressBar.setVisibility(View.GONE);
                                 }
                             });
         } else {
