@@ -92,6 +92,7 @@ public class RVFoodItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         intent.putExtra("donorId", donorId);
                         intent.putExtra("foodId", list.get(position).getFoodId());
                         intent.putExtra("donorName", donorName);
+                        intent.putExtra("prevScreen", "someFoods");
                         v.getContext().startActivity(intent);
                     }
                 });

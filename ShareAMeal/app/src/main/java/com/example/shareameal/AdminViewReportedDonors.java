@@ -38,6 +38,8 @@ public class AdminViewReportedDonors extends AppCompatActivity {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
         getSupportActionBar().setTitle("Reported Donors");
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
         recyclerView = findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
         adapter = new AdminViewReportedDonorsAdapter(this, donorIds);

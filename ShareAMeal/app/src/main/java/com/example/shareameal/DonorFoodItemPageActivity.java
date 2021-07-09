@@ -40,6 +40,8 @@ public class DonorFoodItemPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donor_food_item_page);
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
         // Initialise widgets
         updateFoodQuantityBtn = findViewById(R.id.updateFoodQuantityBtn);
         editFoodListingBtn = findViewById(R.id.editFoodListingBtn);

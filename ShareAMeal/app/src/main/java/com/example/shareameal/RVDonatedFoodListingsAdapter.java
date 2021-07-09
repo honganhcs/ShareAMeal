@@ -170,6 +170,7 @@ public class RVDonatedFoodListingsAdapter extends RecyclerView.Adapter<RecyclerV
                                                             Intent intent = new Intent(v.getContext(), ReserveFoodItem.class);
                                                             intent.putExtra("donorId", clickedDonorId);
                                                             intent.putExtra("foodId", list.get(position).getFoodId());
+                                                            intent.putExtra("prevScreen", "allFoods");
                                                             v.getContext().startActivity(intent);
                                                         }
 

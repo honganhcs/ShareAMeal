@@ -68,6 +68,8 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
         // If user is not logged in, direct user to login page. Else, direct to donor homepage.
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             Intent intent = new Intent(EditProfileActivity.this, LoginActivity.class);

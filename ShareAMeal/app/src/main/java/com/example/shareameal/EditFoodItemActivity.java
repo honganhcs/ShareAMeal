@@ -61,6 +61,8 @@ public class EditFoodItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_food_item);
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
         // If user is not logged in, direct user to login page. Else, direct to donor homepage.
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             Intent intent = new Intent(EditFoodItemActivity.this, LoginActivity.class);
