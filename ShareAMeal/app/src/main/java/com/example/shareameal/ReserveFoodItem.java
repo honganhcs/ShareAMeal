@@ -56,7 +56,7 @@ public class ReserveFoodItem extends AppCompatActivity
         donorId = intent.getStringExtra("donorId");
         foodId = intent.getStringExtra("foodId");
         donorName = intent.getStringExtra("donorName");
-        reference = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
+        reference = FirebaseDatabase.getInstance().getReference("Slots").child("Pending").child(donorId);
 
         loadData();
 

@@ -76,7 +76,7 @@ public class DonorsScheduleActivity extends AppCompatActivity
         reference = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userId = user.getUid();
-        reference = reference.child("Slots").child(userId);
+        reference = reference.child("Slots").child("Pending").child(userId);
 
         loadData();
 

@@ -170,7 +170,7 @@ public class OrderConfirmation extends AppCompatActivity {
 
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 String userId = user.getUid();
-                reference4 = FirebaseDatabase.getInstance().getReference("Orders").child(userId);
+                reference4 = FirebaseDatabase.getInstance().getReference("Orders").child("Pending").child(userId);
                 reference4.child(slot.getSlotId()).setValue(order);
 
                 // update food item
@@ -186,7 +186,7 @@ public class OrderConfirmation extends AppCompatActivity {
                 } else if(slot.getRecipientId3() == null) {
                     slot.setRecipientId3(recipientId);
                 }
-                reference3 = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
+                reference3 = FirebaseDatabase.getInstance().getReference("Slots").child("Pending").child(donorId);
                 reference3.child(slot.getSlotId()).setValue(slot);
 
                 // update recipient info

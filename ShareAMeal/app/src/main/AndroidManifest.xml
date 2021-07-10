@@ -5,7 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -14,6 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShareAMeal">
+        <activity android:name=".RecipientsRecords"></activity>
+        <activity android:name=".DonorsRecords" />
         <activity
             android:name=".ReviewVerification"
             android:theme="@style/Theme.MaterialComponents.Light" />
@@ -80,7 +82,7 @@
             android:theme="@style/Theme.MaterialComponents.Light" />
         <activity
             android:name=".DonorFoodItemPageActivity"
-            android:theme="@style/Theme.MaterialComponents.Light"/>
+            android:theme="@style/Theme.MaterialComponents.Light" />
         <activity
             android:name=".AddFoodItemActivity"
             android:theme="@style/Theme.MaterialComponents.Light" />
@@ -104,7 +106,7 @@
         </activity>
 
         <service
-            android:name="com.example.shareameal.notifications.MyFirebaseMessagingService"
+            android:name=".notifications.MyFirebaseMessagingService"
             android:permission="TODO"
             tools:ignore="ExportedService">
             <intent-filter>
@@ -112,16 +114,16 @@
             </intent-filter>
         </service>
 
-        <receiver android:name="com.example.shareameal.BootReceiver">
+        <receiver android:name=".BootReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name="com.example.shareameal.ReceiverForScheduleCleanUp"
+        <receiver
+            android:name=".ReceiverForScheduleCleanUp"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.example.shareameal.START_CLEANUP"/>
+                <action android:name="com.example.shareameal.START_CLEANUP" />
             </intent-filter>
         </receiver>
     </application>

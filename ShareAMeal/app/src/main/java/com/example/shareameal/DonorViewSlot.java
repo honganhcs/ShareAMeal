@@ -64,7 +64,7 @@ public class DonorViewSlot extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         donorId = user.getUid();
 
-        reference1 = FirebaseDatabase.getInstance().getReference("Orders");
+        reference1 = FirebaseDatabase.getInstance().getReference("Orders").child("Pending");
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -80,6 +80,8 @@ public class DonorViewSlot extends AppCompatActivity {
         } else {
             ArrayList<String> items = new ArrayList<>();
             String[] recipientIds = {slot.getRecipientId1(), slot.getRecipientId2(), slot.getRecipientId3()};
+
+            // need to change to account for multiple orders from the same recipient in the same slot.
             recipientIdToOrder = new HashMap<>();
 
             if(slot.getRecipientId1() != null) {
@@ -249,38 +251,11 @@ public class DonorViewSlot extends AppCompatActivity {
                 }
                 txtReservedItem.setText(itemsText);
             }
-
-//            for (int i = 0; i < 3; i++) {
-//                String recipientId = recipientIds[i];
-//                if (recipientId != null) {
-//                    reference1.child(recipientId).child(slotId).addListenerForSingleValueEvent(
-//                            new ValueEventListener() {
-//                                @Override
-//                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-//                                    Order order = snapshot.getValue(Order.class);
-//                                    recipientIdToOrder.put(recipientId, order);
-//                                    String item = order.getQuantity() + " " + order.getFoodName() + "\n";
-//                                    items.add(item);
-//                                }
-//
-//                                @Override
-//                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
-//                                }
-//                            });
-//                }
-//            }
-//
-//            String itemsText = "";
-//
-//            for(int i = 0; i < items.size(); i++) {
-//                itemsText = new StringBuilder().append(itemsText).append(items.get(i)).toString();
-//            }
-//            txtReservedItem.setText(itemsText);
         }
     }
 
     public void onDeleteBtn(View view) {
-        reference2 = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
+        reference2 = FirebaseDatabase.getInstance().getReference("Slots").child("Pending").child(donorId);
         // remove slot
         reference2.child(slotId).removeValue();
 

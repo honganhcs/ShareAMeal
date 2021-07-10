@@ -34,7 +34,7 @@ public class ViewOrder extends AppCompatActivity {
     private Order order;
     private Slot slot;
     private Food food;
-    private User donor, recipient;
+    private User donor;
     private int orderQuantity;
     private AppCompatButton btnReport;
 
@@ -85,11 +85,9 @@ public class ViewOrder extends AppCompatActivity {
                             }
                         }
 
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        String userId = user.getUid();
 
-                        reference2 = FirebaseDatabase.getInstance().getReference("Orders").child(userId);
-                        reference2.addValueEventListener(
+                        reference2 = FirebaseDatabase.getInstance().getReference("Orders");
+                        reference2.child("Pending").child(recipientId).addValueEventListener(
                                 new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -107,9 +105,6 @@ public class ViewOrder extends AppCompatActivity {
                                                         for (DataSnapshot data : snapshot.getChildren()) {
                                                             if (data.getKey().equals(donorId)) {
                                                                 donor = data.getValue(User.class);
-                                                            }
-                                                            if (data.getKey().equals(recipientId)) {
-                                                                recipient = data.getValue(User.class);
                                                             }
                                                         }
 
@@ -160,11 +155,11 @@ public class ViewOrder extends AppCompatActivity {
 
     public void onCancelOrder(View view) {
         // remove order
-        reference2.child(slotId).removeValue();
+        reference2.child("Pending").child(recipientId).child(slotId).removeValue();
 
         // update slot
-        reference4 = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
-        reference4.addValueEventListener(
+        reference4 = FirebaseDatabase.getInstance().getReference("Slots");
+        reference4.child("Pending").child(donorId).addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -181,7 +176,7 @@ public class ViewOrder extends AppCompatActivity {
                         } else if(slot.getRecipientId3().equals(recipientId)) {
                             slot.setRecipientId3(null);
                         }
-                        reference4.child(slotId).setValue(slot);
+                        reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
                     }
 
                     @Override
@@ -200,6 +195,40 @@ public class ViewOrder extends AppCompatActivity {
         finish();
     }
 
+    public void onOrderCompleted(View view) {
+        // move the order from Pending to Completed in the database
+        reference2.child("Completed").child(recipientId).child(slotId).setValue(order);
+        reference2.child("Pending").child(recipientId).child(slotId).removeValue();
+
+        // update the slot in the Pending section
+        reference4.child("Pending").child(donorId).addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        for (DataSnapshot data : snapshot.getChildren()) {
+                            if(data.getKey().equals(slotId)) {
+                                slot = data.getValue(Slot.class);
+                            }
+                        }
+                        slot.setNumRecipients(slot.getNumRecipients() - 1);
+                        if(slot.getRecipientId1().equals(recipientId)) {
+                            slot.setRecipientId1(null);
+                        } else if(slot.getRecipientId2().equals(recipientId)) {
+                            slot.setRecipientId2(null);
+                        } else if(slot.getRecipientId3().equals(recipientId)) {
+                            slot.setRecipientId3(null);
+                        }
+                        reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                    }
+                });
+        // record order in Completed section of Slots
+        reference4.child("Completed").child(donorId).child(slotId).setValue(order);
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         Intent intent = new Intent(ViewOrder.this, RecipientViewOrders.class);
@@ -215,4 +244,5 @@ public class ViewOrder extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
 }

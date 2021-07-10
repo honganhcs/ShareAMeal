@@ -183,7 +183,7 @@ public class AddNewTimeSlotActivity extends AppCompatActivity {
         } else {
 
             DatabaseReference reference =
-                    FirebaseDatabase.getInstance().getReference("Slots").child(userId);
+                    FirebaseDatabase.getInstance().getReference("Slots").child("Pending").child(userId);
             int numSlots = ((endHour - startHour) * 60 + endMinute - startMinute) / 30;
 
             String end = startTime;
