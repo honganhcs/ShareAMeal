@@ -59,7 +59,7 @@ public class ReserveFoodItem extends AppCompatActivity
         foodId = intent.getStringExtra("foodId");
         donorName = intent.getStringExtra("donorName");
         prevScreen = intent.getStringExtra("prevScreen");
-        reference = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
+        reference = FirebaseDatabase.getInstance().getReference("Slots").child("Pending").child(donorId);
 
         loadData();
 
@@ -95,7 +95,7 @@ public class ReserveFoodItem extends AppCompatActivity
                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                         for (DataSnapshot data : snapshot.getChildren()) {
                             Slot slot = data.getValue(Slot.class);
-                            if (slot.isAvailability()) {
+                            if (slot.getNumRecipients() < 3) {
                                 slots.add(slot);
                             }
                         }

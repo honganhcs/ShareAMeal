@@ -9,12 +9,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.shareameal.notifications.NotificationsSender;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,8 +25,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Calendar;
 
 public class OrderConfirmation extends AppCompatActivity {
 
@@ -175,7 +173,7 @@ public class OrderConfirmation extends AppCompatActivity {
 
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 String userId = user.getUid();
-                reference4 = FirebaseDatabase.getInstance().getReference("Orders").child(userId);
+                reference4 = FirebaseDatabase.getInstance().getReference("Orders").child("Pending").child(userId);
                 reference4.child(slot.getSlotId()).setValue(order);
 
                 // update food item
@@ -183,9 +181,15 @@ public class OrderConfirmation extends AppCompatActivity {
                 reference1.child(foodId).setValue(food);
 
                 // update slot
-                slot.setAvailability(false);
-                slot.setRecipientId(userId);
-                reference3 = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
+                slot.setNumRecipients(slot.getNumRecipients() + 1);
+                if(slot.getRecipientId1() == null) {
+                    slot.setRecipientId1(recipientId);
+                } else if(slot.getRecipientId2() == null) {
+                    slot.setRecipientId2(recipientId);
+                } else if(slot.getRecipientId3() == null) {
+                    slot.setRecipientId3(recipientId);
+                }
+                reference3 = FirebaseDatabase.getInstance().getReference("Slots").child("Pending").child(donorId);
                 reference3.child(slot.getSlotId()).setValue(slot);
 
                 // update recipient info
@@ -197,6 +201,13 @@ public class OrderConfirmation extends AppCompatActivity {
                         "Your order has been successfully created.",
                         Toast.LENGTH_SHORT)
                         .show();
+
+                // send notification to donor
+                String token = donor.getFcmToken();
+                String body = "A recipient has booked the time slot at " + slot.getStartTime() + " on " + slot.getDate();
+                NotificationsSender notificationsSender = new NotificationsSender(token, getString(R.string.slot_booked), body, getApplicationContext(), OrderConfirmation.this);
+                notificationsSender.sendNotification();
+
                 Intent intent = new Intent(OrderConfirmation.this, RecipientViewOrders.class);
                 startActivity(intent);
                 finish();

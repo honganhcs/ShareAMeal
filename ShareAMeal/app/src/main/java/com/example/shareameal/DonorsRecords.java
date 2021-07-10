@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,8 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class RecipientViewOrders extends AppCompatActivity
-        implements RVOrdersAdapter.OnOrderClickListener {
+public class DonorsRecords extends AppCompatActivity implements RVOrdersAdapter.OnOrderClickListener{
 
     private BottomNavigationView bottomNav;
     private RecyclerView recyclerView;
@@ -40,12 +38,10 @@ public class RecipientViewOrders extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipient_view_orders);
-
-        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+        setContentView(R.layout.activity_donors_records);
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-        getSupportActionBar().setTitle("View current orders");
+        getSupportActionBar().setTitle("View completed orders");
 
         recyclerView = findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
@@ -57,33 +53,34 @@ public class RecipientViewOrders extends AppCompatActivity
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userId = user.getUid();
 
-        reference = FirebaseDatabase.getInstance().getReference("Orders").child("Pending").child(userId);
+        reference = FirebaseDatabase.getInstance().getReference("Slots").child("Completed").child(userId);
 
         loadData();
 
         bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setSelectedItemId(R.id.schedule);
+        bottomNav.setSelectedItemId(R.id.profile);
         bottomNav.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         int curr = item.getItemId();
-                        if (curr == R.id.claimFood) {
-                            Intent intent = new Intent(RecipientViewOrders.this, RVDonors.class);
+                        if (curr == R.id.food) {
+                            Intent intent = new Intent(DonorsRecords.this, DonateFoodActivity.class);
                             startActivity(intent);
                             finish();
                         } else if (curr == R.id.home) {
-                            Intent intent = new Intent(RecipientViewOrders.this, RecipientHomepageActivity.class);
+                            Intent intent = new Intent(DonorsRecords.this, DonorHomepageActivity.class);
                             startActivity(intent);
                             finish();
-                        } else if (curr == R.id.profile) {
-                            Intent intent = new Intent(RecipientViewOrders.this, RecipientUserPageActivity.class);
+                        } else if (curr == R.id.schedule) {
+                            Intent intent = new Intent(DonorsRecords.this, DonorsScheduleActivity.class);
                             startActivity(intent);
                             finish();
                         }
                         return true;
                     }
                 });
+
     }
 
     private void loadData() {
@@ -136,18 +133,13 @@ public class RecipientViewOrders extends AppCompatActivity
 
     @Override
     public void onOrderClick(int position) {
-        Intent intent = new Intent(RecipientViewOrders.this, ViewOrder.class);
-        intent.putExtra("donorId", orders.get(position).getDonorId());
-        intent.putExtra("slotId", orders.get(position).getSlotId());
-        intent.putExtra("foodId", orders.get(position).getFoodId());
-        startActivity(intent);
-        finish();
+
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(RecipientViewOrders.this, RecipientHomepageActivity.class);
+        Intent intent = new Intent(DonorsRecords.this, DonorUserPageActivity.class);
         startActivity(intent);
         finish();
     }
