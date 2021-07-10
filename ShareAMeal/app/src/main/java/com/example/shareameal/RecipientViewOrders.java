@@ -42,6 +42,8 @@ public class RecipientViewOrders extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipient_view_orders);
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
         getSupportActionBar().setTitle("View current orders");
 

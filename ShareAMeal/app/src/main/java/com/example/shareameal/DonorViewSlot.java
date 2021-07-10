@@ -56,6 +56,11 @@ public class DonorViewSlot extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        donorId = user.getUid();
+
         txtDate = findViewById(R.id.txtDate);
         txtTime = findViewById(R.id.txtTime);
         txtReserved = findViewById(R.id.txtReserved);

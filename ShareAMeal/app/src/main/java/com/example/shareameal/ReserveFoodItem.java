@@ -33,12 +33,14 @@ public class ReserveFoodItem extends AppCompatActivity
     private DatabaseReference reference;
     private ArrayList<Slot> slots = new ArrayList<>();
     private RVSlotsAdapter adapter;
-    String donorId, foodId, donorName;
+    String donorId, foodId, donorName, prevScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve_food_item);
+
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
         getSupportActionBar().setTitle("Select a time slot");
@@ -56,6 +58,7 @@ public class ReserveFoodItem extends AppCompatActivity
         donorId = intent.getStringExtra("donorId");
         foodId = intent.getStringExtra("foodId");
         donorName = intent.getStringExtra("donorName");
+        prevScreen = intent.getStringExtra("prevScreen");
         reference = FirebaseDatabase.getInstance().getReference("Slots").child("Pending").child(donorId);
 
         loadData();
@@ -144,6 +147,7 @@ public class ReserveFoodItem extends AppCompatActivity
         bundle.putString("donorId", donorId);
         bundle.putString("foodId", foodId);
         bundle.putString("donorName", donorName);
+        bundle.putString("prevScreen", prevScreen);
         intent.putExtras(bundle);
         startActivity(intent);
         finish();
@@ -151,21 +155,34 @@ public class ReserveFoodItem extends AppCompatActivity
 
     @Override
     public boolean onSupportNavigateUp() {
-        Intent intent = new Intent(ReserveFoodItem.this, RVFoodItems.class);
-        intent.putExtra("donorId", donorId);
-        intent.putExtra("donorName", donorName);
-        startActivity(intent);
-        finish();
-        return true;
+        if (prevScreen.equals("someFoods")) {
+            Intent intent = new Intent(ReserveFoodItem.this, RVFoodItems.class);
+            intent.putExtra("donorId", donorId);
+            intent.putExtra("donorName", donorName);
+            startActivity(intent);
+            finish();
+            return true;
+        } else {
+            Intent intent = new Intent(ReserveFoodItem.this, RVDonatedFoodListings.class);
+            startActivity(intent);
+            finish();
+            return true;
+        }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(ReserveFoodItem.this, RVFoodItems.class);
-        intent.putExtra("donorId", donorId);
-        intent.putExtra("donorName", donorName);
-        startActivity(intent);
-        finish();
+        if (prevScreen.equals("someFoods")) {
+            Intent intent = new Intent(ReserveFoodItem.this, RVFoodItems.class);
+            intent.putExtra("donorId", donorId);
+            intent.putExtra("donorName", donorName);
+            startActivity(intent);
+            finish();
+        } else {
+            Intent intent = new Intent(ReserveFoodItem.this, RVDonatedFoodListings.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }

@@ -81,7 +81,8 @@ public class RVDonatedFoodListingsAdapter extends RecyclerView.Adapter<RecyclerV
             if (food.getImageUrl().equals("null")) {
                 vh.img_food.setImageResource(R.drawable.dish128);
             } else {
-                Picasso.get().load(food.getImageUrl()).into(vh.img_food);
+                Picasso.get().load(food.getImageUrl()).noFade().resize(96,96)
+                        .centerCrop().into(vh.img_food);
             }
         }
 
@@ -170,6 +171,7 @@ public class RVDonatedFoodListingsAdapter extends RecyclerView.Adapter<RecyclerV
                                                             Intent intent = new Intent(v.getContext(), ReserveFoodItem.class);
                                                             intent.putExtra("donorId", clickedDonorId);
                                                             intent.putExtra("foodId", list.get(position).getFoodId());
+                                                            intent.putExtra("prevScreen", "allFoods");
                                                             v.getContext().startActivity(intent);
                                                         }
 

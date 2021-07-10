@@ -38,6 +38,8 @@ public class AdminViewReportedDonors extends AppCompatActivity {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
         getSupportActionBar().setTitle("Reported Donors");
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
         recyclerView = findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
         adapter = new AdminViewReportedDonorsAdapter(this, donorIds);
@@ -58,7 +60,9 @@ public class AdminViewReportedDonors extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else if (curr == R.id.verifications) {
-
+                    Intent intent = new Intent(AdminViewReportedDonors.this, AdminViewVerifications.class);
+                    startActivity(intent);
+                    finish();
                 } else if (curr == R.id.profile) {
                     Intent intent = new Intent(AdminViewReportedDonors.this, AdminUserPageActivity.class);
                     startActivity(intent);

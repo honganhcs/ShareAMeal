@@ -64,6 +64,8 @@ public class AddFoodItemActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
         chooseImageBtn = findViewById(R.id.chooseImageBtn);
         uploadImageBtn = findViewById(R.id.uploadImageBtn);
         uploadImageBtn.setClickable(false);

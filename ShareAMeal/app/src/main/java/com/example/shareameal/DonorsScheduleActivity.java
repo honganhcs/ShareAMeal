@@ -48,6 +48,8 @@ public class DonorsScheduleActivity extends AppCompatActivity
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
         getSupportActionBar().setTitle("View time slots for food collection");
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
         String donorId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         usersRef.child(donorId).addValueEventListener(new ValueEventListener() {

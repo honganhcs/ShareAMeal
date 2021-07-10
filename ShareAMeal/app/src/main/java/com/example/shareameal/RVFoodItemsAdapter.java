@@ -72,7 +72,8 @@ public class RVFoodItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (food.getImageUrl().equals("null")) {
                 vh.img_food.setImageResource(R.drawable.dish128);
             } else {
-                Picasso.get().load(food.getImageUrl()).into(vh.img_food);
+                Picasso.get().load(food.getImageUrl()).noFade().resize(96,96)
+                        .centerCrop().into(vh.img_food);
             }
         }
 
@@ -92,6 +93,7 @@ public class RVFoodItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         intent.putExtra("donorId", donorId);
                         intent.putExtra("foodId", list.get(position).getFoodId());
                         intent.putExtra("donorName", donorName);
+                        intent.putExtra("prevScreen", "someFoods");
                         v.getContext().startActivity(intent);
                     }
                 });

@@ -36,12 +36,17 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class RecipientHomepageActivity extends AppCompatActivity {
+    // From Monday 00:00:00 to Sunday 23:59:59, 1 second = 1000 ms
+    private final long ONE_WEEK_IN_MS = 604800000L;
 
     private BottomNavigationView bottomNav;
-    private TextView userNameTxt, reminderTxt, refreshTimestampTxt;
+    private TextView userNameTxt, reminderTxt, refreshTimestampTxt, weeklyStatusTxt;
     private int numOrdersLeft, verificationState;
     private ConstraintLayout verifyMsg, verifyInProcessMsg, rejectMsg, unclearDocMsg;
     private AppCompatButton verifyBtn, verifyAgainBtn;
+    private TextView leaderboardOneFirstTxt, leaderboardOneFirstQtyTxt, leaderboardOneSecondTxt, leaderboardOneSecondQtyTxt,
+            leaderboardOneThirdTxt, leaderboardOneThirdQtyTxt, leaderboardOneFourthTxt, leaderboardOneFourthQtyTxt,
+            leaderboardOneFifthTxt, leaderboardOneFifthQtyTxt;
     private TextView leaderboardTwoFirstTxt, leaderboardTwoFirstQtyTxt, leaderboardTwoSecondTxt, leaderboardTwoSecondQtyTxt,
             leaderboardTwoThirdTxt, leaderboardTwoThirdQtyTxt, leaderboardTwoFourthTxt, leaderboardTwoFourthQtyTxt,
             leaderboardTwoFifthTxt, leaderboardTwoFifthQtyTxt;
@@ -73,10 +78,25 @@ public class RecipientHomepageActivity extends AppCompatActivity {
         verifyBtn = findViewById(R.id.verifyBtn);
         verifyAgainBtn = findViewById(R.id.verifyAgainBtn);
         refreshTimestampTxt = findViewById(R.id.refreshTimestampTxt);
+        weeklyStatusTxt = findViewById(R.id.weeklyStatusTxt);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userid = user.getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+
+        leaderboardOneFirstTxt = findViewById(R.id.leaderboardOneFirstTxt);
+        leaderboardOneFirstQtyTxt = findViewById(R.id.leaderboardOneFirstQtyTxt);
+        leaderboardOneSecondTxt = findViewById(R.id.leaderboardOneSecondTxt);
+        leaderboardOneSecondQtyTxt = findViewById(R.id.leaderboardOneSecondQtyTxt);
+        leaderboardOneThirdTxt = findViewById(R.id.leaderboardOneThirdTxt);
+        leaderboardOneThirdQtyTxt = findViewById(R.id.leaderboardOneThirdQtyTxt);
+        leaderboardOneFourthTxt = findViewById(R.id.leaderboardOneFourthTxt);
+        leaderboardOneFourthQtyTxt = findViewById(R.id.leaderboardOneFourthQtyTxt);
+        leaderboardOneFifthTxt = findViewById(R.id.leaderboardOneFifthTxt);
+        leaderboardOneFifthQtyTxt = findViewById(R.id.leaderboardOneFifthQtyTxt);
+        ArrayList<TextView> leaderboardOneTextViews = new ArrayList<>(Arrays.asList(leaderboardOneFirstTxt, leaderboardOneSecondTxt,
+                leaderboardOneThirdTxt, leaderboardOneFourthTxt, leaderboardOneFifthTxt, leaderboardOneFirstQtyTxt, leaderboardOneSecondQtyTxt,
+                leaderboardOneThirdQtyTxt, leaderboardOneFourthQtyTxt, leaderboardOneFifthQtyTxt));
 
         leaderboardTwoFirstTxt = findViewById(R.id.leaderboardTwoFirstTxt);
         leaderboardTwoFirstQtyTxt = findViewById(R.id.leaderboardTwoFirstQtyTxt);
@@ -92,6 +112,136 @@ public class RecipientHomepageActivity extends AppCompatActivity {
                 leaderboardTwoThirdTxt, leaderboardTwoFourthTxt, leaderboardTwoFifthTxt, leaderboardTwoFirstQtyTxt, leaderboardTwoSecondQtyTxt,
                 leaderboardTwoThirdQtyTxt, leaderboardTwoFourthQtyTxt, leaderboardTwoFifthQtyTxt));
 
+        // Setting up weekly leaderboard
+        FirebaseDatabase.getInstance().getReference("WeeklyLeaderboard").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                DataSnapshot snapshot = task.getResult();
+                long lastRefreshedTimeInMs = (long) snapshot.child("lastRefreshedTimeInMs").getValue();
+                long currentTimeInMs = Calendar.getInstance().getTimeInMillis();
+                long refreshIntervalInMin = (long) snapshot.child("refreshInterval").getValue();
+                long refreshIntervalInMs = refreshIntervalInMin * 60000L;
+                long startDateInMs = (long) snapshot.child("startDateInMs").getValue();
+
+                // Resetting weekly points of donors if a week has passed since start date
+                if (currentTimeInMs >= startDateInMs + ONE_WEEK_IN_MS) {
+                    reference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                            DataSnapshot snapshot = task.getResult();
+                            for (DataSnapshot data : snapshot.getChildren()) {
+                                User currUser = data.getValue(User.class);
+                                if (currUser.getUserGroup().equals("donor")) {
+                                    String donorId = currUser.getUserId();
+                                    reference.child(donorId).child("numberOfWeeklyPoints").setValue(0);
+                                }
+                            }
+                        }
+                    });
+                    long timeDifferentialInMs = currentTimeInMs - startDateInMs;
+                    long numberOfWeeksPassed = timeDifferentialInMs / ONE_WEEK_IN_MS;
+                    long latestWeekInMs = startDateInMs + (numberOfWeeksPassed * ONE_WEEK_IN_MS);
+                    String latestStartDate = getDate(latestWeekInMs, "dd MMM yyyy");
+                    String latestStartDateAndTime = getDate(latestWeekInMs, "dd MMM yyyy HH:mm:ss");
+                    String latestEndDate = getDate(latestWeekInMs + ONE_WEEK_IN_MS - 1000, "dd MMM yyyy");
+                    FirebaseDatabase.getInstance().getReference("WeeklyLeaderboard").child("startDate").setValue(latestStartDateAndTime);
+                    FirebaseDatabase.getInstance().getReference("WeeklyLeaderboard").child("startDateInMs").setValue(latestWeekInMs);
+                    weeklyStatusTxt.setText("(" + latestStartDate + " - " + latestEndDate + ")");
+                } else {
+                    String startDate = getDate(startDateInMs, "dd MMM yyyy");
+                    String endDate = getDate(startDateInMs + ONE_WEEK_IN_MS - 1000, "dd MMM yyyy");
+                    weeklyStatusTxt.setText("(" + startDate + " - " + endDate + ")");
+                }
+
+                // Refreshes weekly leaderboard according to refresh interval
+                if (currentTimeInMs > lastRefreshedTimeInMs + refreshIntervalInMs) {
+                    reference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                            ArrayList<User> donorWeeklyRankings = new ArrayList<>();
+                            DataSnapshot snapshot = task.getResult();
+                            for (DataSnapshot data : snapshot.getChildren()) {
+                                User currUser = data.getValue(User.class);
+                                if (currUser.getUserGroup().equals("donor")) {
+                                    if (currUser.getNumberOfReports() < 3) {
+                                        donorWeeklyRankings.add(currUser);
+                                    }
+                                }
+                            }
+                            Collections.sort(donorWeeklyRankings, new Comparator<User>() {
+                                @Override
+                                public int compare(User o1, User o2) {
+                                    if (o1.getNumberOfWeeklyPoints() < o2.getNumberOfWeeklyPoints()) {
+                                        return 1;
+                                    } else if (o1.getNumberOfWeeklyPoints() > o2.getNumberOfWeeklyPoints()) {
+                                        return -1;
+                                    } else {
+                                        return 0;
+                                    }
+                                }
+                            });
+                            for (int i = 0; i < 5; i++) {
+                                User rankedUser = donorWeeklyRankings.get(i);
+                                LeaderboardRanking ranking = new LeaderboardRanking();
+                                ranking.setPosition(i + 1);
+                                ranking.setDonorId(rankedUser.getUserId());
+                                if (rankedUser.getRestaurant() == null || TextUtils.isEmpty(rankedUser.getRestaurant())) {
+                                    ranking.setDonorName(rankedUser.getName());
+                                } else {
+                                    ranking.setDonorName(rankedUser.getRestaurant());
+                                }
+                                ranking.setNumberOfPoints(rankedUser.getNumberOfWeeklyPoints());
+                                FirebaseDatabase.getInstance().getReference("WeeklyLeaderboard").child(String.valueOf(i + 1)).setValue(ranking);
+                            }
+                            for (int i = 1; i <= 5; i++) {
+                                int pos = i;
+                                FirebaseDatabase.getInstance().getReference("WeeklyLeaderboard").child(String.valueOf(i)).get()
+                                        .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                                                LeaderboardRanking currRanking = task.getResult().getValue(LeaderboardRanking.class);
+                                                if (currRanking.getDonorId().equals(userid)) {
+                                                    leaderboardOneTextViews.get(pos - 1).setText(String.valueOf(pos) + ". " + currRanking.getDonorName() + " (Me)");
+                                                    leaderboardOneTextViews.get(pos - 1).setTextColor(Color.parseColor("#C45508"));
+                                                    leaderboardOneTextViews.get(pos - 1).setTypeface(null, Typeface.BOLD);
+                                                    leaderboardOneTextViews.get(pos + 4).setText(String.valueOf(currRanking.getNumberOfPoints()));
+                                                    leaderboardOneTextViews.get(pos + 4).setTextColor(Color.parseColor("#C45508"));
+                                                    leaderboardOneTextViews.get(pos + 4).setTypeface(null, Typeface.BOLD);
+                                                } else {
+                                                    leaderboardOneTextViews.get(pos - 1).setText(String.valueOf(pos) + ". " + currRanking.getDonorName());
+                                                    leaderboardOneTextViews.get(pos + 4).setText(String.valueOf(currRanking.getNumberOfPoints()));
+                                                }
+                                            }
+                                        });
+                            }
+                        }
+                    });
+                } else {
+                    for (int i = 1; i <= 5; i++) {
+                        int pos = i;
+                        FirebaseDatabase.getInstance().getReference("WeeklyLeaderboard").child(String.valueOf(i)).get()
+                                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                                        LeaderboardRanking currRanking = task.getResult().getValue(LeaderboardRanking.class);
+                                        if (currRanking.getDonorId().equals(userid)) {
+                                            leaderboardOneTextViews.get(pos - 1).setText(String.valueOf(pos) + ". " + currRanking.getDonorName() + " (Me)");
+                                            leaderboardOneTextViews.get(pos - 1).setTextColor(Color.parseColor("#C45508"));
+                                            leaderboardOneTextViews.get(pos - 1).setTypeface(null, Typeface.BOLD);
+                                            leaderboardOneTextViews.get(pos + 4).setText(String.valueOf(currRanking.getNumberOfPoints()));
+                                            leaderboardOneTextViews.get(pos + 4).setTextColor(Color.parseColor("#C45508"));
+                                            leaderboardOneTextViews.get(pos + 4).setTypeface(null, Typeface.BOLD);
+                                        } else {
+                                            leaderboardOneTextViews.get(pos - 1).setText(String.valueOf(pos) + ". " + currRanking.getDonorName());
+                                            leaderboardOneTextViews.get(pos + 4).setText(String.valueOf(currRanking.getNumberOfPoints()));
+                                        }
+                                    }
+                                });
+                    }
+                }
+            }
+        });
+
         // Setting up all time leaderboard
         FirebaseDatabase.getInstance().getReference("AllTimeLeaderboard").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -102,9 +252,6 @@ public class RecipientHomepageActivity extends AppCompatActivity {
                 long refreshIntervalInMin = (long) snapshot.child("refreshInterval").getValue();
                 long refreshIntervalInMs = refreshIntervalInMin * 60000L;
 
-                System.out.println(currentTimeInMs);
-                System.out.println(lastRefreshedTimeInMs);
-                System.out.println(refreshIntervalInMs);
                 // If current system time has passed the last refreshed time by a set interval, refresh the leaderboard standings in database
                 if (currentTimeInMs > lastRefreshedTimeInMs + refreshIntervalInMs) {
                     reference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -123,7 +270,7 @@ public class RecipientHomepageActivity extends AppCompatActivity {
                             Collections.sort(donorRankings, new Comparator<User>() {
                                 @Override
                                 public int compare(User o1, User o2) {
-                                    if (o1.getNumberOfPoints() < o2.getNumberOfReports()) {
+                                    if (o1.getNumberOfPoints() < o2.getNumberOfPoints()) {
                                         return 1;
                                     } else if (o1.getNumberOfPoints() > o2.getNumberOfPoints()) {
                                         return -1;
@@ -152,6 +299,8 @@ public class RecipientHomepageActivity extends AppCompatActivity {
                             String latestRefreshedDateAndTime = getDate(latestRefreshedTimeInMs, "dd MMM yyyy HH:mm:ss");
                             FirebaseDatabase.getInstance().getReference("AllTimeLeaderboard").child("lastRefreshedTime").setValue(latestRefreshedDateAndTime);
                             FirebaseDatabase.getInstance().getReference("AllTimeLeaderboard").child("lastRefreshedTimeInMs").setValue(latestRefreshedTimeInMs);
+                            FirebaseDatabase.getInstance().getReference("WeeklyLeaderboard").child("lastRefreshedTime").setValue(latestRefreshedDateAndTime);
+                            FirebaseDatabase.getInstance().getReference("WeeklyLeaderboard").child("lastRefreshedTimeInMs").setValue(latestRefreshedTimeInMs);
                             refreshTimestampTxt.setText("Last refreshed at: " + latestRefreshedDateAndTime + "\n(Refreshed every " +
                                     String.valueOf(refreshIntervalInMin) + " mins)");
 

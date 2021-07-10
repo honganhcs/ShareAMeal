@@ -20,6 +20,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -61,12 +62,15 @@ public class EditProfileActivity extends AppCompatActivity {
     private AppCompatButton updateProfileInfoBtn;
     private EditText usernameEdt, addressEdt, restaurantEdt;
     private String userGroup, imageUrl, oldImageUrl;
-    private TextInputLayout restaurantWrapper;
+    private TextInputLayout restaurantWrapper, addressWrapper;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
 
         // If user is not logged in, direct user to login page. Else, direct to donor homepage.
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
@@ -85,8 +89,11 @@ public class EditProfileActivity extends AppCompatActivity {
         updateProfileInfoBtn = findViewById(R.id.updateProfileInfoBtn);
         usernameEdt = findViewById(R.id.usernameEdt);
         addressEdt = findViewById(R.id.addressEdt);
+        addressWrapper = findViewById(R.id.addressWrapper);
         restaurantEdt = findViewById(R.id.restaurantEdt);
         restaurantWrapper = findViewById(R.id.restaurantWrapper);
+        progressBar = findViewById(R.id.progress_circular);
+        progressBar.setVisibility(View.GONE);
 
         // "Update Profile Info" button is clickable only after any of the fields are updated
         usernameEdt.addTextChangedListener(
@@ -162,8 +169,10 @@ public class EditProfileActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                                 User user = snapshot.getValue(User.class);
                                 usernameEdt.setText(user.getName());
-                                addressEdt.setText(user.getAddress());
                                 userGroup = user.getUserGroup();
+                                if (!userGroup.equals("admin")) {
+                                    addressEdt.setText(user.getAddress());
+                                }
                                 oldImageUrl = user.getImageUrl();
 
                                 // If user is recipient, the "Name of food service" field will be uneditable
@@ -177,6 +186,20 @@ public class EditProfileActivity extends AppCompatActivity {
                                     if (!TextUtils.isEmpty(user.getRestaurant())) {
                                         restaurantEdt.setText(user.getRestaurant());
                                     }
+                                }
+
+                                // If user is admin, the address field will be disabled
+                                if (userGroup.equals("admin")) {
+                                    restaurantEdt.setEnabled(false);
+                                    restaurantEdt.setClickable(false);
+                                    restaurantEdt.setBackground(getDrawable(R.drawable.disablededittext));
+                                    restaurantWrapper.setHintTextColor(
+                                            ColorStateList.valueOf(getResources().getColor(R.color.white)));
+                                    addressEdt.setEnabled(false);
+                                    addressEdt.setClickable(false);
+                                    addressEdt.setBackground(getDrawable(R.drawable.disablededittext));
+                                    addressWrapper.setHintTextColor(
+                                            ColorStateList.valueOf(getResources().getColor(R.color.white)));
                                 }
 
                                 // If no profile pic previously, set default profile pic
@@ -255,66 +278,107 @@ public class EditProfileActivity extends AppCompatActivity {
                         String newAddress = addressEdt.getText().toString();
                         String newRestaurant = restaurantEdt.getText().toString();
 
-                        if (TextUtils.isEmpty(newUsername)) {
-                            Toast.makeText(EditProfileActivity.this, "Must provide username", Toast.LENGTH_SHORT)
-                                    .show();
-                        } else if (TextUtils.isEmpty(newAddress)) {
-                            Toast.makeText(EditProfileActivity.this, "Must provide address", Toast.LENGTH_SHORT)
-                                    .show();
-                        } else {
-                            DatabaseReference databaseReference1 = databaseReference.child(userId);
-                            User user = new User();
-                            user.setName(newUsername);
-                            user.setAddress(newAddress);
-                            user.setUserId(userId);
-                            user.setUserGroup(userGroup);
-                            user.setRestaurant(newRestaurant);
-
-                            if (imageUrl == null) {
-                                user.setImageUrl(oldImageUrl);
+                        if (!userGroup.equals("admin")) {
+                            if (TextUtils.isEmpty(newUsername)) {
+                                Toast.makeText(EditProfileActivity.this, "Must provide username", Toast.LENGTH_SHORT)
+                                        .show();
+                            } else if (TextUtils.isEmpty(newAddress)) {
+                                Toast.makeText(EditProfileActivity.this, "Must provide address", Toast.LENGTH_SHORT)
+                                        .show();
                             } else {
-                                user.setImageUrl(imageUrl);
-                            }
+                                DatabaseReference databaseReference1 = databaseReference.child(userId);
+                                User user = new User();
+                                user.setName(newUsername);
+                                user.setAddress(newAddress);
+                                user.setUserId(userId);
+                                user.setUserGroup(userGroup);
+                                user.setRestaurant(newRestaurant);
 
-                            Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-                            try {
-                                List addressList = geocoder.getFromLocationName(newAddress, 1);
-                                if (addressList != null && addressList.size() > 0) {
-                                    Address addressItem = (Address) addressList.get(0);
-                                    longitude = addressItem.getLongitude();
-                                    latitude = addressItem.getLatitude();
-
-                                    user.setAddressLatitude(latitude);
-                                    user.setAddressLongitude(longitude);
-
-                                    databaseReference1.setValue(user);
-                                    databaseReference1.addValueEventListener(
-                                            new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                    Toast.makeText(
-                                                            EditProfileActivity.this,
-                                                            "Profile information successfully updated",
-                                                            Toast.LENGTH_SHORT)
-                                                            .show();
-                                                    updateProfileInfoBtn.setClickable(false);
-                                                    updateProfileInfoBtn.setEnabled(false);
-                                                    updateProfileInfoBtn.setBackground(getDrawable(R.drawable.disabledbutton));
-                                                    isProfileUpdated = true;
-                                                }
-
-                                                @Override
-                                                public void onCancelled(@NonNull DatabaseError error) {}
-                                            });
+                                if (imageUrl == null) {
+                                    user.setImageUrl(oldImageUrl);
                                 } else {
-                                    Toast.makeText(
-                                            EditProfileActivity.this,
-                                            "Please provide a valid address",
-                                            Toast.LENGTH_SHORT)
-                                            .show();
+                                    user.setImageUrl(imageUrl);
                                 }
-                            } catch (IOException e) {
-                                e.printStackTrace();
+
+                                Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                                try {
+                                    List addressList = geocoder.getFromLocationName(newAddress, 1);
+                                    if (addressList != null && addressList.size() > 0) {
+                                        Address addressItem = (Address) addressList.get(0);
+                                        longitude = addressItem.getLongitude();
+                                        latitude = addressItem.getLatitude();
+
+                                        user.setAddressLatitude(latitude);
+                                        user.setAddressLongitude(longitude);
+
+                                        databaseReference1.setValue(user);
+                                        databaseReference1.addValueEventListener(
+                                                new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                        Toast.makeText(
+                                                                EditProfileActivity.this,
+                                                                "Profile information successfully updated",
+                                                                Toast.LENGTH_SHORT)
+                                                                .show();
+                                                        updateProfileInfoBtn.setClickable(false);
+                                                        updateProfileInfoBtn.setEnabled(false);
+                                                        updateProfileInfoBtn.setBackground(getDrawable(R.drawable.disabledbutton));
+                                                        isProfileUpdated = true;
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+                                                    }
+                                                });
+                                    } else {
+                                        Toast.makeText(
+                                                EditProfileActivity.this,
+                                                "Please provide a valid address",
+                                                Toast.LENGTH_SHORT)
+                                                .show();
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } else {
+                            if (TextUtils.isEmpty(newUsername)) {
+                                Toast.makeText(EditProfileActivity.this, "Must provide username", Toast.LENGTH_SHORT)
+                                        .show();
+                            } else {
+                                DatabaseReference databaseReference1 = databaseReference.child(userId);
+                                User user = new User();
+                                user.setName(newUsername);
+                                user.setUserId(userId);
+                                user.setUserGroup(userGroup);
+
+                                if (imageUrl == null) {
+                                    user.setImageUrl(oldImageUrl);
+                                } else {
+                                    user.setImageUrl(imageUrl);
+                                }
+
+                                databaseReference1.setValue(user);
+                                databaseReference1.addValueEventListener(
+                                        new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                Toast.makeText(
+                                                        EditProfileActivity.this,
+                                                        "Profile information successfully updated",
+                                                        Toast.LENGTH_SHORT)
+                                                        .show();
+                                                updateProfileInfoBtn.setClickable(false);
+                                                updateProfileInfoBtn.setEnabled(false);
+                                                updateProfileInfoBtn.setBackground(getDrawable(R.drawable.disabledbutton));
+                                                isProfileUpdated = true;
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+                                            }
+                                        });
                             }
                         }
                     }
@@ -353,6 +417,7 @@ public class EditProfileActivity extends AppCompatActivity {
         if (imageUri != null) {
             StorageReference fileReference =
                     mStorageRef.child(System.currentTimeMillis() + "." + getFileExtension(imageUri));
+            progressBar.setVisibility(View.VISIBLE);
             fileReference
                     .putFile(imageUri)
                     .continueWithTask(
@@ -375,12 +440,14 @@ public class EditProfileActivity extends AppCompatActivity {
                                         imageUrl = downloadUri.toString();
                                         Toast.makeText(EditProfileActivity.this, "Upload successful", Toast.LENGTH_LONG)
                                                 .show();
+                                        progressBar.setVisibility(View.GONE);
                                     } else {
                                         Toast.makeText(
                                                 EditProfileActivity.this,
                                                 "Upload failed: " + task.getException().getMessage(),
                                                 Toast.LENGTH_LONG)
                                                 .show();
+                                        progressBar.setVisibility(View.GONE);
                                     }
                                 }
                             })
@@ -390,6 +457,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                 public void onFailure(@NonNull Exception e) {
                                     Toast.makeText(EditProfileActivity.this, e.getMessage(), Toast.LENGTH_LONG)
                                             .show();
+                                    progressBar.setVisibility(View.GONE);
                                 }
                             });
         } else {

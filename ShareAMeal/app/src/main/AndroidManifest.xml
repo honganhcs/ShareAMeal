@@ -16,6 +16,7 @@
         android:theme="@style/Theme.ShareAMeal">
         <activity android:name=".RecipientsRecords"></activity>
         <activity android:name=".DonorsRecords" />
+        <activity android:name=".AdminSignUp"></activity>
         <activity
             android:name=".ReviewVerification"
             android:theme="@style/Theme.MaterialComponents.Light" />

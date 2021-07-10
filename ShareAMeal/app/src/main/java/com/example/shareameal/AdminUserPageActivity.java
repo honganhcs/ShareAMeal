@@ -116,7 +116,9 @@ public class AdminUserPageActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else if (curr == R.id.verifications) {
-
+                    Intent intent = new Intent(AdminUserPageActivity.this, AdminViewVerifications.class);
+                    startActivity(intent);
+                    finish();
                 } else if (curr == R.id.home) {
                     Intent intent = new Intent(AdminUserPageActivity.this, AdminHomepageActivity.class);
                     startActivity(intent);

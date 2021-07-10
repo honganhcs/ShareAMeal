@@ -21,7 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class SignupActivity extends AppCompatActivity {
     private EditText mEditTextEmail, mEditTextPw;
-    private TextView txtSignIn;
+    private TextView txtSignIn, adminSignUpTxt;
     private AppCompatButton signupBtn;
     private FirebaseAuth auth;
     private ImageView mShowPassword;
@@ -37,6 +37,7 @@ public class SignupActivity extends AppCompatActivity {
         signupBtn = findViewById(R.id.signupBtn);
         mShowPassword = findViewById(R.id.changePwVisibility);
         txtSignIn = findViewById(R.id.txtSignIn);
+        adminSignUpTxt = findViewById(R.id.adminSignUpTxt);
 
         auth = FirebaseAuth.getInstance();
 
@@ -107,6 +108,15 @@ public class SignupActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
+
+        adminSignUpTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignupActivity.this, AdminSignUp.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     @Override
