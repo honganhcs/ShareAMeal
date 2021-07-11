@@ -11,26 +11,34 @@
         android:layout_height="match_parent"
         android:paddingBottom="40dp">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout1"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <ImageView
             android:id="@+id/foodImage"
-            android:layout_width="170dp"
-            android:layout_height="170dp"
-            android:layout_marginTop="70dp"
-            android:src="@drawable/dish128"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:src="@drawable/dish"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/layout1" />
 
         <TextView
             android:id="@+id/foodNameTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Food Name"
-            android:layout_marginTop="30dp"
-            android:textSize="25sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:textSize="32sp"
             android:textStyle="bold"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="@+id/foodImage"
+            android:textColor="@color/maroon"
+            android:inputType="textMultiLine"
             app:layout_constraintStart_toStartOf="@+id/foodImage"
             app:layout_constraintTop_toBottomOf="@+id/foodImage" />
 
@@ -38,13 +46,12 @@
             android:id="@+id/foodDescriptionTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:paddingLeft="30dp"
+            android:gravity="left"
             android:paddingRight="30dp"
+            android:textColor="@color/maroon"
             android:textSize="17sp"
             android:text="Description: This is a basic description about the food item. Optional description and is inputted by the donor if necessary."
             android:inputType="textMultiLine"
-            app:layout_constraintEnd_toEndOf="@+id/foodNameTxt"
             app:layout_constraintStart_toStartOf="@+id/foodNameTxt"
             app:layout_constraintTop_toBottomOf="@+id/foodNameTxt" />
 
@@ -52,12 +59,14 @@
             android:id="@+id/foodQuantityHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="110dp"
             android:text="Quantity: "
-            android:textSize="18sp"
+            android:textColor="#C45508"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="50dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/foodNameTxt" />
+            app:layout_constraintTop_toBottomOf="@+id/foodDescriptionTxt" />
 
         <EditText
             android:id="@+id/foodQuantityEdt"
@@ -68,8 +77,29 @@
             android:digits="0123456789"
             android:inputType="number"
             android:textAlignment="center"
+            android:textColor="#C45508"
             app:layout_constraintEnd_toEndOf="@+id/foodQuantityHeader"
             app:layout_constraintStart_toStartOf="@+id/foodQuantityHeader"
+            app:layout_constraintTop_toBottomOf="@+id/foodQuantityHeader" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/decrementBtn"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/ic_baseline_horizontal_rule_24"
+            app:layout_constraintBottom_toBottomOf="@+id/foodQuantityEdt"
+            app:layout_constraintEnd_toStartOf="@+id/foodQuantityEdt"
+            app:layout_constraintTop_toBottomOf="@+id/foodQuantityHeader" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/incrementBtn"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/ic_baseline_add_24"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/foodQuantityEdt"
+            app:layout_constraintStart_toEndOf="@+id/foodQuantityEdt"
             app:layout_constraintTop_toBottomOf="@+id/foodQuantityHeader" />
 
         <androidx.appcompat.widget.AppCompatButton

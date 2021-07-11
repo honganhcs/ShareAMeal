@@ -58,12 +58,9 @@ public class OrderConfirmation extends AppCompatActivity {
 
         getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
 
-//        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        getSupportActionBar().setTitle("Confirm Order");
-        getSupportActionBar().setTitle("");
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow_36);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
+        getSupportActionBar().setTitle("Confirm Order");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         foodImage = findViewById(R.id.foodImage);
@@ -108,7 +105,7 @@ public class OrderConfirmation extends AppCompatActivity {
                             ViewGroup.LayoutParams layoutParams = foodImage.getLayoutParams();
                             layoutParams.width = displayMetrics.widthPixels;
                             final float density = getApplicationContext().getResources().getDisplayMetrics().density;
-                            layoutParams.height = (int) (220 * density);
+                            layoutParams.height = (int) (230 * density);
                             foodImage.setLayoutParams(layoutParams);
                         } else {
                             if (food.getImageUrl().equals("null")) {
@@ -116,7 +113,7 @@ public class OrderConfirmation extends AppCompatActivity {
                                 ViewGroup.LayoutParams layoutParams = foodImage.getLayoutParams();
                                 layoutParams.width = displayMetrics.widthPixels;
                                 final float density = getApplicationContext().getResources().getDisplayMetrics().density;
-                                layoutParams.height = (int) (220 * density);
+                                layoutParams.height = (int) (230 * density);
                                 foodImage.setLayoutParams(layoutParams);
                             } else {
                                 bufferLayout.setVisibility(View.GONE);

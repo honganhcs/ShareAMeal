@@ -3,12 +3,15 @@ package com.example.shareameal;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,6 +40,7 @@ public class ViewOrder extends AppCompatActivity {
     private User donor;
     private int orderQuantity;
     private AppCompatButton btnReport;
+    private ConstraintLayout bufferLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,7 @@ public class ViewOrder extends AppCompatActivity {
         txtOrderQuantity = findViewById(R.id.txtOrderQuantity);
         txtSchedule = findViewById(R.id.txtSchedule);
         txtAddress = findViewById(R.id.txtAddress);
+        bufferLayout = findViewById(R.id.layout1);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         recipientId = user.getUid();
@@ -77,13 +82,27 @@ public class ViewOrder extends AppCompatActivity {
                             }
                         }
 
+                        DisplayMetrics displayMetrics = new DisplayMetrics();
+                        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
                         if (food.getImageUrl() == null) {
                             foodImage.setImageResource(R.drawable.dish);
+                            ViewGroup.LayoutParams layoutParams = foodImage.getLayoutParams();
+                            layoutParams.width = displayMetrics.widthPixels;
+                            final float density = getApplicationContext().getResources().getDisplayMetrics().density;
+                            layoutParams.height = (int) (230 * density);
+                            foodImage.setLayoutParams(layoutParams);
                         } else {
                             if (food.getImageUrl().equals("null")) {
                                 foodImage.setImageResource(R.drawable.dish);
+                                ViewGroup.LayoutParams layoutParams = foodImage.getLayoutParams();
+                                layoutParams.width = displayMetrics.widthPixels;
+                                final float density = getApplicationContext().getResources().getDisplayMetrics().density;
+                                layoutParams.height = (int) (230 * density);
+                                foodImage.setLayoutParams(layoutParams);
                             } else {
-                                Picasso.get().load(food.getImageUrl()).into(foodImage);
+                                bufferLayout.setVisibility(View.GONE);
+                                Picasso.get().load(food.getImageUrl()).fit().into(foodImage);
                             }
                         }
 
@@ -113,15 +132,13 @@ public class ViewOrder extends AppCompatActivity {
                                                         orderQuantity = order.getQuantity();
                                                         foodNameTxt.setText(food.getName());
                                                         foodDescriptionTxt.setText(food.getDescription());
-                                                        txtOrderQuantity.setText("Order quantity: " + orderQuantity);
-                                                        txtSchedule.setText(
-                                                                "Scheduled for collection at:\n"
-                                                                        + order.getStartTime()
+                                                        txtOrderQuantity.setText(String.valueOf(orderQuantity));
+                                                        txtSchedule.setText(order.getStartTime()
                                                                         + " - "
                                                                         + order.getEndTime()
                                                                         + ", "
                                                                         + order.getDate());
-                                                        txtAddress.setText("Address: " + donor.getAddress());
+                                                        txtAddress.setText(donor.getAddress());
                                                     }
 
                                                     @Override
