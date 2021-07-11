@@ -2,13 +2,19 @@ package com.example.shareameal;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,6 +37,8 @@ public class OrderConfirmation extends AppCompatActivity {
     private ImageView foodImage;
     private TextView foodNameTxt, foodDescriptionTxt, txtCurrentQuantity, txtSchedule, txtAddress;
     private EditText foodQuantityEdt;
+    private ConstraintLayout bufferLayout;
+    private AppCompatButton decrementBtn, incrementBtn;
 
     // data
     private DatabaseReference reference1, reference2, reference3, reference4;
@@ -41,6 +49,7 @@ public class OrderConfirmation extends AppCompatActivity {
     private User donor, recipient;
     private int orderQuantity;
     private int numOrdersLeft;
+    private int existingQty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +58,12 @@ public class OrderConfirmation extends AppCompatActivity {
 
         getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
 
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-        getSupportActionBar().setTitle("Confirm Order");
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
+//        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        getSupportActionBar().setTitle("Confirm Order");
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow_36);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         foodImage = findViewById(R.id.foodImage);
@@ -61,6 +73,9 @@ public class OrderConfirmation extends AppCompatActivity {
         txtSchedule = findViewById(R.id.txtSchedule);
         txtAddress = findViewById(R.id.txtAddress);
         foodQuantityEdt = findViewById(R.id.foodQuantityEdt);
+        bufferLayout = findViewById(R.id.layout1);
+        decrementBtn = findViewById(R.id.decrementBtn);
+        incrementBtn = findViewById(R.id.incrementBtn);
 
         Intent intent = getIntent();
         bundle = intent.getExtras();
@@ -85,13 +100,27 @@ public class OrderConfirmation extends AppCompatActivity {
                             }
                         }
 
+                        DisplayMetrics displayMetrics = new DisplayMetrics();
+                        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
                         if (food.getImageUrl() == null) {
                             foodImage.setImageResource(R.drawable.dish);
+                            ViewGroup.LayoutParams layoutParams = foodImage.getLayoutParams();
+                            layoutParams.width = displayMetrics.widthPixels;
+                            final float density = getApplicationContext().getResources().getDisplayMetrics().density;
+                            layoutParams.height = (int) (220 * density);
+                            foodImage.setLayoutParams(layoutParams);
                         } else {
                             if (food.getImageUrl().equals("null")) {
                                 foodImage.setImageResource(R.drawable.dish);
+                                ViewGroup.LayoutParams layoutParams = foodImage.getLayoutParams();
+                                layoutParams.width = displayMetrics.widthPixels;
+                                final float density = getApplicationContext().getResources().getDisplayMetrics().density;
+                                layoutParams.height = (int) (220 * density);
+                                foodImage.setLayoutParams(layoutParams);
                             } else {
-                                Picasso.get().load(food.getImageUrl()).into(foodImage);
+                                bufferLayout.setVisibility(View.GONE);
+                                Picasso.get().load(food.getImageUrl()).fit().into(foodImage);
                             }
                         }
 
@@ -113,15 +142,14 @@ public class OrderConfirmation extends AppCompatActivity {
 
                                         foodNameTxt.setText(food.getName());
                                         foodDescriptionTxt.setText(food.getDescription());
-                                        txtCurrentQuantity.setText("Current quantity: " + food.getQuantity());
-                                        txtSchedule.setText(
-                                                "Scheduled for collection at:\n"
-                                                        + slot.getStartTime()
+                                        txtCurrentQuantity.setText("Current Quantity: " + food.getQuantity());
+                                        existingQty = food.getQuantity();
+                                        txtSchedule.setText(slot.getStartTime()
                                                         + " - "
                                                         + slot.getEndTime()
                                                         + ", "
                                                         + slot.getDate());
-                                        txtAddress.setText("Address: " + donor.getAddress());
+                                        txtAddress.setText(donor.getAddress());
                                     }
 
                                     @Override
@@ -134,6 +162,28 @@ public class OrderConfirmation extends AppCompatActivity {
                     public void onCancelled(@NonNull @NotNull DatabaseError error) {
                     }
                 });
+
+        decrementBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currQty = Integer.valueOf(foodQuantityEdt.getText().toString());
+                if (currQty > 0) {
+                    currQty -= 1;
+                }
+                foodQuantityEdt.setText(String.valueOf(currQty));
+            }
+        });
+
+        incrementBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currQty = Integer.valueOf(foodQuantityEdt.getText().toString());
+                if (currQty < existingQty) {
+                    foodQuantityEdt.setText(String.valueOf(currQty + 1));
+                }
+            }
+        });
+
     }
 
     public void onConfirmOrder(View view) {
