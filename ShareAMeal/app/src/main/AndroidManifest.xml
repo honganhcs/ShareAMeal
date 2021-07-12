@@ -120,6 +120,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
         <receiver
             android:name=".schedulecleanup.ReceiverForScheduleCleanUp"
             android:exported="true">

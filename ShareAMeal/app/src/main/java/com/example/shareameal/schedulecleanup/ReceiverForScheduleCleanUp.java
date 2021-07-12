@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Calendar;
 
 public class ReceiverForScheduleCleanUp extends BroadcastReceiver {
-    private final int interval = 1000 * 60 * 1;
+    private final int interval = 1000 * 60 * 60 * 24;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -41,65 +41,57 @@ public class ReceiverForScheduleCleanUp extends BroadcastReceiver {
         int todayMonth = cal.get(Calendar.MONTH) + 1;
         int today = cal.get(Calendar.DAY_OF_MONTH);
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-        reference
-                .child(userId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        User user = snapshot.getValue(User.class);
-                        if(user.getUserGroup().equals("donor")) {
-                            DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Slots").child(userId);
-                            reference1.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                    for(DataSnapshot data : snapshot.getChildren()) {
-                                        Slot slot = data.getValue(Slot.class);
-                                        // if the slot has expired then remove it
-                                        if(slot.getYear() < todayYear ||
-                                                (slot.getYear() == todayYear && slot.getMonth() < todayMonth) ||
-                                                (slot.getYear() == todayYear && slot.getMonth() == todayMonth && slot.getDayOfMonth() < today)) {
-                                            reference1.child(slot.getSlotId()).removeValue();
-                                        }
-                                        Log.d("schedule clean up", "Outdated slots removed.");
-                                    }
-                                }
+        // clean up entire database for Slots and Orders
+        DatabaseReference slotsReference = FirebaseDatabase.getInstance().getReference("Slots").child("Pending");
+        slotsReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot donor : snapshot.getChildren()) {
+                    for(DataSnapshot data : donor.getChildren()) {
+                        Slot slot = data.getValue(Slot.class);
+                        // if the slot has expired then remove it
+                        if(slot.getYear() < todayYear ||
+                                (slot.getYear() == todayYear && slot.getMonth() < todayMonth) ||
+                                (slot.getYear() == todayYear && slot.getMonth() == todayMonth && slot.getDayOfMonth() < today)) {
+                            slotsReference.child(donor.getKey()).child(slot.getSlotId()).removeValue();
+                        }
+                        Log.d("schedule clean up", "Outdated slots removed.");
+                    }
+                }
+            }
 
-                                @Override
-                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-                                }
-                            });
-                        } else {
-                            DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("Orders").child(userId);
-                            reference2.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                    for(DataSnapshot data : snapshot.getChildren()) {
-                                        Order order = data.getValue(Order.class);
-                                        // if the slot has expired then remove it
-                                        if(order.getYear() < todayYear ||
-                                                (order.getYear() == todayYear && order.getMonth() < todayMonth) ||
-                                                (order.getYear() == todayYear && order.getMonth() == todayMonth && order.getDayOfMonth() < today)) {
-                                            reference2.child(order.getSlotId()).removeValue();
-                                        }
-                                        Log.d("schedule clean up", "Outdated orders removed.");
-                                    }
-                                }
+            }
+        });
 
-                                @Override
-                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-                                }
-                            });
+        DatabaseReference ordersReference = FirebaseDatabase.getInstance().getReference("Orders").child("Pending");
+        ordersReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot recipient : snapshot.getChildren()) {
+                    for(DataSnapshot slot : recipient.getChildren()) {
+                        for(DataSnapshot data : slot.getChildren()) {
+                            Order order = data.getValue(Order.class);
+                            // if the slot has expired then remove it
+                            if(order.getYear() < todayYear ||
+                                    (order.getYear() == todayYear && order.getMonth() < todayMonth) ||
+                                    (order.getYear() == todayYear && order.getMonth() == todayMonth && order.getDayOfMonth() < today)) {
+                                ordersReference.child(recipient.getKey()).child(order.getSlotId()).child(order.getFoodId()).removeValue();
+                            }
+                            Log.d("schedule clean up", "Outdated orders removed.");
                         }
                     }
+                }
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-                    }
-                });
+            }
+        });
+
     }
 
     public void setAlarm(Context context) {

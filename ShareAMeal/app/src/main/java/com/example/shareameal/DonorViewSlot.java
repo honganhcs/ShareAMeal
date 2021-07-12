@@ -66,9 +66,6 @@ public class DonorViewSlot extends AppCompatActivity {
         txtReserved = findViewById(R.id.txtReserved);
         txtReservedItem = findViewById(R.id.txtReservedItem);
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        donorId = user.getUid();
-
         reference1 = FirebaseDatabase.getInstance().getReference("Orders").child("Pending");
 
         Intent intent = getIntent();

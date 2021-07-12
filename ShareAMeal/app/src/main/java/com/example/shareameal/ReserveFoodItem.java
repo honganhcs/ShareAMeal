@@ -65,7 +65,7 @@ public class ReserveFoodItem extends AppCompatActivity
         donorName = intent.getStringExtra("donorName");
         prevScreen = intent.getStringExtra("prevScreen");
         reference = FirebaseDatabase.getInstance().getReference("Slots").child("Pending").child(donorId);
-        reference1 = FirebaseDatabase.getInstance().getReference("Orders").child(recipientId);
+        reference1 = FirebaseDatabase.getInstance().getReference("Orders").child("Pending").child(recipientId);
 
         // only load slots that aren't already reserved by the same recipient for the same food item
         // and the slots must also have fewer than 3 recipients

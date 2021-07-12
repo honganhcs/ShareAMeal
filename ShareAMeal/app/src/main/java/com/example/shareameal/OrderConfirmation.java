@@ -183,7 +183,7 @@ public class OrderConfirmation extends AppCompatActivity {
                 reference1.child(foodId).setValue(food);
 
                 // update slot only if recipient hasn't already ordered anything from the donor in the same slot.
-                if(!slot.getRecipientId1().equals(recipientId) && !slot.getRecipientId2().equals(recipientId) && !slot.getRecipientId3().equals(recipientId)) {
+                if(!recipientId.equals(slot.getRecipientId1()) && !recipientId.equals(slot.getRecipientId2()) && !recipientId.equals(slot.getRecipientId3())) {
                     slot.setNumRecipients(slot.getNumRecipients() + 1);
                     if(slot.getRecipientId1() == null) {
                         slot.setRecipientId1(recipientId);
