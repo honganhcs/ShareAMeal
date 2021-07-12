@@ -2,6 +2,7 @@ package com.example.shareameal.schedulecleanup;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.os.PowerManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.shareameal.Order;
 import com.example.shareameal.Slot;
@@ -21,17 +23,27 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.EnhancedIntentService;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
 
-public class ReceiverForScheduleCleanUp extends BroadcastReceiver {
-    private final int interval = 1000 * 60 * 60 * 24;
+public class CleanUpService extends IntentService {
+
+    private static final String TAG = "CleanUpService";
+    /**
+     * Creates an IntentService.  Invoked by your subclass's constructor.
+     *
+     * @param name Used to name the worker thread, important only for debugging.
+     */
+    public CleanUpService(String name) {
+        super(TAG);
+    }
 
     @Override
-    public void onReceive(Context context, Intent intent) {
-        // code for schedule clean up
+    protected void onHandleIntent(@Nullable Intent intent) {
+        Log.d("service_started", "Clean-up service started.");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userId = user.getUid();
@@ -91,23 +103,5 @@ public class ReceiverForScheduleCleanUp extends BroadcastReceiver {
 
             }
         });
-
-    }
-
-    public void setAlarm(Context context) {
-        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent("com.example.shareameal.START_CLEANUP");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-        Calendar cal = Calendar.getInstance();
-        // adjust the intervals for the cleanup
-        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, cal.getTimeInMillis(),
-                interval, pendingIntent);
-    }
-
-    public void cancelAlarm(Context context) {
-        Intent intent = new Intent("com.example.shareameal.START_CLEANUP");
-        PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
-        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(sender);
     }
 }
