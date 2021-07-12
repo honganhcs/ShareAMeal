@@ -91,8 +91,10 @@ public class RecipientViewOrders extends AppCompatActivity
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        for (DataSnapshot data : snapshot.getChildren()) {
-                            orders.add(data.getValue(Order.class));
+                        for (DataSnapshot ordersUnderSameSlot : snapshot.getChildren()) {
+                            for(DataSnapshot orderData : ordersUnderSameSlot.getChildren()) {
+                                orders.add(orderData.getValue(Order.class));
+                            }
                         }
                         Collections.sort(orders, new Comparator<Order>() {
                             @Override
