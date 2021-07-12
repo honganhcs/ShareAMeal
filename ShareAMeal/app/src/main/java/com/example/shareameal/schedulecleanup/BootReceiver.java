@@ -1,4 +1,4 @@
-package com.example.shareameal;
+package com.example.shareameal.schedulecleanup;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

@@ -25,6 +25,8 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 public class ViewOrder extends AppCompatActivity {
 
     private ImageView foodImage;
@@ -87,15 +89,11 @@ public class ViewOrder extends AppCompatActivity {
 
 
                         reference2 = FirebaseDatabase.getInstance().getReference("Orders");
-                        reference2.child("Pending").child(recipientId).addValueEventListener(
+                        reference2.child("Pending").child(recipientId).child(slotId).child(foodId).addListenerForSingleValueEvent(
                                 new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                        for (DataSnapshot data : snapshot.getChildren()) {
-                                            if (data.getKey().equals(slotId)) {
-                                                order = data.getValue(Order.class);
-                                            }
-                                        }
+                                        order = snapshot.getValue(Order.class);
 
                                         reference3 = FirebaseDatabase.getInstance().getReference("Users");
                                         reference3.addValueEventListener(
@@ -155,34 +153,50 @@ public class ViewOrder extends AppCompatActivity {
 
     public void onCancelOrder(View view) {
         // remove order
-        reference2.child("Pending").child(recipientId).child(slotId).removeValue();
+        reference2.child("Pending").child(recipientId).child(slotId).child(foodId).removeValue();
 
-        // update slot
-        reference4 = FirebaseDatabase.getInstance().getReference("Slots");
-        reference4.child("Pending").child(donorId).addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        for (DataSnapshot data : snapshot.getChildren()) {
-                            if(data.getKey().equals(slotId)) {
-                                slot = data.getValue(Slot.class);
-                            }
-                        }
-                        slot.setNumRecipients(slot.getNumRecipients() - 1);
-                        if(slot.getRecipientId1().equals(recipientId)) {
-                            slot.setRecipientId1(null);
-                        } else if(slot.getRecipientId2().equals(recipientId)) {
-                            slot.setRecipientId2(null);
-                        } else if(slot.getRecipientId3().equals(recipientId)) {
-                            slot.setRecipientId3(null);
-                        }
-                        reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
-                    }
+        // update slot only if the same recipient does not have any other orders in the same time slot
+        ArrayList<String> foodIds = new ArrayList<>();
+        reference2.child("Pending").child(recipientId).child(slotId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot data : snapshot.getChildren()) {
+                    foodIds.add(data.getKey());
+                }
+                if(foodIds.isEmpty()) {
+                    reference4 = FirebaseDatabase.getInstance().getReference("Slots");
+                    reference4.child("Pending").child(donorId).addValueEventListener(
+                            new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                    for (DataSnapshot data : snapshot.getChildren()) {
+                                        if(data.getKey().equals(slotId)) {
+                                            slot = data.getValue(Slot.class);
+                                        }
+                                    }
+                                    slot.setNumRecipients(slot.getNumRecipients() - 1);
+                                    if(slot.getRecipientId1().equals(recipientId)) {
+                                        slot.setRecipientId1(null);
+                                    } else if(slot.getRecipientId2().equals(recipientId)) {
+                                        slot.setRecipientId2(null);
+                                    } else if(slot.getRecipientId3().equals(recipientId)) {
+                                        slot.setRecipientId3(null);
+                                    }
+                                    reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
+                                }
 
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                    }
-                });
+                                @Override
+                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
 
         // update food quantity
         food.setQuantity(food.getQuantity() + orderQuantity);
@@ -197,36 +211,54 @@ public class ViewOrder extends AppCompatActivity {
 
     public void onOrderCompleted(View view) {
         // move the order from Pending to Completed in the database
-        reference2.child("Completed").child(recipientId).child(slotId).setValue(order);
-        reference2.child("Pending").child(recipientId).child(slotId).removeValue();
+        reference2.child("Completed").child(recipientId).child(slotId).child(foodId).setValue(order);
+        reference2.child("Pending").child(recipientId).child(slotId).child(foodId).removeValue();
 
-        // update the slot in the Pending section
-        reference4.child("Pending").child(donorId).addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        for (DataSnapshot data : snapshot.getChildren()) {
-                            if(data.getKey().equals(slotId)) {
-                                slot = data.getValue(Slot.class);
-                            }
-                        }
-                        slot.setNumRecipients(slot.getNumRecipients() - 1);
-                        if(slot.getRecipientId1().equals(recipientId)) {
-                            slot.setRecipientId1(null);
-                        } else if(slot.getRecipientId2().equals(recipientId)) {
-                            slot.setRecipientId2(null);
-                        } else if(slot.getRecipientId3().equals(recipientId)) {
-                            slot.setRecipientId3(null);
-                        }
-                        reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
-                    }
+        // update slot only if the same recipient does not have any other orders in the same time slot
+        ArrayList<String> foodIds = new ArrayList<>();
+        reference2.child("Pending").child(recipientId).child(slotId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot data : snapshot.getChildren()) {
+                    foodIds.add(data.getKey());
+                }
+                if(foodIds.isEmpty()) {
+                    reference4 = FirebaseDatabase.getInstance().getReference("Slots");
+                    reference4.child("Pending").child(donorId).addValueEventListener(
+                            new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                    for (DataSnapshot data : snapshot.getChildren()) {
+                                        if(data.getKey().equals(slotId)) {
+                                            slot = data.getValue(Slot.class);
+                                        }
+                                    }
+                                    slot.setNumRecipients(slot.getNumRecipients() - 1);
+                                    if(slot.getRecipientId1().equals(recipientId)) {
+                                        slot.setRecipientId1(null);
+                                    } else if(slot.getRecipientId2().equals(recipientId)) {
+                                        slot.setRecipientId2(null);
+                                    } else if(slot.getRecipientId3().equals(recipientId)) {
+                                        slot.setRecipientId3(null);
+                                    }
+                                    reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
+                                }
 
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                    }
-                });
+                                @Override
+                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+
         // record order in Completed section of Slots
-        reference4.child("Completed").child(donorId).child(slotId).setValue(order);
+        reference4.child("Completed").child(donorId).child(slotId).child(recipientId).child(foodId).setValue(order);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.shareameal;
+package com.example.shareameal.schedulecleanup;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
@@ -11,6 +11,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.shareameal.Order;
+import com.example.shareameal.Slot;
+import com.example.shareameal.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;

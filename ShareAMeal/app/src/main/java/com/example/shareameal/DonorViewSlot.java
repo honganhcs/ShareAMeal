@@ -39,7 +39,7 @@ public class DonorViewSlot extends AppCompatActivity {
     private Slot slot;
     private String donorId, slotId;
 
-    private HashMap<String, Order> recipientIdToOrder;
+    private HashMap<String, ArrayList<Order>> recipientIdToOrder;
     private Food food;
 
     private DatabaseReference reference1, reference2, reference3;
@@ -79,43 +79,65 @@ public class DonorViewSlot extends AppCompatActivity {
             txtReservedItem.setText("");
         } else {
             ArrayList<String> items = new ArrayList<>();
-            String[] recipientIds = {slot.getRecipientId1(), slot.getRecipientId2(), slot.getRecipientId3()};
 
-            // need to change to account for multiple orders from the same recipient in the same slot.
             recipientIdToOrder = new HashMap<>();
 
             if(slot.getRecipientId1() != null) {
                 String recipientId = slot.getRecipientId1();
-                reference1.child(recipientId).child(slotId).addListenerForSingleValueEvent(
+                reference1.child(recipientId).child(slotId).addValueEventListener(
                         new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                Order order = snapshot.getValue(Order.class);
-                                recipientIdToOrder.put(recipientId, order);
-                                String item = order.getQuantity() + " " + order.getFoodName() + "\n";
-                                items.add(item);
+                                for (DataSnapshot data : snapshot.getChildren()) {
+                                    Order order = data.getValue(Order.class);
+                                    if (recipientIdToOrder.get(recipientId) == null) {
+                                        ArrayList<Order> arrayList = new ArrayList<>();
+                                        arrayList.add(order);
+                                        recipientIdToOrder.put(recipientId, arrayList);
+                                    } else {
+                                        recipientIdToOrder.get(recipientId).add(order);
+                                    }
+                                    String item = order.getQuantity() + " " + order.getFoodName() + "\n";
+                                    items.add(item);
+                                }
                                 if(slot.getRecipientId2() != null) {
                                     String recipientId = slot.getRecipientId2();
-                                    reference1.child(recipientId).child(slotId).addListenerForSingleValueEvent(
+                                    reference1.child(recipientId).child(slotId).addValueEventListener(
                                             new ValueEventListener() {
                                                 @Override
                                                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                                    Order order = snapshot.getValue(Order.class);
-                                                    recipientIdToOrder.put(recipientId, order);
-                                                    String item = order.getQuantity() + " " + order.getFoodName() + "\n";
-                                                    items.add(item);
+                                                    for (DataSnapshot data : snapshot.getChildren()) {
+                                                        Order order = data.getValue(Order.class);
+                                                        if (recipientIdToOrder.get(recipientId).equals(null)) {
+                                                            ArrayList<Order> arrayList = new ArrayList<>();
+                                                            arrayList.add(order);
+                                                            recipientIdToOrder.put(recipientId, arrayList);
+                                                        } else {
+                                                            recipientIdToOrder.get(recipientId).add(order);
+                                                        }
+                                                        String item = order.getQuantity() + " " + order.getFoodName() + "\n";
+                                                        items.add(item);
+                                                    }
                                                     if (slot.getRecipientId3() != null) {
                                                         String recipientId = slot.getRecipientId3();
-                                                        reference1.child(recipientId).child(slotId).addListenerForSingleValueEvent(
+                                                        reference1.child(recipientId).child(slotId).addValueEventListener(
                                                                 new ValueEventListener() {
                                                                     @Override
                                                                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                                                        Order order = snapshot.getValue(Order.class);
-                                                                        recipientIdToOrder.put(recipientId, order);
-                                                                        String item = order.getQuantity() + " " + order.getFoodName() + "\n";
-                                                                        items.add(item);
-                                                                        String itemsText = "";
+                                                                        for (DataSnapshot data : snapshot.getChildren()) {
+                                                                            Order order = data.getValue(Order.class);
+                                                                            if (recipientIdToOrder.get(recipientId).equals(null)) {
+                                                                                ArrayList<Order> arrayList = new ArrayList<>();
+                                                                                arrayList.add(order);
+                                                                                recipientIdToOrder.put(recipientId, arrayList);
+                                                                            } else {
+                                                                                recipientIdToOrder.get(recipientId).add(order);
+                                                                            }
+                                                                            String item = order.getQuantity() + " " + order.getFoodName() + "\n";
+                                                                            items.add(item);
+                                                                        }
 
+                                                                        String itemsText = "";
                                                                         for(int i = 0; i < items.size(); i++) {
                                                                             itemsText = new StringBuilder().append(itemsText).append(items.get(i)).toString();
                                                                         }
@@ -142,14 +164,23 @@ public class DonorViewSlot extends AppCompatActivity {
                                             });
                                 } else if(slot.getRecipientId3() != null) {
                                 String recipientId = slot.getRecipientId3();
-                                reference1.child(recipientId).child(slotId).addListenerForSingleValueEvent(
+                                reference1.child(recipientId).child(slotId).addValueEventListener(
                                         new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                                Order order = snapshot.getValue(Order.class);
-                                                recipientIdToOrder.put(recipientId, order);
-                                                String item = order.getQuantity() + " " + order.getFoodName() + "\n";
-                                                items.add(item);
+                                                for (DataSnapshot data : snapshot.getChildren()) {
+                                                    Order order = data.getValue(Order.class);
+                                                    if (recipientIdToOrder.get(recipientId).equals(null)) {
+                                                        ArrayList<Order> arrayList = new ArrayList<>();
+                                                        arrayList.add(order);
+                                                        recipientIdToOrder.put(recipientId, arrayList);
+                                                    } else {
+                                                        recipientIdToOrder.get(recipientId).add(order);
+                                                    }
+                                                    String item = order.getQuantity() + " " + order.getFoodName() + "\n";
+                                                    items.add(item);
+                                                }
+
                                                 String itemsText = "";
 
                                                 for(int i = 0; i < items.size(); i++) {
@@ -177,24 +208,42 @@ public class DonorViewSlot extends AppCompatActivity {
                         });
             } else if(slot.getRecipientId2() != null) {
                 String recipientId = slot.getRecipientId2();
-                reference1.child(recipientId).child(slotId).addListenerForSingleValueEvent(
+                reference1.child(recipientId).child(slotId).addValueEventListener(
                         new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                Order order = snapshot.getValue(Order.class);
-                                recipientIdToOrder.put(recipientId, order);
-                                String item = order.getQuantity() + " " + order.getFoodName() + "\n";
-                                items.add(item);
+                                for (DataSnapshot data : snapshot.getChildren()) {
+                                    Order order = data.getValue(Order.class);
+                                    if (recipientIdToOrder.get(recipientId).equals(null)) {
+                                        ArrayList<Order> arrayList = new ArrayList<>();
+                                        arrayList.add(order);
+                                        recipientIdToOrder.put(recipientId, arrayList);
+                                    } else {
+                                        recipientIdToOrder.get(recipientId).add(order);
+                                    }
+                                    String item = order.getQuantity() + " " + order.getFoodName() + "\n";
+                                    items.add(item);
+                                }
+
                                 if (slot.getRecipientId3() != null) {
                                     String recipientId = slot.getRecipientId3();
-                                    reference1.child(recipientId).child(slotId).addListenerForSingleValueEvent(
+                                    reference1.child(recipientId).child(slotId).addValueEventListener(
                                             new ValueEventListener() {
                                                 @Override
                                                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                                    Order order = snapshot.getValue(Order.class);
-                                                    recipientIdToOrder.put(recipientId, order);
-                                                    String item = order.getQuantity() + " " + order.getFoodName() + "\n";
-                                                    items.add(item);
+                                                    for (DataSnapshot data : snapshot.getChildren()) {
+                                                        Order order = data.getValue(Order.class);
+                                                        if (recipientIdToOrder.get(recipientId).equals(null)) {
+                                                            ArrayList<Order> arrayList = new ArrayList<>();
+                                                            arrayList.add(order);
+                                                            recipientIdToOrder.put(recipientId, arrayList);
+                                                        } else {
+                                                            recipientIdToOrder.get(recipientId).add(order);
+                                                        }
+                                                        String item = order.getQuantity() + " " + order.getFoodName() + "\n";
+                                                        items.add(item);
+                                                    }
+
                                                     String itemsText = "";
 
                                                     for(int i = 0; i < items.size(); i++) {
@@ -223,14 +272,23 @@ public class DonorViewSlot extends AppCompatActivity {
                         });
             } else if (slot.getRecipientId3() != null) {
                 String recipientId = slot.getRecipientId3();
-                reference1.child(recipientId).child(slotId).addListenerForSingleValueEvent(
+                reference1.child(recipientId).child(slotId).addValueEventListener(
                         new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                Order order = snapshot.getValue(Order.class);
-                                recipientIdToOrder.put(recipientId, order);
-                                String item = order.getQuantity() + " " + order.getFoodName() + "\n";
-                                items.add(item);
+                                for (DataSnapshot data : snapshot.getChildren()) {
+                                    Order order = data.getValue(Order.class);
+                                    if (recipientIdToOrder.get(recipientId).equals(null)) {
+                                        ArrayList<Order> arrayList = new ArrayList<>();
+                                        arrayList.add(order);
+                                        recipientIdToOrder.put(recipientId, arrayList);
+                                    } else {
+                                        recipientIdToOrder.get(recipientId).add(order);
+                                    }
+                                    String item = order.getQuantity() + " " + order.getFoodName() + "\n";
+                                    items.add(item);
+                                }
+
                                 String itemsText = "";
 
                                 for(int i = 0; i < items.size(); i++) {
@@ -263,52 +321,58 @@ public class DonorViewSlot extends AppCompatActivity {
         reference3 = FirebaseDatabase.getInstance().getReference("Foods").child(donorId);
 
         if(slot.getRecipientId1() != null) {
-            Order order = recipientIdToOrder.get(slot.getRecipientId1());
-            reference3.child(order.getFoodId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                    food = snapshot.getValue(Food.class);
-                    food.setQuantity(food.getQuantity() + order.getQuantity());
-                    reference3.child(order.getFoodId()).setValue(food);
-                    reference1.child(slot.getRecipientId1()).child(slotId).removeValue();
-                }
-                @Override
-                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+            for (Order order : recipientIdToOrder.get(slot.getRecipientId1())) {
+                reference3.child(order.getFoodId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        food = snapshot.getValue(Food.class);
+                        food.setQuantity(food.getQuantity() + order.getQuantity());
+                        reference3.child(order.getFoodId()).setValue(food);
+                    }
 
-                }
-            });
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                    }
+                });
+            }
+            reference1.child(slot.getRecipientId1()).child(slotId).removeValue();
         }
         if(slot.getRecipientId2() != null) {
-            Order order = recipientIdToOrder.get(slot.getRecipientId2());
-            reference3.child(order.getFoodId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                    food = snapshot.getValue(Food.class);
-                    food.setQuantity(food.getQuantity() + order.getQuantity());
-                    reference3.child(order.getFoodId()).setValue(food);
-                    reference1.child(slot.getRecipientId2()).child(slotId).removeValue();
-                }
-                @Override
-                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+            for (Order order : recipientIdToOrder.get(slot.getRecipientId2())) {
+                reference3.child(order.getFoodId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        food = snapshot.getValue(Food.class);
+                        food.setQuantity(food.getQuantity() + order.getQuantity());
+                        reference3.child(order.getFoodId()).setValue(food);
+                    }
 
-                }
-            });
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                    }
+                });
+            }
+            reference1.child(slot.getRecipientId2()).child(slotId).removeValue();
         }
         if(slot.getRecipientId3() != null) {
-            Order order = recipientIdToOrder.get(slot.getRecipientId3());
-            reference3.child(order.getFoodId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                    food = snapshot.getValue(Food.class);
-                    food.setQuantity(food.getQuantity() + order.getQuantity());
-                    reference3.child(order.getFoodId()).setValue(food);
-                    reference1.child(slot.getRecipientId3()).child(slotId).removeValue();
-                }
-                @Override
-                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+            for (Order order : recipientIdToOrder.get(slot.getRecipientId3())) {
+                reference3.child(order.getFoodId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        food = snapshot.getValue(Food.class);
+                        food.setQuantity(food.getQuantity() + order.getQuantity());
+                        reference3.child(order.getFoodId()).setValue(food);
+                    }
 
-                }
-            });
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                    }
+                });
+            }
+            reference1.child(slot.getRecipientId3()).child(slotId).removeValue();
         }
 
         Intent intent = new Intent(DonorViewSlot.this, DonorsScheduleActivity.class);

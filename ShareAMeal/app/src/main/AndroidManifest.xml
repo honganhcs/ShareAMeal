@@ -114,13 +114,13 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".BootReceiver">
+        <receiver android:name=".schedulecleanup.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".ReceiverForScheduleCleanUp"
+            android:name=".schedulecleanup.ReceiverForScheduleCleanUp"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.example.shareameal.START_CLEANUP" />

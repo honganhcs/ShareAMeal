@@ -87,8 +87,10 @@ public class RecipientsRecords extends AppCompatActivity implements RVOrdersAdap
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        for (DataSnapshot data : snapshot.getChildren()) {
-                            orders.add(data.getValue(Order.class));
+                        for (DataSnapshot ordersUnderRecipient : snapshot.getChildren()) {
+                            for(DataSnapshot ordersUnderSameSlot : ordersUnderRecipient.getChildren()) {
+                                orders.add(ordersUnderSameSlot.getValue(Order.class));
+                            }
                         }
                         Collections.sort(orders, new Comparator<Order>() {
                             @Override

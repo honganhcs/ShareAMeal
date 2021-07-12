@@ -88,8 +88,12 @@ public class DonorsRecords extends AppCompatActivity implements RVOrdersAdapter.
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        for (DataSnapshot data : snapshot.getChildren()) {
-                            orders.add(data.getValue(Order.class));
+                        for (DataSnapshot ordersUnderDonor : snapshot.getChildren()) {
+                            for(DataSnapshot ordersUnderSameSlot : ordersUnderDonor.getChildren()) {
+                                for(DataSnapshot ordersBySameRecipient : ordersUnderSameSlot.getChildren()) {
+                                    orders.add(ordersBySameRecipient.getValue(Order.class));
+                                }
+                            }
                         }
                         Collections.sort(orders, new Comparator<Order>() {
                             @Override
