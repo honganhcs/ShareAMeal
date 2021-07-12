@@ -39,6 +39,8 @@ public class AdminViewReports extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_view_reports);
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
         getSupportActionBar().setTitle("Reported Donors");
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);

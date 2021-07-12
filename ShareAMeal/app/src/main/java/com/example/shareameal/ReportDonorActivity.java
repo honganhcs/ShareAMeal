@@ -60,6 +60,8 @@ public class ReportDonorActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
         getSupportActionBar().setTitle("Report Donor");
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);

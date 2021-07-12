@@ -44,6 +44,8 @@ public class ReviewReport extends AppCompatActivity {
         slotId = intent.getStringExtra("slotId");
         reportId = intent.getStringExtra("reportId");
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
         getSupportActionBar().setTitle("Review Report");
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);

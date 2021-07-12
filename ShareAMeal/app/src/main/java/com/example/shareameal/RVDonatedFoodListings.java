@@ -49,6 +49,8 @@ public class RVDonatedFoodListings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rvfood_items);
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
         foods = new ArrayList<>();
         recyclerView = findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);

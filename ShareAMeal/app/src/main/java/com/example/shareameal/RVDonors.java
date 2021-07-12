@@ -56,6 +56,8 @@ public class RVDonors extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rvdonors);
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
         getSupportActionBar().setTitle("Food Donors");
 

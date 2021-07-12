@@ -135,7 +135,8 @@ public class RVDonorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (donor.getImageUrl().equals("null")) {
                 vh.image.setImageResource(R.drawable.profile128px);
             } else {
-                Picasso.get().load(donor.getImageUrl()).into(vh.image);
+                Picasso.get().load(donor.getImageUrl()).noFade().resize(96,96)
+                        .centerCrop().into(vh.image);
             }
         }
 

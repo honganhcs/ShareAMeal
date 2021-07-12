@@ -47,6 +47,8 @@ public class ReviewVerification extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
         downloadBtn = findViewById(R.id.downloadBtn);
         verifyBtn = findViewById(R.id.verifyBtn);
         rejectBtn = findViewById(R.id.rejectBtn);

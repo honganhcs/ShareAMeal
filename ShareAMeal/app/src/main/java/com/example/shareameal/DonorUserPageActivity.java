@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,9 +23,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import org.jetbrains.annotations.NotNull;
+
 public class DonorUserPageActivity extends AppCompatActivity {
     private BottomNavigationView bottomNav;
-    private TextView recordsTxt, editProfileTxt, changePasswordTxt, logoutTxt;
+    private TextView recordsTxt, editProfileTxt, changePasswordTxt, logoutTxt, donatedFoodsQtyTxt;
     private TextView userNameTxt;
     private ImageView userProfilePic;
     private int numberOfReports;
@@ -76,6 +80,19 @@ public class DonorUserPageActivity extends AppCompatActivity {
         // Highlighting the right icon in the bottom navigation bar
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setSelectedItemId(R.id.profile);
+
+        // Setting the quantity of donated food items of the donor
+        donatedFoodsQtyTxt = findViewById(R.id.donatedFoodsQtyTxt);
+        FirebaseDatabase.getInstance().getReference("Users").child(userid).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                User currUser = task.getResult().getValue(User.class);
+                int numberOfFoodsDonatedAllTime = currUser.getNumberOfPoints();
+                int numberOfFoodsDonatedThisWeek = currUser.getNumberOfWeeklyPoints();
+                donatedFoodsQtyTxt.setText("All-time: " + String.valueOf(numberOfFoodsDonatedAllTime) + ", This Week: "
+                        + String.valueOf(numberOfFoodsDonatedThisWeek));
+            }
+        });
 
         // Adding reactions to the different settings
         recordsTxt = findViewById(R.id.recordsTxt);
