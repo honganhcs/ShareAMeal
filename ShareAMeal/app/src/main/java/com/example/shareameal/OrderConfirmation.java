@@ -26,6 +26,8 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 public class OrderConfirmation extends AppCompatActivity {
 
     private ImageView foodImage;
@@ -180,17 +182,19 @@ public class OrderConfirmation extends AppCompatActivity {
                 food.setQuantity(food.getQuantity() - orderQuantity);
                 reference1.child(foodId).setValue(food);
 
-                // update slot
-                slot.setNumRecipients(slot.getNumRecipients() + 1);
-                if(slot.getRecipientId1() == null) {
-                    slot.setRecipientId1(recipientId);
-                } else if(slot.getRecipientId2() == null) {
-                    slot.setRecipientId2(recipientId);
-                } else if(slot.getRecipientId3() == null) {
-                    slot.setRecipientId3(recipientId);
+                // update slot only if recipient hasn't already ordered anything from the donor in the same slot.
+                if(!slot.getRecipientId1().equals(recipientId) && !slot.getRecipientId2().equals(recipientId) && !slot.getRecipientId3().equals(recipientId)) {
+                    slot.setNumRecipients(slot.getNumRecipients() + 1);
+                    if(slot.getRecipientId1() == null) {
+                        slot.setRecipientId1(recipientId);
+                    } else if(slot.getRecipientId2() == null) {
+                        slot.setRecipientId2(recipientId);
+                    } else if(slot.getRecipientId3() == null) {
+                        slot.setRecipientId3(recipientId);
+                    }
+                    reference3 = FirebaseDatabase.getInstance().getReference("Slots").child("Pending").child(donorId);
+                    reference3.child(slot.getSlotId()).setValue(slot);
                 }
-                reference3 = FirebaseDatabase.getInstance().getReference("Slots").child("Pending").child(donorId);
-                reference3.child(slot.getSlotId()).setValue(slot);
 
                 // update recipient info
                 recipient.setNumOrdersLeft(numOrdersLeft - 1);
