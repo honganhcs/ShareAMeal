@@ -38,59 +38,60 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
-        }
+        } else {
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String userid = user.getUid();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String userid = user.getUid();
 
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w("fail", "Fetching FCM registration token failed", task.getException());
-                            return;
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Log.w("fail", "Fetching FCM registration token failed", task.getException());
+                                return;
+                            }
+
+                            // Get new FCM registration token
+                            token = task.getResult();
                         }
+                    });
 
-                        // Get new FCM registration token
-                        token = task.getResult();
-                    }
-                });
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+            reference
+                    .child(userid)
+                    .addListenerForSingleValueEvent(
+                            new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    User user = snapshot.getValue(User.class);
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-        reference
-                .child(userid)
-                .addListenerForSingleValueEvent(
-                        new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                User user = snapshot.getValue(User.class);
-
-                                // Redirecting user to the correct interface/home page
-                                if (user == null) {
-                                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    user.setFcmToken(token);
-                                    reference.child(userid).setValue(user);
-                                    if (user.getUserGroup().equals("donor")) {
-                                        Intent intent = new Intent(MainActivity.this, DonorHomepageActivity.class);
+                                    // Redirecting user to the correct interface/home page
+                                    if (user == null) {
+                                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                                         startActivity(intent);
                                         finish();
-                                    } else if (user.getUserGroup().equals("recipient")) {
-                                        Intent intent = new Intent(MainActivity.this, RecipientHomepageActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    } else if (user.getUserGroup().equals("admin")) {
-                                        Intent intent = new Intent(MainActivity.this, AdminHomepageActivity.class);
+                                    } else {
+                                        user.setFcmToken(token);
+                                        reference.child(userid).setValue(user);
+                                        if (user.getUserGroup().equals("donor")) {
+                                            Intent intent = new Intent(MainActivity.this, DonorHomepageActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        } else if (user.getUserGroup().equals("recipient")) {
+                                            Intent intent = new Intent(MainActivity.this, RecipientHomepageActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        } else if (user.getUserGroup().equals("admin")) {
+                                            Intent intent = new Intent(MainActivity.this, AdminHomepageActivity.class);
+                                        }
                                     }
                                 }
-                            }
-                              
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                            }
-                        });
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                }
+                            });
+        }
     }
 }
