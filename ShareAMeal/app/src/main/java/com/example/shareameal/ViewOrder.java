@@ -67,6 +67,8 @@ public class ViewOrder extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         recipientId = user.getUid();
 
+        reference4 = FirebaseDatabase.getInstance().getReference("Slots");
+
         Intent intent = getIntent();
 
         donorId = intent.getStringExtra("donorId");
@@ -183,7 +185,6 @@ public class ViewOrder extends AppCompatActivity {
                     foodIds.add(data.getKey());
                 }
                 if(foodIds.isEmpty()) {
-                    reference4 = FirebaseDatabase.getInstance().getReference("Slots");
                     reference4.child("Pending").child(donorId).addValueEventListener(
                             new ValueEventListener() {
                                 @Override
@@ -253,11 +254,11 @@ public class ViewOrder extends AppCompatActivity {
                                         }
                                     }
                                     slot.setNumRecipients(slot.getNumRecipients() - 1);
-                                    if(slot.getRecipientId1().equals(recipientId)) {
+                                    if(recipientId.equals(slot.getRecipientId1())) {
                                         slot.setRecipientId1(null);
-                                    } else if(slot.getRecipientId2().equals(recipientId)) {
+                                    } else if(recipientId.equals(slot.getRecipientId2())) {
                                         slot.setRecipientId2(null);
-                                    } else if(slot.getRecipientId3().equals(recipientId)) {
+                                    } else if(recipientId.equals(slot.getRecipientId3())) {
                                         slot.setRecipientId3(null);
                                     }
                                     reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
@@ -278,6 +279,11 @@ public class ViewOrder extends AppCompatActivity {
 
         // record order in Completed section of Slots
         reference4.child("Completed").child(donorId).child(slotId).child(recipientId).child(foodId).setValue(order);
+
+        Toast.makeText(ViewOrder.this, "Order has been registered as completed.", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(ViewOrder.this, RecipientViewOrders.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
