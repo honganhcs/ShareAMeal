@@ -103,9 +103,9 @@ public class DonorUserPageActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(
-                                DonorUserPageActivity.this, "Records not implemented yet", Toast.LENGTH_SHORT)
-                                .show();
+                        Intent intent = new Intent(DonorUserPageActivity.this, DonorsRecords.class);
+                        startActivity(intent);
+                        finish();
                     }
                 });
         editProfileTxt.setOnClickListener(
