@@ -281,7 +281,7 @@ public class ViewOrder extends AppCompatActivity {
         reference4.child("Completed").child(donorId).child(slotId).child(recipientId).child(foodId).setValue(order);
 
         Toast.makeText(ViewOrder.this, "Order has been registered as completed.", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(ViewOrder.this, RecipientViewOrders.class);
+        Intent intent = new Intent(ViewOrder.this, RecipientsRecords.class);
         startActivity(intent);
         finish();
     }

@@ -6,13 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,10 +22,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.concurrent.FutureTask;
 
 public class DonorViewSlot extends AppCompatActivity {
 
@@ -110,7 +103,7 @@ public class DonorViewSlot extends AppCompatActivity {
                                                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                                                     for (DataSnapshot data : snapshot.getChildren()) {
                                                         Order order = data.getValue(Order.class);
-                                                        if (recipientIdToOrder.get(recipientId).equals(null)) {
+                                                        if (recipientIdToOrder.get(recipientId) == null) {
                                                             ArrayList<Order> arrayList = new ArrayList<>();
                                                             arrayList.add(order);
                                                             recipientIdToOrder.put(recipientId, arrayList);
@@ -128,7 +121,7 @@ public class DonorViewSlot extends AppCompatActivity {
                                                                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                                                                         for (DataSnapshot data : snapshot.getChildren()) {
                                                                             Order order = data.getValue(Order.class);
-                                                                            if (recipientIdToOrder.get(recipientId).equals(null)) {
+                                                                            if (recipientIdToOrder.get(recipientId) == null) {
                                                                                 ArrayList<Order> arrayList = new ArrayList<>();
                                                                                 arrayList.add(order);
                                                                                 recipientIdToOrder.put(recipientId, arrayList);
@@ -172,7 +165,7 @@ public class DonorViewSlot extends AppCompatActivity {
                                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                                                 for (DataSnapshot data : snapshot.getChildren()) {
                                                     Order order = data.getValue(Order.class);
-                                                    if (recipientIdToOrder.get(recipientId).equals(null)) {
+                                                    if (recipientIdToOrder.get(recipientId) == null) {
                                                         ArrayList<Order> arrayList = new ArrayList<>();
                                                         arrayList.add(order);
                                                         recipientIdToOrder.put(recipientId, arrayList);
@@ -216,7 +209,7 @@ public class DonorViewSlot extends AppCompatActivity {
                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                                 for (DataSnapshot data : snapshot.getChildren()) {
                                     Order order = data.getValue(Order.class);
-                                    if (recipientIdToOrder.get(recipientId).equals(null)) {
+                                    if (recipientIdToOrder.get(recipientId) == null) {
                                         ArrayList<Order> arrayList = new ArrayList<>();
                                         arrayList.add(order);
                                         recipientIdToOrder.put(recipientId, arrayList);
@@ -235,7 +228,7 @@ public class DonorViewSlot extends AppCompatActivity {
                                                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                                                     for (DataSnapshot data : snapshot.getChildren()) {
                                                         Order order = data.getValue(Order.class);
-                                                        if (recipientIdToOrder.get(recipientId).equals(null)) {
+                                                        if (recipientIdToOrder.get(recipientId) == null) {
                                                             ArrayList<Order> arrayList = new ArrayList<>();
                                                             arrayList.add(order);
                                                             recipientIdToOrder.put(recipientId, arrayList);
@@ -280,7 +273,7 @@ public class DonorViewSlot extends AppCompatActivity {
                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                                 for (DataSnapshot data : snapshot.getChildren()) {
                                     Order order = data.getValue(Order.class);
-                                    if (recipientIdToOrder.get(recipientId).equals(null)) {
+                                    if (recipientIdToOrder.get(recipientId) == null) {
                                         ArrayList<Order> arrayList = new ArrayList<>();
                                         arrayList.add(order);
                                         recipientIdToOrder.put(recipientId, arrayList);

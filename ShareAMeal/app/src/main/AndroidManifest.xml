@@ -14,8 +14,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShareAMeal">
-        <activity android:name=".RecipientsRecords"></activity>
-        <activity android:name=".DonorsRecords" />
+        <activity android:name=".RecipientsRecords"
+            android:theme="@style/Theme.MaterialComponents.Light"/>
+        <activity android:name=".DonorsRecords"
+            android:theme="@style/Theme.MaterialComponents.Light"/>
         <activity android:name=".AdminSignUp"></activity>
         <activity
             android:name=".ReviewVerification"
