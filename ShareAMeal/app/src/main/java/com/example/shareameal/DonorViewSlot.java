@@ -110,7 +110,7 @@ public class DonorViewSlot extends AppCompatActivity {
                                                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                                                     for (DataSnapshot data : snapshot.getChildren()) {
                                                         Order order = data.getValue(Order.class);
-                                                        if (recipientIdToOrder.get(recipientId).equals(null)) {
+                                                        if (recipientIdToOrder.get(recipientId) == null) {
                                                             ArrayList<Order> arrayList = new ArrayList<>();
                                                             arrayList.add(order);
                                                             recipientIdToOrder.put(recipientId, arrayList);
@@ -128,7 +128,7 @@ public class DonorViewSlot extends AppCompatActivity {
                                                                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                                                                         for (DataSnapshot data : snapshot.getChildren()) {
                                                                             Order order = data.getValue(Order.class);
-                                                                            if (recipientIdToOrder.get(recipientId).equals(null)) {
+                                                                            if (recipientIdToOrder.get(recipientId) == null) {
                                                                                 ArrayList<Order> arrayList = new ArrayList<>();
                                                                                 arrayList.add(order);
                                                                                 recipientIdToOrder.put(recipientId, arrayList);
@@ -172,7 +172,7 @@ public class DonorViewSlot extends AppCompatActivity {
                                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                                                 for (DataSnapshot data : snapshot.getChildren()) {
                                                     Order order = data.getValue(Order.class);
-                                                    if (recipientIdToOrder.get(recipientId).equals(null)) {
+                                                    if (recipientIdToOrder.get(recipientId) == null) {
                                                         ArrayList<Order> arrayList = new ArrayList<>();
                                                         arrayList.add(order);
                                                         recipientIdToOrder.put(recipientId, arrayList);
@@ -216,7 +216,7 @@ public class DonorViewSlot extends AppCompatActivity {
                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                                 for (DataSnapshot data : snapshot.getChildren()) {
                                     Order order = data.getValue(Order.class);
-                                    if (recipientIdToOrder.get(recipientId).equals(null)) {
+                                    if (recipientIdToOrder.get(recipientId) == null) {
                                         ArrayList<Order> arrayList = new ArrayList<>();
                                         arrayList.add(order);
                                         recipientIdToOrder.put(recipientId, arrayList);
@@ -235,7 +235,7 @@ public class DonorViewSlot extends AppCompatActivity {
                                                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                                                     for (DataSnapshot data : snapshot.getChildren()) {
                                                         Order order = data.getValue(Order.class);
-                                                        if (recipientIdToOrder.get(recipientId).equals(null)) {
+                                                        if (recipientIdToOrder.get(recipientId) == null) {
                                                             ArrayList<Order> arrayList = new ArrayList<>();
                                                             arrayList.add(order);
                                                             recipientIdToOrder.put(recipientId, arrayList);
@@ -280,7 +280,7 @@ public class DonorViewSlot extends AppCompatActivity {
                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                                 for (DataSnapshot data : snapshot.getChildren()) {
                                     Order order = data.getValue(Order.class);
-                                    if (recipientIdToOrder.get(recipientId).equals(null)) {
+                                    if (recipientIdToOrder.get(recipientId) == null) {
                                         ArrayList<Order> arrayList = new ArrayList<>();
                                         arrayList.add(order);
                                         recipientIdToOrder.put(recipientId, arrayList);
