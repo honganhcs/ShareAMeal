@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".DonorHomepageActivity">
 
     <ScrollView
@@ -18,6 +19,33 @@
             android:layout_height="wrap_content">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/donorBlockedMsg"
+                android:layout_width="370dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button2"
+                android:alpha="0.9"
+                android:layout_marginTop="40dp"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:text="Due to a number of verified reports made against you, your account will be suspended until further notice. You are now currently unable to access the food donation system."
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
                 android:layout_width="370dp"
                 android:layout_height="160dp"
@@ -25,7 +53,7 @@
                 android:background="@drawable/homepagefloat"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/donorBlockedMsg">
 
                 <ImageView
                     android:id="@+id/userNameIcon"
@@ -124,6 +152,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
             <TextView
+                android:id="@+id/refreshTimestampTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Refreshed At: "
+                android:textColor="#C45508"
+                android:textSize="15sp"
+                android:inputType="textMultiLine"
+                app:layout_constraintStart_toStartOf="@+id/leaderboardTxt"
+                app:layout_constraintTop_toBottomOf="@+id/leaderboardTxt" />
+
+            <TextView
                 android:id="@+id/leaderboardOneTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -133,7 +172,18 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="25dp"
                 app:layout_constraintStart_toStartOf="@+id/leaderboardTxt"
-                app:layout_constraintTop_toBottomOf="@+id/leaderboardTxt" />
+                app:layout_constraintTop_toBottomOf="@+id/refreshTimestampTxt" />
+
+            <TextView
+                android:id="@+id/weeklyStatusTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="#C45508"
+                android:textSize="15sp"
+                android:inputType="textMultiLine"
+                app:layout_constraintStart_toStartOf="@+id/leaderboardOneTxt"
+                app:layout_constraintTop_toBottomOf="@+id/leaderboardOneTxt" />
 
             <ImageView
                 android:id="@+id/leaderboardOneFirstPlaceIcon"
@@ -153,8 +203,9 @@
                 android:layout_marginLeft="10dp"
                 android:text="1. Placeholder1"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toEndOf="@+id/leaderboardOneFirstPlaceIcon"
-                app:layout_constraintTop_toBottomOf="@+id/leaderboardOneTxt" />
+                app:layout_constraintTop_toBottomOf="@+id/weeklyStatusTxt" />
 
             <TextView
                 android:id="@+id/leaderboardOneFirstQtyTxt"
@@ -162,6 +213,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardOneFirstTxt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -182,6 +234,7 @@
                 android:layout_height="wrap_content"
                 android:text="2. Placeholder2"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginLeft="10dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardOneSecondPlaceIcon"
                 app:layout_constraintStart_toEndOf="@+id/leaderboardOneSecondPlaceIcon"
@@ -193,6 +246,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardOneSecondTxt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -214,6 +268,7 @@
                 android:layout_marginLeft="10dp"
                 android:text="3. Placeholder3"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardOneThirdPlaceIcon"
                 app:layout_constraintStart_toEndOf="@+id/leaderboardOneThirdPlaceIcon"
                 app:layout_constraintTop_toTopOf="@+id/leaderboardOneThirdPlaceIcon" />
@@ -224,6 +279,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardOneThirdTxt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -235,6 +291,7 @@
                 android:layout_height="wrap_content"
                 android:text="4. Placeholder4"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginTop="15dp"
                 app:layout_constraintStart_toStartOf="@+id/leaderboardOneThirdTxt"
                 app:layout_constraintTop_toBottomOf="@+id/leaderboardOneThirdTxt" />
@@ -245,6 +302,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardOneFourthTxt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -256,6 +314,7 @@
                 android:layout_height="wrap_content"
                 android:text="5. Placeholder5"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginTop="15dp"
                 app:layout_constraintStart_toStartOf="@+id/leaderboardOneFourthTxt"
                 app:layout_constraintTop_toBottomOf="@+id/leaderboardOneFourthTxt" />
@@ -266,6 +325,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardOneFifthTxt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -301,6 +361,7 @@
                 android:layout_marginLeft="10dp"
                 android:text="1. Placeholder1"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toEndOf="@+id/leaderboardTwoFirstPlaceIcon"
                 app:layout_constraintTop_toBottomOf="@+id/leaderboardTwoTxt" />
 
@@ -310,6 +371,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardTwoFirstTxt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -330,6 +392,7 @@
                 android:layout_height="wrap_content"
                 android:text="2. Placeholder2"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginLeft="10dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardTwoSecondPlaceIcon"
                 app:layout_constraintStart_toEndOf="@+id/leaderboardTwoSecondPlaceIcon"
@@ -341,6 +404,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardTwoSecondTxt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -362,6 +426,7 @@
                 android:layout_marginLeft="10dp"
                 android:text="3. Placeholder3"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardTwoThirdPlaceIcon"
                 app:layout_constraintStart_toEndOf="@+id/leaderboardTwoThirdPlaceIcon"
                 app:layout_constraintTop_toTopOf="@+id/leaderboardTwoThirdPlaceIcon" />
@@ -372,6 +437,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardTwoThirdTxt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -383,6 +449,7 @@
                 android:layout_height="wrap_content"
                 android:text="4. Placeholder4"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginTop="15dp"
                 app:layout_constraintStart_toStartOf="@+id/leaderboardTwoThirdTxt"
                 app:layout_constraintTop_toBottomOf="@+id/leaderboardTwoThirdTxt" />
@@ -393,6 +460,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardTwoFourthTxt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -404,6 +472,7 @@
                 android:layout_height="wrap_content"
                 android:text="5. Placeholder5"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -416,6 +485,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardTwoFifthTxt"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -2,19 +2,25 @@ package com.example.shareameal;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.shareameal.notifications.NotificationsSender;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,28 +32,33 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Calendar;
+import java.util.ArrayList;
 
 public class OrderConfirmation extends AppCompatActivity {
 
     private ImageView foodImage;
     private TextView foodNameTxt, foodDescriptionTxt, txtCurrentQuantity, txtSchedule, txtAddress;
     private EditText foodQuantityEdt;
+    private ConstraintLayout bufferLayout;
+    private AppCompatButton decrementBtn, incrementBtn;
 
     // data
     private DatabaseReference reference1, reference2, reference3, reference4;
     private Bundle bundle;
     private Slot slot;
-    private String donorId, foodId, donorName, recipientId;
+    private String donorId, foodId, donorName, recipientId, prevScreen;
     private Food food;
     private User donor, recipient;
     private int orderQuantity;
     private int numOrdersLeft;
+    private int existingQty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_confirmation);
+
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
         getSupportActionBar().setTitle("Confirm Order");
@@ -61,6 +72,9 @@ public class OrderConfirmation extends AppCompatActivity {
         txtSchedule = findViewById(R.id.txtSchedule);
         txtAddress = findViewById(R.id.txtAddress);
         foodQuantityEdt = findViewById(R.id.foodQuantityEdt);
+        bufferLayout = findViewById(R.id.layout1);
+        decrementBtn = findViewById(R.id.decrementBtn);
+        incrementBtn = findViewById(R.id.incrementBtn);
 
         Intent intent = getIntent();
         bundle = intent.getExtras();
@@ -68,6 +82,7 @@ public class OrderConfirmation extends AppCompatActivity {
         donorId = bundle.getString("donorId");
         foodId = bundle.getString("foodId");
         donorName = bundle.getString("donorName");
+        prevScreen = bundle.getString("prevScreen");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         recipientId = user.getUid();
@@ -84,13 +99,27 @@ public class OrderConfirmation extends AppCompatActivity {
                             }
                         }
 
+                        DisplayMetrics displayMetrics = new DisplayMetrics();
+                        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
                         if (food.getImageUrl() == null) {
                             foodImage.setImageResource(R.drawable.dish);
+                            ViewGroup.LayoutParams layoutParams = foodImage.getLayoutParams();
+                            layoutParams.width = displayMetrics.widthPixels;
+                            final float density = getApplicationContext().getResources().getDisplayMetrics().density;
+                            layoutParams.height = (int) (230 * density);
+                            foodImage.setLayoutParams(layoutParams);
                         } else {
                             if (food.getImageUrl().equals("null")) {
                                 foodImage.setImageResource(R.drawable.dish);
+                                ViewGroup.LayoutParams layoutParams = foodImage.getLayoutParams();
+                                layoutParams.width = displayMetrics.widthPixels;
+                                final float density = getApplicationContext().getResources().getDisplayMetrics().density;
+                                layoutParams.height = (int) (230 * density);
+                                foodImage.setLayoutParams(layoutParams);
                             } else {
-                                Picasso.get().load(food.getImageUrl()).into(foodImage);
+                                bufferLayout.setVisibility(View.GONE);
+                                Picasso.get().load(food.getImageUrl()).fit().into(foodImage);
                             }
                         }
 
@@ -112,15 +141,14 @@ public class OrderConfirmation extends AppCompatActivity {
 
                                         foodNameTxt.setText(food.getName());
                                         foodDescriptionTxt.setText(food.getDescription());
-                                        txtCurrentQuantity.setText("Current quantity: " + food.getQuantity());
-                                        txtSchedule.setText(
-                                                "Scheduled for collection at:\n"
-                                                        + slot.getStartTime()
+                                        txtCurrentQuantity.setText("Current Quantity: " + food.getQuantity());
+                                        existingQty = food.getQuantity();
+                                        txtSchedule.setText(slot.getStartTime()
                                                         + " - "
                                                         + slot.getEndTime()
                                                         + ", "
                                                         + slot.getDate());
-                                        txtAddress.setText("Address: " + donor.getAddress());
+                                        txtAddress.setText(donor.getAddress());
                                     }
 
                                     @Override
@@ -133,6 +161,28 @@ public class OrderConfirmation extends AppCompatActivity {
                     public void onCancelled(@NonNull @NotNull DatabaseError error) {
                     }
                 });
+
+        decrementBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currQty = Integer.valueOf(foodQuantityEdt.getText().toString());
+                if (currQty > 0) {
+                    currQty -= 1;
+                }
+                foodQuantityEdt.setText(String.valueOf(currQty));
+            }
+        });
+
+        incrementBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currQty = Integer.valueOf(foodQuantityEdt.getText().toString());
+                if (currQty < existingQty) {
+                    foodQuantityEdt.setText(String.valueOf(currQty + 1));
+                }
+            }
+        });
+
     }
 
     public void onConfirmOrder(View view) {
@@ -172,24 +222,26 @@ public class OrderConfirmation extends AppCompatActivity {
 
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 String userId = user.getUid();
-                reference4 = FirebaseDatabase.getInstance().getReference("Orders").child(userId);
-                reference4.child(slot.getSlotId()).setValue(order);
+                reference4 = FirebaseDatabase.getInstance().getReference("Orders").child("Pending").child(userId);
+                reference4.child(slot.getSlotId()).child(foodId).setValue(order);
 
                 // update food item
                 food.setQuantity(food.getQuantity() - orderQuantity);
                 reference1.child(foodId).setValue(food);
 
-                // update slot
-                slot.setNumRecipients(slot.getNumRecipients() + 1);
-                if(slot.getRecipientId1() == null) {
-                    slot.setRecipientId1(recipientId);
-                } else if(slot.getRecipientId2() == null) {
-                    slot.setRecipientId2(recipientId);
-                } else if(slot.getRecipientId3() == null) {
-                    slot.setRecipientId3(recipientId);
+                // update slot only if recipient hasn't already ordered anything from the donor in the same slot.
+                if(!recipientId.equals(slot.getRecipientId1()) && !recipientId.equals(slot.getRecipientId2()) && !recipientId.equals(slot.getRecipientId3())) {
+                    slot.setNumRecipients(slot.getNumRecipients() + 1);
+                    if(slot.getRecipientId1() == null) {
+                        slot.setRecipientId1(recipientId);
+                    } else if(slot.getRecipientId2() == null) {
+                        slot.setRecipientId2(recipientId);
+                    } else if(slot.getRecipientId3() == null) {
+                        slot.setRecipientId3(recipientId);
+                    }
+                    reference3 = FirebaseDatabase.getInstance().getReference("Slots").child("Pending").child(donorId);
+                    reference3.child(slot.getSlotId()).setValue(slot);
                 }
-                reference3 = FirebaseDatabase.getInstance().getReference("Slots").child(donorId);
-                reference3.child(slot.getSlotId()).setValue(slot);
 
                 // update recipient info
                 recipient.setNumOrdersLeft(numOrdersLeft - 1);
@@ -200,6 +252,13 @@ public class OrderConfirmation extends AppCompatActivity {
                         "Your order has been successfully created.",
                         Toast.LENGTH_SHORT)
                         .show();
+
+                // send notification to donor
+                String token = donor.getFcmToken();
+                String body = "A recipient has booked the time slot at " + slot.getStartTime() + " on " + slot.getDate();
+                NotificationsSender notificationsSender = new NotificationsSender(token, getString(R.string.slot_booked), body, getApplicationContext(), OrderConfirmation.this);
+                notificationsSender.sendNotification();
+
                 Intent intent = new Intent(OrderConfirmation.this, RecipientViewOrders.class);
                 startActivity(intent);
                 finish();
@@ -213,6 +272,7 @@ public class OrderConfirmation extends AppCompatActivity {
         intent.putExtra("donorId", donorId);
         intent.putExtra("foodId", foodId);
         intent.putExtra("donorName", donorName);
+        intent.putExtra("prevScreen", prevScreen);
         startActivity(intent);
         finish();
         return true;
@@ -225,6 +285,7 @@ public class OrderConfirmation extends AppCompatActivity {
         intent.putExtra("donorId", donorId);
         intent.putExtra("foodId", foodId);
         intent.putExtra("donorName", donorName);
+        intent.putExtra("prevScreen", prevScreen);
         startActivity(intent);
         finish();
     }

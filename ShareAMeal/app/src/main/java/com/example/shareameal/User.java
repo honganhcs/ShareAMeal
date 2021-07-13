@@ -6,15 +6,22 @@ public class User {
     private String address;
     private String userId;
     private String imageUrl;
+    private String fcmToken;
     private double addressLatitude;
     private double addressLongitude;
+    private int numberOfReports;
 
     //for donors only
     private String restaurant;
+    private int numberOfPoints;
+    private int numberOfWeeklyPoints;
 
     //for recipients only
     private int year, month, dayOfMonth;
     private int numOrdersLeft;
+
+    // 0 - has not verified yet, 1 - in process of checking verification, 2 - verified, 3 - rejected, 4 - unclear document(s)
+    private int verificationState;
 
     public User() {
     }
@@ -37,6 +44,38 @@ public class User {
 
     public int getDayOfMonth() {
         return dayOfMonth;
+    }
+
+    public void setNumberOfReports(int numberOfReports) {
+        this.numberOfReports = numberOfReports;
+    }
+
+    public int getNumberOfReports() {
+        return numberOfReports;
+    }
+
+    public void setVerificationState(int verificationState) {
+        this.verificationState = verificationState;
+    }
+
+    public int getVerificationState() {
+        return verificationState;
+    }
+
+    public void setNumberOfPoints(int numberOfPoints) {
+        this.numberOfPoints = numberOfPoints;
+    }
+
+    public int getNumberOfPoints() {
+        return numberOfPoints;
+    }
+
+    public void setNumberOfWeeklyPoints(int numberOfWeeklyPoints) {
+        this.numberOfWeeklyPoints = numberOfWeeklyPoints;
+    }
+
+    public int getNumberOfWeeklyPoints() {
+        return numberOfWeeklyPoints;
     }
 
     public void setDayOfMonth(int dayOfMonth) {
@@ -113,5 +152,13 @@ public class User {
 
     public double getAddressLongitude() {
         return addressLongitude;
+    }
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 }

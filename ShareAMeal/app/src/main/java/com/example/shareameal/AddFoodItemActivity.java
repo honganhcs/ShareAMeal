@@ -59,11 +59,12 @@ public class AddFoodItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_food_item);
 
-        // If user is not logged in, direct user to login page. Else, direct to donor homepage.
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             Intent intent = new Intent(AddFoodItemActivity.this, LoginActivity.class);
             startActivity(intent);
         }
+
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
 
         chooseImageBtn = findViewById(R.id.chooseImageBtn);
         uploadImageBtn = findViewById(R.id.uploadImageBtn);

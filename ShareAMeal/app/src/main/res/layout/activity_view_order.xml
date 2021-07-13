@@ -9,28 +9,37 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
+        android:paddingBottom="40dp"
         >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout1"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
             android:id="@+id/foodImage"
-            android:layout_width="170dp"
-            android:layout_height="170dp"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
             android:src="@drawable/dish"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/layout1" />
 
         <TextView
             android:id="@+id/foodNameTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Food Name"
-            android:layout_marginTop="20dp"
-            android:textSize="25sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:textSize="32sp"
             android:textStyle="bold"
             android:textColor="@color/maroon"
-            app:layout_constraintEnd_toEndOf="@+id/foodImage"
+            android:inputType="textMultiLine"
             app:layout_constraintStart_toStartOf="@+id/foodImage"
             app:layout_constraintTop_toBottomOf="@+id/foodImage" />
 
@@ -38,44 +47,83 @@
             android:id="@+id/foodDescriptionTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:paddingLeft="30dp"
+            android:textColor="@color/maroon"
             android:paddingRight="30dp"
             android:textSize="17sp"
             android:text="Description: This is a basic description about the food item. Optional description and is inputted by the donor if necessary."
             android:inputType="textMultiLine"
-            app:layout_constraintEnd_toEndOf="@+id/foodNameTxt"
             app:layout_constraintStart_toStartOf="@+id/foodNameTxt"
             app:layout_constraintTop_toBottomOf="@+id/foodNameTxt" />
 
         <TextView
-            android:id="@+id/txtOrderQuantity"
-            android:layout_width="match_parent"
+            android:id="@+id/txtOrderQuantityHeader"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/foodDescriptionTxt"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="30dp"
             android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:text="Order quantity:"
-            android:textSize="17sp"/>
+            android:text="Order quantity: "
+            android:textColor="#C45508"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/foodDescriptionTxt" />
 
+        <TextView
+            android:id="@+id/txtOrderQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="2"
+            android:textSize="17sp"
+            android:textColor="#C45508"
+            app:layout_constraintStart_toEndOf="@+id/txtOrderQuantityHeader"
+            app:layout_constraintTop_toBottomOf="@id/foodDescriptionTxt" />
+
+        <TextView
+            android:id="@+id/txtScheduleHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/txtOrderQuantityHeader"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:textColor="#C45508"
+            android:textStyle="bold"
+            android:text="Scheduled for collection at: "
+            android:inputType="textMultiLine"
+            android:textSize="17sp" />
 
         <TextView
             android:id="@+id/txtSchedule"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/txtOrderQuantity"
+            app:layout_constraintTop_toBottomOf="@id/txtScheduleHeader"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
-            android:text="Scheduled for collection at: \nDate and Time"
+            android:textColor="#C45508"
+            android:text="Date and Time"
             android:inputType="textMultiLine"
             android:textSize="17sp" />
 
-
+        <TextView
+            android:id="@+id/txtAddressHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:textSize="17sp"
+            android:textColor="#C45508"
+            android:textStyle="bold"
+            android:text="Address: "
+            android:inputType="textMultiLine"
+            app:layout_constraintTop_toBottomOf="@id/txtSchedule"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
 
         <TextView
             android:id="@+id/txtAddress"
@@ -84,28 +132,54 @@
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
             android:textSize="17sp"
-            android:text="Address: This is the address of the donor where the recipient will collect the food item."
+            android:textColor="#C45508"
+            android:text="This is the address of the donor where the recipient will collect the food item."
             android:inputType="textMultiLine"
-            app:layout_constraintTop_toBottomOf="@id/txtSchedule"
+            app:layout_constraintTop_toBottomOf="@id/txtAddressHeader"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnOrderCompleted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/button"
+            android:ems="10"
+            android:onClick="onOrderCompleted"
+            android:text="Order Completed"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtAddress" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnCancelOrder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/button2"
+            android:ems="9"
+            android:onClick="onCancelOrder"
             android:text="CANCEL ORDER"
             android:textColor="@color/white"
-            android:background="@drawable/button2"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:ems="9"
-            android:layout_marginTop="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtAddress"
-            android:onClick="onCancelOrder"/>
+            app:layout_constraintTop_toBottomOf="@+id/btnOrderCompleted" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnReport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Report"
+            android:layout_marginTop="30dp"
+            app:layout_constraintEnd_toEndOf="@+id/btnCancelOrder"
+            app:layout_constraintStart_toStartOf="@+id/btnCancelOrder"
+            app:layout_constraintTop_toBottomOf="@+id/btnCancelOrder" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

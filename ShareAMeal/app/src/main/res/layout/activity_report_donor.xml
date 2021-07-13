@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ReportDonorActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="70dp"
+            android:src="@drawable/exclamationmark"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:ems="17"
+            android:inputType="textMultiLine"
+            android:text="Please note that misuse/abuse of the reporting system will lead to your account being blocked/terminated"
+            android:textColor="#AF1B1B"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send Report"
+            android:textColor="#AF1B1B"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <ImageView
+            android:id="@+id/reportImage"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_marginTop="60dp"
+            android:src="@drawable/ic_baseline_insert_photo_128"
+            app:layout_constraintEnd_toEndOf="@+id/header"
+            app:layout_constraintStart_toStartOf="@+id/header"
+            app:layout_constraintTop_toBottomOf="@+id/header" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/chooseImageBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="choose image"
+            android:textColor="@color/white"
+            android:background="@drawable/button"
+            android:ems="8"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="50dp"
+            app:layout_constraintBottom_toBottomOf="@+id/reportImage"
+            app:layout_constraintStart_toEndOf="@+id/reportImage"
+            app:layout_constraintTop_toTopOf="@+id/reportImage" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/uploadImageBtn"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="confirm image choice"
+            android:textColor="@color/white"
+            android:background="@drawable/button"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/chooseImageBtn"
+            app:layout_constraintStart_toStartOf="@+id/chooseImageBtn"
+            app:layout_constraintTop_toBottomOf="@+id/chooseImageBtn" />
+
+        <EditText
+            android:id="@+id/reportEdt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="16"
+            android:hint="Report Description"
+            android:inputType="textMultiLine"
+            android:layout_marginTop="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/reportImage" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/reportUserBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/button2"
+            android:ems="10"
+            android:text="Report User"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/reportEdt"
+            app:layout_constraintStart_toStartOf="@+id/reportEdt"
+            app:layout_constraintTop_toBottomOf="@+id/reportEdt" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

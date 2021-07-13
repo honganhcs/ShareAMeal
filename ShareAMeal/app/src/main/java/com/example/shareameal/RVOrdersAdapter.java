@@ -72,16 +72,8 @@ public class RVOrdersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         OrderVH vh = (OrderVH) holder;
 
         Order order = list.get(position);
-
         vh.txt_food.setText(order.getFoodName());
         vh.txt_food_quantity.setText("Order quantity: " + order.getQuantity());
-        vh.txt_date_time.setText(
-                "Order scheduled at "
-                        + order.getStartTime()
-                        + " - "
-                        + order.getEndTime()
-                        + " on "
-                        + order.getDate());
 
         if (order.getFoodImageURL() == null) {
             vh.img_food.setImageResource(R.drawable.dish);
@@ -91,6 +83,24 @@ public class RVOrdersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             } else {
                 Picasso.get().load(order.getFoodImageURL()).into(vh.img_food);
             }
+        }
+
+        if(this.context instanceof RecipientViewOrders) {
+            vh.txt_date_time.setText(
+                    "Order scheduled at "
+                            + order.getStartTime()
+                            + " - "
+                            + order.getEndTime()
+                            + " on "
+                            + order.getDate());
+        } else {
+            vh.txt_date_time.setText(
+                    "Order completed at "
+                            + order.getStartTime()
+                            + " - "
+                            + order.getEndTime()
+                            + " on "
+                            + order.getDate());
         }
     }
 

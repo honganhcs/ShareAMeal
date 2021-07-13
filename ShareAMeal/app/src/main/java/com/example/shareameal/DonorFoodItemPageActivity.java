@@ -3,14 +3,18 @@ package com.example.shareameal;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,13 +31,15 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 public class DonorFoodItemPageActivity extends AppCompatActivity {
-    private AppCompatButton updateFoodQuantityBtn, editFoodListingBtn, deleteFoodListingBtn;
+    private AppCompatButton updateFoodQuantityBtn, editFoodListingBtn, deleteFoodListingBtn, decrementBtn, incrementBtn;
     private ImageView foodImage;
     private TextView foodNameTxt, foodDescriptionTxt;
     private EditText foodQuantityEdt;
     private String foodId;
     private Food food;
     private Bundle bundle;
+    private ConstraintLayout bufferLayout;
+    private int prevFoodQty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +54,9 @@ public class DonorFoodItemPageActivity extends AppCompatActivity {
         foodNameTxt = findViewById(R.id.foodNameTxt);
         foodDescriptionTxt = findViewById(R.id.foodDescriptionTxt);
         foodQuantityEdt = findViewById(R.id.foodQuantityEdt);
+        bufferLayout = findViewById(R.id.layout1);
+        decrementBtn = findViewById(R.id.decrementBtn);
+        incrementBtn = findViewById(R.id.incrementBtn);
 
         updateFoodQuantityBtn.setClickable(false);
         updateFoodQuantityBtn.setEnabled(false);
@@ -59,15 +68,30 @@ public class DonorFoodItemPageActivity extends AppCompatActivity {
             foodNameTxt.setText(food.getName());
             foodDescriptionTxt.setText(food.getDescription());
             foodQuantityEdt.setText(String.valueOf(food.getQuantity()));
+            prevFoodQty = food.getQuantity();
             foodId = food.getFoodId();
 
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
             if (food.getImageUrl() == null) {
-                foodImage.setImageResource(R.drawable.dish128);
+                foodImage.setImageResource(R.drawable.dish);
+                ViewGroup.LayoutParams layoutParams = foodImage.getLayoutParams();
+                layoutParams.width = displayMetrics.widthPixels;
+                final float density = getApplicationContext().getResources().getDisplayMetrics().density;
+                layoutParams.height = (int) (230 * density);
+                foodImage.setLayoutParams(layoutParams);
             } else {
                 if (food.getImageUrl().equals("null")) {
-                    foodImage.setImageResource(R.drawable.dish128);
+                    foodImage.setImageResource(R.drawable.dish);
+                    ViewGroup.LayoutParams layoutParams = foodImage.getLayoutParams();
+                    layoutParams.width = displayMetrics.widthPixels;
+                    final float density = getApplicationContext().getResources().getDisplayMetrics().density;
+                    layoutParams.height = (int) (230 * density);
+                    foodImage.setLayoutParams(layoutParams);
                 } else {
-                    Picasso.get().load(food.getImageUrl()).into(foodImage);
+                    bufferLayout.setVisibility(View.GONE);
+                    Picasso.get().load(food.getImageUrl()).fit().into(foodImage);
                 }
             }
         } else {
@@ -87,9 +111,15 @@ public class DonorFoodItemPageActivity extends AppCompatActivity {
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        updateFoodQuantityBtn.setClickable(true);
-                        updateFoodQuantityBtn.setEnabled(true);
-                        updateFoodQuantityBtn.setBackground(getDrawable(R.drawable.button));
+                        if (TextUtils.isEmpty(s) || Integer.valueOf(s.toString()) != prevFoodQty) {
+                            updateFoodQuantityBtn.setClickable(true);
+                            updateFoodQuantityBtn.setEnabled(true);
+                            updateFoodQuantityBtn.setBackground(getDrawable(R.drawable.button));
+                        } else {
+                            updateFoodQuantityBtn.setClickable(false);
+                            updateFoodQuantityBtn.setEnabled(false);
+                            updateFoodQuantityBtn.setBackground(getDrawable(R.drawable.disabledbutton));
+                        }
                     }
 
                     @Override
@@ -171,6 +201,25 @@ public class DonorFoodItemPageActivity extends AppCompatActivity {
                         finish();
                     }
                 });
+
+        decrementBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currQty = Integer.valueOf(foodQuantityEdt.getText().toString());
+                if (currQty > 0) {
+                    currQty -= 1;
+                }
+                foodQuantityEdt.setText(String.valueOf(currQty));
+            }
+        });
+
+        incrementBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currQty = Integer.valueOf(foodQuantityEdt.getText().toString());
+                foodQuantityEdt.setText(String.valueOf(currQty + 1));
+            }
+        });
     }
 
     @Override

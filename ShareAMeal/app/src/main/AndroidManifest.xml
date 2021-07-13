@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.shareameal">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +14,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShareAMeal">
-        <activity android:name=".SignUp_getUserNameRecipients"></activity>
+        <activity android:name=".RecipientsRecords"></activity>
+        <activity android:name=".DonorsRecords" />
+        <activity android:name=".AdminSignUp"></activity>
+        <activity
+            android:name=".ReviewVerification"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity
+            android:name=".AdminViewVerifications"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity
+            android:name=".RecipientSendVerification"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity
+            android:name=".ReviewReport"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity
+            android:name=".AdminViewReports"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity
+            android:name=".AdminViewReportedDonors"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity android:name=".AdminUserPageActivity" />
+        <activity
+            android:name=".ReportDonorActivity"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity android:name=".AdminHomepageActivity" />
+        <activity android:name=".SignUp_getUserNameRecipients" />
         <activity
             android:name=".RVDonatedFoodListings"
             android:theme="@style/Theme.MaterialComponents.Light" />
@@ -54,7 +83,7 @@
             android:theme="@style/Theme.MaterialComponents.Light" />
         <activity
             android:name=".DonorFoodItemPageActivity"
-            android:theme="@style/Theme.MaterialComponents.Light"></activity>
+            android:theme="@style/Theme.MaterialComponents.Light" />
         <activity
             android:name=".AddFoodItemActivity"
             android:theme="@style/Theme.MaterialComponents.Light" />
@@ -76,6 +105,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".notifications.MyFirebaseMessagingService"
+            android:permission="TODO"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name=".schedulecleanup.BootReceiver"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".schedulecleanup.CleanUpService"
+            android:enabled="true"
+            android:exported="true"
+            tools:ignore="Instantiatable">
+        </service>
+
     </application>
 
 </manifest>

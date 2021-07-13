@@ -26,6 +26,7 @@ public class RecipientUserPageActivity extends AppCompatActivity {
     private TextView recordsTxt, editProfileTxt, logoutTxt, changePasswordTxt;
     private TextView userNameTxt;
     private ImageView userProfilePic;
+    private int verificationState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,8 @@ public class RecipientUserPageActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 User user = snapshot.getValue(User.class);
                                 userNameTxt.setText(user.getName());
+
+                                verificationState = user.getVerificationState();
 
                                 String imageUrl = user.getImageUrl();
                                 if (imageUrl == null) {
@@ -127,13 +130,23 @@ public class RecipientUserPageActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         int curr = item.getItemId();
                         if (curr == R.id.claimFood) {
-                            Intent intent = new Intent(RecipientUserPageActivity.this, RVDonors.class);
-                            startActivity(intent);
-                            finish();
+                            if (verificationState == 2) {
+                                Intent intent = new Intent(RecipientUserPageActivity.this, RVDonors.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(RecipientUserPageActivity.this, "Not allowed access to this page", Toast.LENGTH_SHORT).show();
+                                bottomNav.setSelectedItemId(R.id.profile);
+                            }
                         } else if (curr == R.id.schedule) {
-                            Intent intent = new Intent(RecipientUserPageActivity.this, RecipientViewOrders.class);
-                            startActivity(intent);
-                            finish();
+                            if (verificationState == 2) {
+                                Intent intent = new Intent(RecipientUserPageActivity.this, RecipientViewOrders.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(RecipientUserPageActivity.this, "Not allowed access to this page", Toast.LENGTH_SHORT).show();
+                                bottomNav.setSelectedItemId(R.id.profile);
+                            }
                         } else if (curr == R.id.home) {
                             Intent intent =
                                     new Intent(RecipientUserPageActivity.this, RecipientHomepageActivity.class);

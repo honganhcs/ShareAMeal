@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".RecipientHomepageActivity">
 
     <ScrollView
@@ -18,6 +19,138 @@
             android:layout_height="wrap_content">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/verifyMsg"
+                android:layout_width="370dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button2"
+                android:alpha="0.9"
+                android:layout_marginTop="50dp"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:text="Please verify your income level by clicking the button below to be able to access the 'Claim Food' and 'Schedule' pages."
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/verifyBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext1"
+                    android:text="Verify"
+                    android:textColor="#AF1B1B"
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintEnd_toEndOf="@+id/textView6"
+                    app:layout_constraintStart_toStartOf="@+id/textView6"
+                    app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/verifyInProcessMsg"
+                android:layout_width="370dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button2"
+                android:alpha="0.9"
+                android:layout_marginTop="50dp"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/verifyMsg">
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:text="Our admins are currently verifying your verification document, and checking if your income level meets the requirements."
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/rejectMsg"
+                android:layout_width="370dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button2"
+                android:alpha="0.9"
+                android:layout_marginTop="50dp"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/verifyInProcessMsg">
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:text="We are sorry to inform you that your income level is higher than the maximum allowed income level of a recipient. Hence, you are unable to access the food claiming system."
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/unclearDocMsg"
+                android:layout_width="370dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button2"
+                android:alpha="0.9"
+                android:layout_marginTop="50dp"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rejectMsg">
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:text="The previous verification documents you sent were unclear. Please verify your income level again by clicking the button below to be able to access the 'Claim Food' and 'Schedule' pages."
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/verifyAgainBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext1"
+                    android:text="Verify"
+                    android:textColor="#AF1B1B"
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintEnd_toEndOf="@+id/textView9"
+                    app:layout_constraintStart_toStartOf="@+id/textView9"
+                    app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
                 android:layout_width="370dp"
                 android:layout_height="160dp"
@@ -25,7 +158,7 @@
                 android:background="@drawable/homepagefloat"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/unclearDocMsg">
 
                 <ImageView
                     android:id="@+id/userNameIcon"
@@ -111,6 +244,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
             <TextView
+                android:id="@+id/refreshTimestampTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Refreshed At: "
+                android:textColor="#C45508"
+                android:textSize="15sp"
+                android:inputType="textMultiLine"
+                app:layout_constraintStart_toStartOf="@+id/leaderboardTxt"
+                app:layout_constraintTop_toBottomOf="@+id/leaderboardTxt" />
+
+            <TextView
                 android:id="@+id/leaderboardOneTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -119,8 +263,19 @@
                 android:textColor="#C45508"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="25dp"
-                app:layout_constraintStart_toStartOf="@+id/leaderboardTxt"
-                app:layout_constraintTop_toBottomOf="@+id/leaderboardTxt" />
+                app:layout_constraintStart_toStartOf="@+id/refreshTimestampTxt"
+                app:layout_constraintTop_toBottomOf="@+id/refreshTimestampTxt" />
+
+            <TextView
+                android:id="@+id/weeklyStatusTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="#C45508"
+                android:textSize="15sp"
+                android:inputType="textMultiLine"
+                app:layout_constraintStart_toStartOf="@+id/leaderboardOneTxt"
+                app:layout_constraintTop_toBottomOf="@+id/leaderboardOneTxt" />
 
             <ImageView
                 android:id="@+id/leaderboardOneFirstPlaceIcon"
@@ -140,8 +295,9 @@
                 android:layout_marginLeft="10dp"
                 android:text="1. Placeholder1"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toEndOf="@+id/leaderboardOneFirstPlaceIcon"
-                app:layout_constraintTop_toBottomOf="@+id/leaderboardOneTxt" />
+                app:layout_constraintTop_toBottomOf="@+id/weeklyStatusTxt" />
 
             <TextView
                 android:id="@+id/leaderboardOneFirstQtyTxt"
@@ -149,6 +305,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardOneFirstTxt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -169,6 +326,7 @@
                 android:layout_height="wrap_content"
                 android:text="2. Placeholder2"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginLeft="10dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardOneSecondPlaceIcon"
                 app:layout_constraintStart_toEndOf="@+id/leaderboardOneSecondPlaceIcon"
@@ -180,6 +338,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardOneSecondTxt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -201,6 +360,7 @@
                 android:layout_marginLeft="10dp"
                 android:text="3. Placeholder3"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardOneThirdPlaceIcon"
                 app:layout_constraintStart_toEndOf="@+id/leaderboardOneThirdPlaceIcon"
                 app:layout_constraintTop_toTopOf="@+id/leaderboardOneThirdPlaceIcon" />
@@ -211,6 +371,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardOneThirdTxt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -222,6 +383,7 @@
                 android:layout_height="wrap_content"
                 android:text="4. Placeholder4"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginTop="15dp"
                 app:layout_constraintStart_toStartOf="@+id/leaderboardOneThirdTxt"
                 app:layout_constraintTop_toBottomOf="@+id/leaderboardOneThirdTxt" />
@@ -232,6 +394,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardOneFourthTxt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -243,6 +406,7 @@
                 android:layout_height="wrap_content"
                 android:text="5. Placeholder5"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginTop="15dp"
                 app:layout_constraintStart_toStartOf="@+id/leaderboardOneFourthTxt"
                 app:layout_constraintTop_toBottomOf="@+id/leaderboardOneFourthTxt" />
@@ -253,6 +417,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardOneFifthTxt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -288,6 +453,7 @@
                 android:layout_marginLeft="10dp"
                 android:text="1. Placeholder1"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toEndOf="@+id/leaderboardTwoFirstPlaceIcon"
                 app:layout_constraintTop_toBottomOf="@+id/leaderboardTwoTxt" />
 
@@ -297,6 +463,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardTwoFirstTxt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -317,6 +484,7 @@
                 android:layout_height="wrap_content"
                 android:text="2. Placeholder2"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginLeft="10dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardTwoSecondPlaceIcon"
                 app:layout_constraintStart_toEndOf="@+id/leaderboardTwoSecondPlaceIcon"
@@ -328,6 +496,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardTwoSecondTxt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -349,6 +518,7 @@
                 android:layout_marginLeft="10dp"
                 android:text="3. Placeholder3"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardTwoThirdPlaceIcon"
                 app:layout_constraintStart_toEndOf="@+id/leaderboardTwoThirdPlaceIcon"
                 app:layout_constraintTop_toTopOf="@+id/leaderboardTwoThirdPlaceIcon" />
@@ -359,6 +529,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardTwoThirdTxt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -370,6 +541,7 @@
                 android:layout_height="wrap_content"
                 android:text="4. Placeholder4"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginTop="15dp"
                 app:layout_constraintStart_toStartOf="@+id/leaderboardTwoThirdTxt"
                 app:layout_constraintTop_toBottomOf="@+id/leaderboardTwoThirdTxt" />
@@ -380,6 +552,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardTwoFourthTxt"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -393,6 +566,7 @@
                 android:layout_marginBottom="20dp"
                 android:text="5. Placeholder5"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/leaderboardTwoFourthTxt"
                 app:layout_constraintTop_toBottomOf="@+id/leaderboardTwoFourthTxt" />
@@ -403,6 +577,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textSize="17sp"
+                android:textColor="@color/black"
                 android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/leaderboardTwoFifthTxt"
                 app:layout_constraintEnd_toEndOf="parent"

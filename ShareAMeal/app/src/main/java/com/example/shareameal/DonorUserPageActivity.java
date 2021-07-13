@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,11 +23,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import org.jetbrains.annotations.NotNull;
+
 public class DonorUserPageActivity extends AppCompatActivity {
     private BottomNavigationView bottomNav;
-    private TextView recordsTxt, editProfileTxt, changePasswordTxt, logoutTxt;
+    private TextView recordsTxt, editProfileTxt, changePasswordTxt, logoutTxt, donatedFoodsQtyTxt;
     private TextView userNameTxt;
     private ImageView userProfilePic;
+    private int numberOfReports;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,7 @@ public class DonorUserPageActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 User user = snapshot.getValue(User.class);
                                 userNameTxt.setText(user.getName());
+                                numberOfReports = user.getNumberOfReports();
 
                                 String imageUrl = user.getImageUrl();
                                 if (imageUrl == null) {
@@ -74,6 +80,19 @@ public class DonorUserPageActivity extends AppCompatActivity {
         // Highlighting the right icon in the bottom navigation bar
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setSelectedItemId(R.id.profile);
+
+        // Setting the quantity of donated food items of the donor
+        donatedFoodsQtyTxt = findViewById(R.id.donatedFoodsQtyTxt);
+        FirebaseDatabase.getInstance().getReference("Users").child(userid).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                User currUser = task.getResult().getValue(User.class);
+                int numberOfFoodsDonatedAllTime = currUser.getNumberOfPoints();
+                int numberOfFoodsDonatedThisWeek = currUser.getNumberOfWeeklyPoints();
+                donatedFoodsQtyTxt.setText("All-time: " + String.valueOf(numberOfFoodsDonatedAllTime) + ", This Week: "
+                        + String.valueOf(numberOfFoodsDonatedThisWeek));
+            }
+        });
 
         // Adding reactions to the different settings
         recordsTxt = findViewById(R.id.recordsTxt);
@@ -124,13 +143,21 @@ public class DonorUserPageActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         int curr = item.getItemId();
                         if (curr == R.id.food) {
-                            Intent intent = new Intent(DonorUserPageActivity.this, DonateFoodActivity.class);
-                            startActivity(intent);
-                            finish();
+                            if (numberOfReports < 3) {
+                                Intent intent = new Intent(DonorUserPageActivity.this, DonateFoodActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(DonorUserPageActivity.this, "You are not allowed access to this page", Toast.LENGTH_SHORT).show();
+                            }
                         } else if (curr == R.id.schedule) {
-                            Intent intent = new Intent(DonorUserPageActivity.this, DonorsScheduleActivity.class);
-                            startActivity(intent);
-                            finish();
+                            if (numberOfReports < 3) {
+                                Intent intent = new Intent(DonorUserPageActivity.this, DonorsScheduleActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(DonorUserPageActivity.this, "You are not allowed access to this page", Toast.LENGTH_SHORT).show();
+                            }
                         } else if (curr == R.id.home) {
                             Intent intent = new Intent(DonorUserPageActivity.this, DonorHomepageActivity.class);
                             startActivity(intent);

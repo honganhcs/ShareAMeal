@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -59,8 +60,28 @@ public class DonateFoodActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
         getSupportActionBar().setTitle("View food listings");
+
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
+        String donorId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        usersRef.child(donorId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                int numberOfReports = user.getNumberOfReports();
+                if (numberOfReports >= 3) {
+                    Intent intent = new Intent(DonateFoodActivity.this, DonorHomepageActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {}
+        });
 
         // Initialising bottom navigation bar
         bottomNav = findViewById(R.id.bottom_navigation);

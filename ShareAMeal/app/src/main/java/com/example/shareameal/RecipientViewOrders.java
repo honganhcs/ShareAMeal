@@ -42,6 +42,8 @@ public class RecipientViewOrders extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipient_view_orders);
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
         getSupportActionBar().setTitle("View current orders");
 
@@ -55,11 +57,9 @@ public class RecipientViewOrders extends AppCompatActivity
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userId = user.getUid();
 
-        reference = FirebaseDatabase.getInstance().getReference("Orders").child(userId);
+        reference = FirebaseDatabase.getInstance().getReference("Orders").child("Pending").child(userId);
 
         loadData();
-
-        Toast.makeText(RecipientViewOrders.this, "Orders are in chronological order.", Toast.LENGTH_SHORT).show();
 
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setSelectedItemId(R.id.schedule);
@@ -91,8 +91,10 @@ public class RecipientViewOrders extends AppCompatActivity
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        for (DataSnapshot data : snapshot.getChildren()) {
-                            orders.add(data.getValue(Order.class));
+                        for (DataSnapshot ordersUnderSameSlot : snapshot.getChildren()) {
+                            for(DataSnapshot orderData : ordersUnderSameSlot.getChildren()) {
+                                orders.add(orderData.getValue(Order.class));
+                            }
                         }
                         Collections.sort(orders, new Comparator<Order>() {
                             @Override
