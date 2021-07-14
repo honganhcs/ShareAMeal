@@ -40,8 +40,12 @@ public class DonorsRecords extends AppCompatActivity implements RVOrdersAdapter.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donors_records);
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
         getSupportActionBar().setTitle("View completed orders");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView = findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
@@ -74,6 +78,10 @@ public class DonorsRecords extends AppCompatActivity implements RVOrdersAdapter.
                             finish();
                         } else if (curr == R.id.schedule) {
                             Intent intent = new Intent(DonorsRecords.this, DonorsScheduleActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else if (curr == R.id.profile) {
+                            Intent intent = new Intent(DonorsRecords.this, DonorUserPageActivity.class);
                             startActivity(intent);
                             finish();
                         }
@@ -137,7 +145,21 @@ public class DonorsRecords extends AppCompatActivity implements RVOrdersAdapter.
 
     @Override
     public void onOrderClick(int position) {
+        Intent intent = new Intent(DonorsRecords.this, ViewCompletedOrder.class);
+        intent.putExtra("recipientId", orders.get(position).getRecipientId());
+        intent.putExtra("donorId", orders.get(position).getDonorId());
+        intent.putExtra("foodId", orders.get(position).getFoodId());
+        intent.putExtra("slotId", orders.get(position).getSlotId());
+        startActivity(intent);
+        finish();
+    }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        Intent intent = new Intent(DonorsRecords.this, DonorUserPageActivity.class);
+        startActivity(intent);
+        finish();
+        return true;
     }
 
     @Override

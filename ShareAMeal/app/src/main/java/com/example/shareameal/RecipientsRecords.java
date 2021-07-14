@@ -40,8 +40,12 @@ public class RecipientsRecords extends AppCompatActivity implements RVOrdersAdap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipients_records);
 
+        getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
+
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
         getSupportActionBar().setTitle("View completed orders");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView = findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
@@ -74,6 +78,10 @@ public class RecipientsRecords extends AppCompatActivity implements RVOrdersAdap
                             finish();
                         } else if (curr == R.id.schedule) {
                             Intent intent = new Intent(RecipientsRecords.this, RecipientViewOrders.class);
+                            startActivity(intent);
+                            finish();
+                        } else if (curr == R.id.profile) {
+                            Intent intent = new Intent(RecipientsRecords.this, RecipientUserPageActivity.class);
                             startActivity(intent);
                             finish();
                         }
@@ -134,9 +142,23 @@ public class RecipientsRecords extends AppCompatActivity implements RVOrdersAdap
 
     @Override
     public void onOrderClick(int position) {
-
+        Intent intent = new Intent(RecipientsRecords.this, ViewCompletedOrder.class);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        intent.putExtra("recipientId", user.getUid());
+        intent.putExtra("donorId", orders.get(position).getDonorId());
+        intent.putExtra("foodId", orders.get(position).getFoodId());
+        intent.putExtra("slotId", orders.get(position).getSlotId());
+        startActivity(intent);
+        finish();
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        Intent intent = new Intent(RecipientsRecords.this, RecipientUserPageActivity.class);
+        startActivity(intent);
+        finish();
+        return true;
+    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();

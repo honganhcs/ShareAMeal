@@ -12,7 +12,18 @@ public class Order {
     private int year, month, dayOfMonth, startHour, startMinute;
     private int quantity;
 
+    //for completed orders in Slots
+    private String recipientId;
+
     public Order() {
+    }
+
+    public String getRecipientId() {
+        return recipientId;
+    }
+
+    public void setRecipientId(String recipientId) {
+        this.recipientId = recipientId;
     }
 
     public int getYear() {

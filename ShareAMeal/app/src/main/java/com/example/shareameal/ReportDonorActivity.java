@@ -48,7 +48,7 @@ public class ReportDonorActivity extends AppCompatActivity {
 
     private EditText reportEdt;
     private AppCompatButton reportUserBtn;
-    private String donorId, slotId, foodId;
+    private String donorId, slotId, foodId, recipientId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,7 @@ public class ReportDonorActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String recipientId = user.getUid();
+        recipientId = user.getUid();
 
         chooseImageBtn = findViewById(R.id.chooseImageBtn);
         uploadImageBtn = findViewById(R.id.uploadImageBtn);
@@ -268,10 +268,11 @@ public class ReportDonorActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        Intent intent = new Intent(ReportDonorActivity.this, ViewOrder.class);
+        Intent intent = new Intent(ReportDonorActivity.this, ViewCompletedOrder.class);
         intent.putExtra("donorId", donorId);
         intent.putExtra("slotId", slotId);
         intent.putExtra("foodId", foodId);
+        intent.putExtra("recipientId", recipientId);
         startActivity(intent);
         finish();
         return true;
@@ -280,10 +281,11 @@ public class ReportDonorActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(ReportDonorActivity.this, ViewOrder.class);
+        Intent intent = new Intent(ReportDonorActivity.this, ViewCompletedOrder.class);
         intent.putExtra("donorId", donorId);
         intent.putExtra("slotId", slotId);
         intent.putExtra("foodId", foodId);
+        intent.putExtra("recipientId", recipientId);
         startActivity(intent);
         finish();
     }

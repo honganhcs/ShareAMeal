@@ -46,7 +46,7 @@ public class RVDonors extends AppCompatActivity {
     private RecyclerView recyclerView;
     private BottomNavigationView bottomNav;
 
-    private DatabaseReference reference;
+    private DatabaseReference reference, foodReference, slotReference;
     private ArrayList<User> users = new ArrayList<>();
     private RVDonorsAdapter adapter;
     private int numOrdersLeft;
@@ -68,6 +68,8 @@ public class RVDonors extends AppCompatActivity {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);
         reference = FirebaseDatabase.getInstance().getReference("Users");
+        foodReference = FirebaseDatabase.getInstance().getReference("Foods");
+        slotReference = FirebaseDatabase.getInstance().getReference("Slots").child("Pending");
         loadData();
 
         // get current userId to check the number of items they can still claim
@@ -140,8 +142,34 @@ public class RVDonors extends AppCompatActivity {
                         for (DataSnapshot data : snapshot.getChildren()) {
                             User donor = data.getValue(User.class);
                             if (donor.getUserGroup().equals("donor")) {
-                                users.add(donor);
-                                adapter.notifyDataSetChanged();
+                                // check if donor has any available food items
+                                foodReference.child(donor.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                        if(snapshot.exists()) {
+                                            // check if donor has any available time slots
+                                            slotReference.child(donor.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                                    if(snapshot.exists()) {
+                                                        users.add(donor);
+                                                        adapter.notifyDataSetChanged();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                                                }
+                                            });
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                                    }
+                                });
                             }
                         }
 

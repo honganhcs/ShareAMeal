@@ -12,10 +12,8 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,16 +26,14 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-
-public class ViewOrder extends AppCompatActivity {
+public class ViewCompletedOrder extends AppCompatActivity {
 
     private ImageView foodImage;
     private TextView foodNameTxt, foodDescriptionTxt, txtOrderQuantity, txtSchedule, txtAddress;
-    private DatabaseReference reference1, reference2, reference3, reference4;
-    private String donorId, foodId, slotId, recipientId;
+    private DatabaseReference reference1, reference2, reference3;
+    private AppCompatButton btnReport;
+    private String userId, donorId, foodId, slotId, recipientId;
     private Order order;
-    private Slot slot;
     private Food food;
     private User donor;
     private int orderQuantity;
@@ -46,12 +42,12 @@ public class ViewOrder extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_order);
+        setContentView(R.layout.activity_view_completed_order);
 
         getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-        getSupportActionBar().setTitle("View order");
+        getSupportActionBar().setTitle("View completed order");
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -62,14 +58,14 @@ public class ViewOrder extends AppCompatActivity {
         txtSchedule = findViewById(R.id.txtSchedule);
         txtAddress = findViewById(R.id.txtAddress);
         bufferLayout = findViewById(R.id.layout1);
+        btnReport = findViewById(R.id.btnReport);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        recipientId = user.getUid();
-
-        reference4 = FirebaseDatabase.getInstance().getReference("Slots");
+        userId = user.getUid();
 
         Intent intent = getIntent();
 
+        recipientId = intent.getStringExtra("recipientId");
         donorId = intent.getStringExtra("donorId");
         foodId = intent.getStringExtra("foodId");
         slotId = intent.getStringExtra("slotId");
@@ -111,7 +107,7 @@ public class ViewOrder extends AppCompatActivity {
 
 
                         reference2 = FirebaseDatabase.getInstance().getReference("Orders");
-                        reference2.child("Pending").child(recipientId).child(slotId).child(foodId).addListenerForSingleValueEvent(
+                        reference2.child("Completed").child(recipientId).child(slotId).child(foodId).addListenerForSingleValueEvent(
                                 new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -133,10 +129,10 @@ public class ViewOrder extends AppCompatActivity {
                                                         foodDescriptionTxt.setText(food.getDescription());
                                                         txtOrderQuantity.setText(String.valueOf(orderQuantity));
                                                         txtSchedule.setText(order.getStartTime()
-                                                                        + " - "
-                                                                        + order.getEndTime()
-                                                                        + ", "
-                                                                        + order.getDate());
+                                                                + " - "
+                                                                + order.getEndTime()
+                                                                + ", "
+                                                                + order.getDate());
                                                         txtAddress.setText(donor.getAddress());
                                                     }
 
@@ -156,126 +152,32 @@ public class ViewOrder extends AppCompatActivity {
                     public void onCancelled(@NonNull @NotNull DatabaseError error) {
                     }
                 });
-    }
 
-    public void onCancelOrder(View view) {
-        // remove order
-        reference2.child("Pending").child(recipientId).child(slotId).child(foodId).removeValue();
-
-        // update slot only if the same recipient does not have any other orders in the same time slot
-        ArrayList<String> foodIds = new ArrayList<>();
-        reference2.child("Pending").child(recipientId).child(slotId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                for(DataSnapshot data : snapshot.getChildren()) {
-                    foodIds.add(data.getKey());
+        if(userId.equals(recipientId)) {
+            btnReport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ViewCompletedOrder.this, ReportDonorActivity.class);
+                    intent.putExtra("donorId", donorId);
+                    intent.putExtra("slotId", slotId);
+                    intent.putExtra("foodId", foodId);
+                    startActivity(intent);
+                    finish();
                 }
-                if(foodIds.isEmpty()) {
-                    reference4.child("Pending").child(donorId).addValueEventListener(
-                            new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                    for (DataSnapshot data : snapshot.getChildren()) {
-                                        if(data.getKey().equals(slotId)) {
-                                            slot = data.getValue(Slot.class);
-                                        }
-                                    }
-                                    slot.setNumRecipients(slot.getNumRecipients() - 1);
-                                    if(slot.getRecipientId1().equals(recipientId)) {
-                                        slot.setRecipientId1(null);
-                                    } else if(slot.getRecipientId2().equals(recipientId)) {
-                                        slot.setRecipientId2(null);
-                                    } else if(slot.getRecipientId3().equals(recipientId)) {
-                                        slot.setRecipientId3(null);
-                                    }
-                                    reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                                }
-                            });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
-
-        // update food quantity
-        food.setQuantity(food.getQuantity() + orderQuantity);
-        reference1.child(foodId).setValue(food);
-
-        Toast.makeText(ViewOrder.this, "Your order has been successfully cancelled.", Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(ViewOrder.this, RecipientViewOrders.class);
-        startActivity(intent);
-        finish();
-    }
-
-    public void onOrderCompleted(View view) {
-        // move the order from Pending to Completed in the database
-        reference2.child("Completed").child(recipientId).child(slotId).child(foodId).setValue(order);
-        reference2.child("Pending").child(recipientId).child(slotId).child(foodId).removeValue();
-
-        // update slot only if the same recipient does not have any other orders in the same time slot
-        ArrayList<String> foodIds = new ArrayList<>();
-        reference2.child("Pending").child(recipientId).child(slotId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                for(DataSnapshot data : snapshot.getChildren()) {
-                    foodIds.add(data.getKey());
-                }
-                if(foodIds.isEmpty()) {
-                    reference4 = FirebaseDatabase.getInstance().getReference("Slots");
-                    reference4.child("Pending").child(donorId).addValueEventListener(
-                            new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                    for (DataSnapshot data : snapshot.getChildren()) {
-                                        if(data.getKey().equals(slotId)) {
-                                            slot = data.getValue(Slot.class);
-                                        }
-                                    }
-                                    slot.setNumRecipients(slot.getNumRecipients() - 1);
-                                    if(recipientId.equals(slot.getRecipientId1())) {
-                                        slot.setRecipientId1(null);
-                                    } else if(recipientId.equals(slot.getRecipientId2())) {
-                                        slot.setRecipientId2(null);
-                                    } else if(recipientId.equals(slot.getRecipientId3())) {
-                                        slot.setRecipientId3(null);
-                                    }
-                                    reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                                }
-                            });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
-
-        // record order in Completed section of Slots
-        order.setRecipientId(recipientId);
-        reference4.child("Completed").child(donorId).child(slotId).child(recipientId).child(foodId).setValue(order);
-
-        Toast.makeText(ViewOrder.this, "Order has been registered as completed.", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(ViewOrder.this, RecipientsRecords.class);
-        startActivity(intent);
-        finish();
+            });
+        } else {
+            btnReport.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        Intent intent = new Intent(ViewOrder.this, RecipientViewOrders.class);
+        Intent intent;
+        if(userId.equals(recipientId)) {
+            intent = new Intent(ViewCompletedOrder.this, RecipientsRecords.class);
+        } else {
+            intent = new Intent(ViewCompletedOrder.this, DonorsRecords.class);
+        }
         startActivity(intent);
         finish();
         return true;
@@ -284,9 +186,13 @@ public class ViewOrder extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(ViewOrder.this, RecipientViewOrders.class);
+        Intent intent;
+        if(userId.equals(recipientId)) {
+            intent = new Intent(ViewCompletedOrder.this, RecipientsRecords.class);
+        } else {
+            intent = new Intent(ViewCompletedOrder.this, DonorsRecords.class);
+        }
         startActivity(intent);
         finish();
     }
-
 }

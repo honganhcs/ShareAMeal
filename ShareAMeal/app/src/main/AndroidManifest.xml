@@ -14,11 +14,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShareAMeal">
-        <activity android:name=".RecipientsRecords"
+        <activity android:name=".ViewCompletedOrder"
             android:theme="@style/Theme.MaterialComponents.Light"/>
-        <activity android:name=".DonorsRecords"
-            android:theme="@style/Theme.MaterialComponents.Light"/>
-        <activity android:name=".AdminSignUp"></activity>
+        <activity
+            android:name=".RecipientsRecords"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity
+            android:name=".DonorsRecords"
+            android:theme="@style/Theme.MaterialComponents.Light" />
+        <activity android:name=".AdminSignUp" />
         <activity
             android:name=".ReviewVerification"
             android:theme="@style/Theme.MaterialComponents.Light" />
@@ -117,20 +121,20 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".schedulecleanup.BootReceiver"
-            android:exported="true"
-            android:enabled="true">
+        <receiver
+            android:name=".schedulecleanup.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".schedulecleanup.CleanUpService"
+        <service
+            android:name=".schedulecleanup.CleanUpService"
             android:enabled="true"
             android:exported="true"
-            tools:ignore="Instantiatable">
-        </service>
-
+            tools:ignore="Instantiatable"></service>
     </application>
 
 </manifest>

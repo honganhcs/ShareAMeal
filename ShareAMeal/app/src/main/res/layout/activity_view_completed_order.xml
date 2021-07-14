@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ViewOrder">
+    tools:context=".ViewCompletedOrder">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -91,7 +91,7 @@
             android:paddingRight="30dp"
             android:textColor="#C45508"
             android:textStyle="bold"
-            android:text="Scheduled for collection at: "
+            android:text="Collected at: "
             android:inputType="textMultiLine"
             android:textSize="17sp" />
 
@@ -133,43 +133,22 @@
             android:paddingRight="30dp"
             android:textSize="17sp"
             android:textColor="#C45508"
-            android:text="This is the address of the donor where the recipient will collect the food item."
+            android:text="This is the address of the donor where the recipient collected the food item."
             android:inputType="textMultiLine"
             app:layout_constraintTop_toBottomOf="@id/txtAddressHeader"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnOrderCompleted"
+            android:id="@+id/btnReport"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:background="@drawable/button"
-            android:ems="10"
-            android:onClick="onOrderCompleted"
-            android:text="Order Completed"
-            android:textColor="@color/white"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtAddress" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnCancelOrder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/button2"
-            android:ems="9"
-            android:onClick="onCancelOrder"
-            android:text="CANCEL ORDER"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnOrderCompleted" />
+            android:text="Report"
+            android:layout_marginTop="30dp"
+            app:layout_constraintEnd_toEndOf="@+id/txtAddress"
+            app:layout_constraintStart_toStartOf="@+id/txtAddress"
+            app:layout_constraintTop_toBottomOf="@+id/txtAddress"
+            android:visibility="visible"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
