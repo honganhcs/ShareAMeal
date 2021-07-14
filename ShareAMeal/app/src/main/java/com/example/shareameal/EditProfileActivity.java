@@ -21,6 +21,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -60,6 +61,7 @@ public class EditProfileActivity extends AppCompatActivity {
     // confirmed on the image choice for the profile picture
     private boolean isImageUploaded, isProfileUpdated;
     private AppCompatButton updateProfileInfoBtn;
+    private TextView textView5;
     private EditText usernameEdt, addressEdt, restaurantEdt;
     private String userGroup, imageUrl, oldImageUrl;
     private TextInputLayout restaurantWrapper, addressWrapper;
@@ -90,6 +92,7 @@ public class EditProfileActivity extends AppCompatActivity {
         usernameEdt = findViewById(R.id.usernameEdt);
         addressEdt = findViewById(R.id.addressEdt);
         addressWrapper = findViewById(R.id.addressWrapper);
+        textView5 = findViewById(R.id.textView5);
         restaurantEdt = findViewById(R.id.restaurantEdt);
         restaurantWrapper = findViewById(R.id.restaurantWrapper);
         progressBar = findViewById(R.id.progress_circular);
@@ -177,11 +180,14 @@ public class EditProfileActivity extends AppCompatActivity {
 
                                 // If user is recipient, the "Name of food service" field will be uneditable
                                 if (user.getUserGroup().equals("recipient")) {
-                                    restaurantEdt.setEnabled(false);
-                                    restaurantEdt.setClickable(false);
-                                    restaurantEdt.setBackground(getDrawable(R.drawable.disablededittext));
-                                    restaurantWrapper.setHintTextColor(
-                                            ColorStateList.valueOf(getResources().getColor(R.color.white)));
+                                    textView5.setVisibility(View.GONE);
+                                    restaurantEdt.setVisibility(View.GONE);
+                                    restaurantWrapper.setVisibility(View.GONE);
+//                                    restaurantEdt.setEnabled(false);
+//                                    restaurantEdt.setClickable(false);
+//                                    restaurantEdt.setBackground(getDrawable(R.drawable.disablededittext));
+//                                    restaurantWrapper.setHintTextColor(
+//                                            ColorStateList.valueOf(getResources().getColor(R.color.white)));
                                 } else {
                                     if (!TextUtils.isEmpty(user.getRestaurant())) {
                                         restaurantEdt.setText(user.getRestaurant());
