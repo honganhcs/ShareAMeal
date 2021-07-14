@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -235,16 +237,16 @@ public class ViewOrder extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                                     for (DataSnapshot data : snapshot.getChildren()) {
-                                        if(data.getKey().equals(slotId)) {
+                                        if (data.getKey().equals(slotId)) {
                                             slot = data.getValue(Slot.class);
                                         }
                                     }
                                     slot.setNumRecipients(slot.getNumRecipients() - 1);
-                                    if(recipientId.equals(slot.getRecipientId1())) {
+                                    if (recipientId.equals(slot.getRecipientId1())) {
                                         slot.setRecipientId1(null);
-                                    } else if(recipientId.equals(slot.getRecipientId2())) {
+                                    } else if (recipientId.equals(slot.getRecipientId2())) {
                                         slot.setRecipientId2(null);
-                                    } else if(recipientId.equals(slot.getRecipientId3())) {
+                                    } else if (recipientId.equals(slot.getRecipientId3())) {
                                         slot.setRecipientId3(null);
                                     }
                                     reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
@@ -266,6 +268,19 @@ public class ViewOrder extends AppCompatActivity {
         // record order in Completed section of Slots
         order.setRecipientId(recipientId);
         reference4.child("Completed").child(donorId).child(slotId).child(recipientId).child(foodId).setValue(order);
+
+        // Update weekly points and all-time points for donors
+        DatabaseReference donorRef = FirebaseDatabase.getInstance().getReference("Users").child(donorId);
+        donorRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                User user = task.getResult().getValue(User.class);
+                int currWeeklyPoints = user.getNumberOfWeeklyPoints();
+                int currAllTimePoints = user.getNumberOfPoints();
+                donorRef.child("numberOfWeeklyPoints").setValue(currWeeklyPoints + orderQuantity);
+                donorRef.child("numberOfPoints").setValue(currAllTimePoints + orderQuantity);
+            }
+        });
 
         Toast.makeText(ViewOrder.this, "Order has been registered as completed.", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(ViewOrder.this, RecipientsRecords.class);
