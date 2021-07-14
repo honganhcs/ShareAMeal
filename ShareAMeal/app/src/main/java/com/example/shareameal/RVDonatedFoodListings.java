@@ -117,7 +117,18 @@ public class RVDonatedFoodListings extends AppCompatActivity {
 
                                                 // So that foods with 0 qty won't be show to recipients
                                                 if (currFood.getQuantity() > 0) {
-                                                    foodCallback.onCallback(currFood);
+                                                    DatabaseReference donorSlotRef = FirebaseDatabase.getInstance().getReference("Slots").child("Pending").child(userId);
+                                                    donorSlotRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                                            if (snapshot.exists()) {
+                                                                foodCallback.onCallback(currFood);
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull @NotNull DatabaseError error) {}
+                                                    });
                                                 }
                                             }
                                         }

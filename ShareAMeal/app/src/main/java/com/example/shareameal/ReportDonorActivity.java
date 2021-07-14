@@ -15,6 +15,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -48,6 +49,7 @@ public class ReportDonorActivity extends AppCompatActivity {
 
     private EditText reportEdt;
     private AppCompatButton reportUserBtn;
+    private ProgressBar progressBar;
     private String donorId, slotId, foodId, recipientId;
 
     @Override
@@ -79,6 +81,9 @@ public class ReportDonorActivity extends AppCompatActivity {
 
         reportEdt = findViewById(R.id.reportEdt);
         reportUserBtn = findViewById(R.id.reportUserBtn);
+
+        progressBar = findViewById(R.id.progress_circular);
+        progressBar.setVisibility(View.GONE);
 
         Intent intent = getIntent();
         donorId = intent.getStringExtra("donorId");
@@ -221,6 +226,7 @@ public class ReportDonorActivity extends AppCompatActivity {
         if (imageUri != null) {
             StorageReference fileReference =
                     mStorageRef.child(System.currentTimeMillis() + "." + getFileExtension(imageUri));
+            progressBar.setVisibility(View.VISIBLE);
             fileReference
                     .putFile(imageUri)
                     .continueWithTask(
@@ -244,12 +250,14 @@ public class ReportDonorActivity extends AppCompatActivity {
                                         Toast.makeText(
                                                 ReportDonorActivity.this, "Upload successful", Toast.LENGTH_LONG)
                                                 .show();
+                                        progressBar.setVisibility(View.GONE);
                                     } else {
                                         Toast.makeText(
                                                 ReportDonorActivity.this,
                                                 "Upload failed: " + task.getException().getMessage(),
                                                 Toast.LENGTH_LONG)
                                                 .show();
+                                        progressBar.setVisibility(View.GONE);
                                     }
                                 }
                             })
@@ -259,6 +267,7 @@ public class ReportDonorActivity extends AppCompatActivity {
                                 public void onFailure(@NonNull Exception e) {
                                     Toast.makeText(ReportDonorActivity.this, e.getMessage(), Toast.LENGTH_LONG)
                                             .show();
+                                    progressBar.setVisibility(View.GONE);
                                 }
                             });
         } else {

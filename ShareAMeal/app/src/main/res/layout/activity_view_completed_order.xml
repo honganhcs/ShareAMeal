@@ -72,18 +72,42 @@
             android:id="@+id/txtOrderQuantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
             android:text="2"
-            android:textSize="17sp"
             android:textColor="#C45508"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toBottomOf="@+id/txtOrderQuantityHeader"
             app:layout_constraintStart_toEndOf="@+id/txtOrderQuantityHeader"
-            app:layout_constraintTop_toBottomOf="@id/foodDescriptionTxt" />
+            app:layout_constraintTop_toTopOf="@+id/txtOrderQuantityHeader" />
+
+        <TextView
+            android:id="@+id/txtDonorHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="30dp"
+            android:text="Donor: "
+            android:textColor="#C45508"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtOrderQuantityHeader" />
+
+        <TextView
+            android:id="@+id/txtDonor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sample"
+            android:textColor="#C45508"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toBottomOf="@+id/txtDonorHeader"
+            app:layout_constraintStart_toEndOf="@+id/txtDonorHeader"
+            app:layout_constraintTop_toTopOf="@+id/txtDonorHeader" />
 
         <TextView
             android:id="@+id/txtScheduleHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/txtOrderQuantityHeader"
+            app:layout_constraintTop_toBottomOf="@id/txtDonorHeader"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="5dp"

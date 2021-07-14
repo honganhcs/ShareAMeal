@@ -35,7 +35,7 @@ import java.util.ArrayList;
 public class ViewOrder extends AppCompatActivity {
 
     private ImageView foodImage;
-    private TextView foodNameTxt, foodDescriptionTxt, txtOrderQuantity, txtSchedule, txtAddress;
+    private TextView foodNameTxt, foodDescriptionTxt, txtOrderQuantity, txtSchedule, txtAddress, txtDonorHeader, txtDonor;
     private DatabaseReference reference1, reference2, reference3, reference4;
     private String donorId, foodId, slotId, recipientId;
     private Order order;
@@ -63,6 +63,8 @@ public class ViewOrder extends AppCompatActivity {
         txtOrderQuantity = findViewById(R.id.txtOrderQuantity);
         txtSchedule = findViewById(R.id.txtSchedule);
         txtAddress = findViewById(R.id.txtAddress);
+        txtDonorHeader = findViewById(R.id.txtDonorHeader);
+        txtDonor = findViewById(R.id.txtDonor);
         bufferLayout = findViewById(R.id.layout1);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -158,6 +160,18 @@ public class ViewOrder extends AppCompatActivity {
                     public void onCancelled(@NonNull @NotNull DatabaseError error) {
                     }
                 });
+
+        FirebaseDatabase.getInstance().getReference("Users").child(donorId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                User user = task.getResult().getValue(User.class);
+                if (user.getRestaurant() == null || user.getRestaurant().equals("null")) {
+                    txtDonor.setText(user.getName());
+                } else {
+                    txtDonor.setText(user.getRestaurant());
+                }
+            }
+        });
     }
 
     public void onCancelOrder(View view) {

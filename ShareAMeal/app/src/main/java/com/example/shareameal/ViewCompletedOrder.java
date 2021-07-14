@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 public class ViewCompletedOrder extends AppCompatActivity {
 
     private ImageView foodImage;
-    private TextView foodNameTxt, foodDescriptionTxt, txtOrderQuantity, txtSchedule, txtAddress;
+    private TextView foodNameTxt, foodDescriptionTxt, txtOrderQuantity, txtSchedule, txtAddress, txtDonorHeader, txtDonor;
     private DatabaseReference reference1, reference2, reference3;
     private AppCompatButton btnReport;
     private String userId, donorId, foodId, slotId, recipientId;
@@ -57,6 +59,8 @@ public class ViewCompletedOrder extends AppCompatActivity {
         txtOrderQuantity = findViewById(R.id.txtOrderQuantity);
         txtSchedule = findViewById(R.id.txtSchedule);
         txtAddress = findViewById(R.id.txtAddress);
+        txtDonorHeader = findViewById(R.id.txtDonorHeader);
+        txtDonor = findViewById(R.id.txtDonor);
         bufferLayout = findViewById(R.id.layout1);
         btnReport = findViewById(R.id.btnReport);
 
@@ -153,6 +157,18 @@ public class ViewCompletedOrder extends AppCompatActivity {
                     }
                 });
 
+        FirebaseDatabase.getInstance().getReference("Users").child(donorId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                User user = task.getResult().getValue(User.class);
+                if (user.getRestaurant() == null || user.getRestaurant().equals("null")) {
+                    txtDonor.setText(user.getName());
+                } else {
+                    txtDonor.setText(user.getRestaurant());
+                }
+            }
+        });
+
         if(userId.equals(recipientId)) {
             btnReport.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -167,6 +183,8 @@ public class ViewCompletedOrder extends AppCompatActivity {
             });
         } else {
             btnReport.setVisibility(View.GONE);
+            txtDonor.setVisibility(View.GONE);
+            txtDonorHeader.setVisibility(View.GONE);
         }
     }
 
