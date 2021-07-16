@@ -17,6 +17,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -53,6 +54,7 @@ public class AddFoodItemActivity extends AppCompatActivity {
     private EditText foodQuantityEdt;
     private AppCompatButton addFoodItemBtn;
     private String imageUrl;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,9 @@ public class AddFoodItemActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Add Food Listing");
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        progressBar = findViewById(R.id.progress_circular);
+        progressBar.setVisibility(View.GONE);
 
         // Getting user id of current user
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -210,6 +215,7 @@ public class AddFoodItemActivity extends AppCompatActivity {
         if (imageUri != null) {
             StorageReference fileReference =
                     mStorageRef.child(System.currentTimeMillis() + "." + getFileExtension(imageUri));
+            progressBar.setVisibility(View.VISIBLE);
             fileReference
                     .putFile(imageUri)
                     .continueWithTask(
@@ -232,12 +238,14 @@ public class AddFoodItemActivity extends AppCompatActivity {
                                         imageUrl = downloadUri.toString();
                                         Toast.makeText(AddFoodItemActivity.this, "Upload successful", Toast.LENGTH_LONG)
                                                 .show();
+                                        progressBar.setVisibility(View.GONE);
                                     } else {
                                         Toast.makeText(
                                                 AddFoodItemActivity.this,
                                                 "Upload failed: " + task.getException().getMessage(),
                                                 Toast.LENGTH_LONG)
                                                 .show();
+                                        progressBar.setVisibility(View.GONE);
                                     }
                                 }
                             })
@@ -247,6 +255,7 @@ public class AddFoodItemActivity extends AppCompatActivity {
                                 public void onFailure(@NonNull Exception e) {
                                     Toast.makeText(AddFoodItemActivity.this, e.getMessage(), Toast.LENGTH_LONG)
                                             .show();
+                                    progressBar.setVisibility(View.GONE);
                                 }
                             });
         } else {

@@ -1,9 +1,11 @@
 package com.example.shareameal;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -15,6 +17,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,6 +41,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
     private ImageView changeOldPwVisibility, changeNewPwVisibility;
     private boolean isOldPwVisible, isNewPwVisible;
     private String userGroup;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,9 @@ public class ChangePasswordActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Change password");
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        progressBar = findViewById(R.id.progress_circular);
+        progressBar.setVisibility(View.GONE);
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         String userId = currentUser.getUid();
@@ -155,42 +162,61 @@ public class ChangePasswordActivity extends AppCompatActivity {
                         if (TextUtils.isEmpty(oldPw)) {
                             Toast.makeText(ChangePasswordActivity.this, "Please enter old password", Toast.LENGTH_SHORT).show();
                         } else {
-                            AuthCredential credential = EmailAuthProvider.getCredential(email, oldPw);
-                            user.reauthenticate(credential)
-                                    .addOnCompleteListener(
-                                            new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull @NotNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
-                                                        user.updatePassword(newPw)
-                                                                .addOnCompleteListener(
-                                                                        new OnCompleteListener<Void>() {
-                                                                            @Override
-                                                                            public void onComplete(@NonNull @NotNull Task<Void> task) {
-                                                                                if (task.isSuccessful()) {
-                                                                                    Toast.makeText(
-                                                                                            ChangePasswordActivity.this,
-                                                                                            "Password updated",
-                                                                                            Toast.LENGTH_SHORT)
-                                                                                            .show();
-                                                                                } else {
-                                                                                    Toast.makeText(
-                                                                                            ChangePasswordActivity.this,
-                                                                                            "Error: Password not updated",
-                                                                                            Toast.LENGTH_SHORT)
-                                                                                            .show();
-                                                                                }
-                                                                            }
-                                                                        });
-                                                    } else {
-                                                        Toast.makeText(
-                                                                ChangePasswordActivity.this,
-                                                                "Wrong current password",
-                                                                Toast.LENGTH_SHORT)
-                                                                .show();
-                                                    }
-                                                }
-                                            });
+                            AlertDialog dialog = new AlertDialog.Builder(ChangePasswordActivity.this)
+                                    .setTitle("Change Password")
+                                    .setMessage("Proceed ahead with changing password?")
+                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            progressBar.setVisibility(View.VISIBLE);
+                                            AuthCredential credential = EmailAuthProvider.getCredential(email, oldPw);
+                                            user.reauthenticate(credential)
+                                                    .addOnCompleteListener(
+                                                            new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                                                    if (task.isSuccessful()) {
+                                                                        user.updatePassword(newPw)
+                                                                                .addOnCompleteListener(
+                                                                                        new OnCompleteListener<Void>() {
+                                                                                            @Override
+                                                                                            public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                                                                                if (task.isSuccessful()) {
+                                                                                                    Toast.makeText(
+                                                                                                            ChangePasswordActivity.this,
+                                                                                                            "Password updated",
+                                                                                                            Toast.LENGTH_SHORT)
+                                                                                                            .show();
+                                                                                                    progressBar.setVisibility(View.GONE);
+                                                                                                    changePwBtn.setClickable(false);
+                                                                                                    changePwBtn.setEnabled(false);
+                                                                                                    changePwBtn.setBackground(getDrawable(R.drawable.disabledbutton));
+                                                                                                } else {
+                                                                                                    Toast.makeText(
+                                                                                                            ChangePasswordActivity.this,
+                                                                                                            "Error: Password not updated",
+                                                                                                            Toast.LENGTH_SHORT)
+                                                                                                            .show();
+                                                                                                    progressBar.setVisibility(View.GONE);
+                                                                                                }
+                                                                                            }
+                                                                                        });
+                                                                    } else {
+                                                                        Toast.makeText(
+                                                                                ChangePasswordActivity.this,
+                                                                                "Wrong current password",
+                                                                                Toast.LENGTH_SHORT)
+                                                                                .show();
+                                                                        progressBar.setVisibility(View.GONE);
+                                                                    }
+                                                                }
+                                                            });
+                                        }
+                                    })
+                                    .setNegativeButton("No", null)
+                                    .show();
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#AF1B1B"));
+                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#AF1B1B"));
                         }
                     }
                 });

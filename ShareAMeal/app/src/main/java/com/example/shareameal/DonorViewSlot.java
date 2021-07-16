@@ -1,8 +1,10 @@
 package com.example.shareameal;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -10,6 +12,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -308,71 +312,92 @@ public class DonorViewSlot extends AppCompatActivity {
     }
 
     public void onDeleteBtn(View view) {
-        reference2 = FirebaseDatabase.getInstance().getReference("Slots").child("Pending").child(donorId);
-        // remove slot
-        reference2.child(slotId).removeValue();
+        FirebaseDatabase.getInstance().getReference("Slots").child("Pending").child(donorId).child(slotId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                Slot currSlot = task.getResult().getValue(Slot.class);
+                String date = currSlot.getDate();
+                String startTime = currSlot.getStartTime();
+                String endTime = currSlot.getEndTime();
+                AlertDialog dialog = new AlertDialog.Builder(DonorViewSlot.this)
+                        .setTitle("Delete Time Slot")
+                        .setMessage("Are you sure you want to delete this time slot?\n(" + date + ", " + startTime + " - " + endTime + ")")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                reference2 = FirebaseDatabase.getInstance().getReference("Slots").child("Pending").child(donorId);
+                                // remove slot
+                                reference2.child(slotId).removeValue();
 
-        // remove orders & update food quantities
-        reference3 = FirebaseDatabase.getInstance().getReference("Foods").child(donorId);
+                                // remove orders & update food quantities
+                                reference3 = FirebaseDatabase.getInstance().getReference("Foods").child(donorId);
 
-        if(slot.getRecipientId1() != null) {
-            for (Order order : recipientIdToOrder.get(slot.getRecipientId1())) {
-                reference3.child(order.getFoodId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        food = snapshot.getValue(Food.class);
-                        food.setQuantity(food.getQuantity() + order.getQuantity());
-                        reference3.child(order.getFoodId()).setValue(food);
-                    }
+                                if(slot.getRecipientId1() != null) {
+                                    for (Order order : recipientIdToOrder.get(slot.getRecipientId1())) {
+                                        reference3.child(order.getFoodId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                                food = snapshot.getValue(Food.class);
+                                                food.setQuantity(food.getQuantity() + order.getQuantity());
+                                                reference3.child(order.getFoodId()).setValue(food);
+                                            }
 
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                            @Override
+                                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-                    }
-                });
+                                            }
+                                        });
+                                    }
+                                    reference1.child(slot.getRecipientId1()).child(slotId).removeValue();
+                                }
+                                if(slot.getRecipientId2() != null) {
+                                    for (Order order : recipientIdToOrder.get(slot.getRecipientId2())) {
+                                        reference3.child(order.getFoodId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                                food = snapshot.getValue(Food.class);
+                                                food.setQuantity(food.getQuantity() + order.getQuantity());
+                                                reference3.child(order.getFoodId()).setValue(food);
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                                            }
+                                        });
+                                    }
+                                    reference1.child(slot.getRecipientId2()).child(slotId).removeValue();
+                                }
+                                if(slot.getRecipientId3() != null) {
+                                    for (Order order : recipientIdToOrder.get(slot.getRecipientId3())) {
+                                        reference3.child(order.getFoodId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                                food = snapshot.getValue(Food.class);
+                                                food.setQuantity(food.getQuantity() + order.getQuantity());
+                                                reference3.child(order.getFoodId()).setValue(food);
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                                            }
+                                        });
+                                    }
+                                    reference1.child(slot.getRecipientId3()).child(slotId).removeValue();
+                                }
+
+                                Intent intent = new Intent(DonorViewSlot.this, DonorsScheduleActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#AF1B1B"));
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#AF1B1B"));
             }
-            reference1.child(slot.getRecipientId1()).child(slotId).removeValue();
-        }
-        if(slot.getRecipientId2() != null) {
-            for (Order order : recipientIdToOrder.get(slot.getRecipientId2())) {
-                reference3.child(order.getFoodId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        food = snapshot.getValue(Food.class);
-                        food.setQuantity(food.getQuantity() + order.getQuantity());
-                        reference3.child(order.getFoodId()).setValue(food);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-                    }
-                });
-            }
-            reference1.child(slot.getRecipientId2()).child(slotId).removeValue();
-        }
-        if(slot.getRecipientId3() != null) {
-            for (Order order : recipientIdToOrder.get(slot.getRecipientId3())) {
-                reference3.child(order.getFoodId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        food = snapshot.getValue(Food.class);
-                        food.setQuantity(food.getQuantity() + order.getQuantity());
-                        reference3.child(order.getFoodId()).setValue(food);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-                    }
-                });
-            }
-            reference1.child(slot.getRecipientId3()).child(slotId).removeValue();
-        }
-
-        Intent intent = new Intent(DonorViewSlot.this, DonorsScheduleActivity.class);
-        startActivity(intent);
-        finish();
+        });
     }
 
     @Override

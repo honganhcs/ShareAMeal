@@ -1,10 +1,12 @@
 package com.example.shareameal;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -120,57 +122,81 @@ public class ReportDonorActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(reportContent)) {
                     Toast.makeText(ReportDonorActivity.this, "Please fill in the report description", Toast.LENGTH_SHORT).show();
                 } else {
-                    DatabaseReference database =
-                            FirebaseDatabase.getInstance().getReference("Reports").child(donorId);
-
-                    Report report = new Report();
-                    report.setDonorId(donorId);
-                    report.setSlotId(slotId);
-                    report.setRecipientId(recipientId);
-                    report.setReportContent(reportContent);
-
-                    if (imageUrl == null) {
-                        report.setReportImageUrl("null");
-                    } else {
-                        report.setReportImageUrl(imageUrl);
-                    }
-
-                    Calendar curr = Calendar.getInstance();
-                    int year = curr.get(Calendar.YEAR);
-                    int monthInt = curr.get(Calendar.MONTH) + 1;
-                    String month = getMonthFormat(monthInt);
-                    int day = curr.get(Calendar.DAY_OF_MONTH);
-                    int hour = curr.get(Calendar.HOUR_OF_DAY);
-                    int minute = curr.get(Calendar.MINUTE);
-
-                    String date;
-                    if (minute < 10) {
-                        date = month + " " + day + " " + year + " " + hour + ":0" + minute;
-                    } else {
-                        date = month + " " + day + " " + year + " " + hour + ":" + minute;
-                    }
-                    report.setReportTime(date);
-                    report.setYear(year);
-                    report.setMonth(monthInt);
-                    report.setDay(day);
-                    report.setHour(hour);
-                    report.setMinute(minute);
-
-                    String reportId = database.push().getKey();
-                    report.setReportId(reportId);
-                    database.child(reportId).setValue(report);
-
-                    database.addValueEventListener(new ValueEventListener() {
+                    FirebaseDatabase.getInstance().getReference("Users").child(donorId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
-                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                            Toast.makeText(ReportDonorActivity.this, "Report successfully sent in", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(ReportDonorActivity.this, RecipientViewOrders.class);
-                            startActivity(intent);
-                            finish();
+                        public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                            User currUser = task.getResult().getValue(User.class);
+                            String donorName;
+                            if (currUser.getRestaurant() == null || currUser.getRestaurant().equals("null")) {
+                                donorName = currUser.getName();
+                            } else {
+                                donorName = currUser.getRestaurant();
+                            }
+                            AlertDialog dialog = new AlertDialog.Builder(ReportDonorActivity.this)
+                                    .setTitle("Send Report")
+                                    .setMessage("Are you sure you want to report " + donorName + "?")
+                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            DatabaseReference database =
+                                                    FirebaseDatabase.getInstance().getReference("Reports").child(donorId);
+
+                                            Report report = new Report();
+                                            report.setDonorId(donorId);
+                                            report.setSlotId(slotId);
+                                            report.setRecipientId(recipientId);
+                                            report.setReportContent(reportContent);
+
+                                            if (imageUrl == null) {
+                                                report.setReportImageUrl("null");
+                                            } else {
+                                                report.setReportImageUrl(imageUrl);
+                                            }
+
+                                            Calendar curr = Calendar.getInstance();
+                                            int year = curr.get(Calendar.YEAR);
+                                            int monthInt = curr.get(Calendar.MONTH) + 1;
+                                            String month = getMonthFormat(monthInt);
+                                            int day = curr.get(Calendar.DAY_OF_MONTH);
+                                            int hour = curr.get(Calendar.HOUR_OF_DAY);
+                                            int minute = curr.get(Calendar.MINUTE);
+
+                                            String date;
+                                            if (minute < 10) {
+                                                date = month + " " + day + " " + year + " " + hour + ":0" + minute;
+                                            } else {
+                                                date = month + " " + day + " " + year + " " + hour + ":" + minute;
+                                            }
+                                            report.setReportTime(date);
+                                            report.setYear(year);
+                                            report.setMonth(monthInt);
+                                            report.setDay(day);
+                                            report.setHour(hour);
+                                            report.setMinute(minute);
+
+                                            String reportId = database.push().getKey();
+                                            report.setReportId(reportId);
+                                            database.child(reportId).setValue(report);
+
+                                            database.addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                                    Toast.makeText(ReportDonorActivity.this, "Report successfully sent in", Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent(ReportDonorActivity.this, RecipientsRecords.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull @NotNull DatabaseError error) {}
+                                            });
+                                        }
+                                    })
+                                    .setNegativeButton("No", null)
+                                    .show();
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#AF1B1B"));
+                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#AF1B1B"));
                         }
-
-                        @Override
-                        public void onCancelled(@NonNull @NotNull DatabaseError error) {}
                     });
                 }
             }

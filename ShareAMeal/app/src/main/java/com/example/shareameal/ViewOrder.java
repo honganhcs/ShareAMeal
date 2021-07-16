@@ -1,10 +1,12 @@
 package com.example.shareameal;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -175,131 +177,155 @@ public class ViewOrder extends AppCompatActivity {
     }
 
     public void onCancelOrder(View view) {
-        // remove order
-        reference2.child("Pending").child(recipientId).child(slotId).child(foodId).removeValue();
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Cancel Order")
+                .setMessage("Are you sure you want to cancel this order?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // remove order
+                        reference2.child("Pending").child(recipientId).child(slotId).child(foodId).removeValue();
 
-        // update slot only if the same recipient does not have any other orders in the same time slot
-        ArrayList<String> foodIds = new ArrayList<>();
-        reference2.child("Pending").child(recipientId).child(slotId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                for(DataSnapshot data : snapshot.getChildren()) {
-                    foodIds.add(data.getKey());
-                }
-                if(foodIds.isEmpty()) {
-                    reference4.child("Pending").child(donorId).addValueEventListener(
-                            new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                    for (DataSnapshot data : snapshot.getChildren()) {
-                                        if(data.getKey().equals(slotId)) {
-                                            slot = data.getValue(Slot.class);
-                                        }
-                                    }
-                                    slot.setNumRecipients(slot.getNumRecipients() - 1);
-                                    if(slot.getRecipientId1().equals(recipientId)) {
-                                        slot.setRecipientId1(null);
-                                    } else if(slot.getRecipientId2().equals(recipientId)) {
-                                        slot.setRecipientId2(null);
-                                    } else if(slot.getRecipientId3().equals(recipientId)) {
-                                        slot.setRecipientId3(null);
-                                    }
-                                    reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
+                        // update slot only if the same recipient does not have any other orders in the same time slot
+                        ArrayList<String> foodIds = new ArrayList<>();
+                        reference2.child("Pending").child(recipientId).child(slotId).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                for(DataSnapshot data : snapshot.getChildren()) {
+                                    foodIds.add(data.getKey());
                                 }
+                                if(foodIds.isEmpty()) {
+                                    reference4.child("Pending").child(donorId).addValueEventListener(
+                                            new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                                    for (DataSnapshot data : snapshot.getChildren()) {
+                                                        if(data.getKey().equals(slotId)) {
+                                                            slot = data.getValue(Slot.class);
+                                                        }
+                                                    }
+                                                    slot.setNumRecipients(slot.getNumRecipients() - 1);
+                                                    if(slot.getRecipientId1().equals(recipientId)) {
+                                                        slot.setRecipientId1(null);
+                                                    } else if(slot.getRecipientId2().equals(recipientId)) {
+                                                        slot.setRecipientId2(null);
+                                                    } else if(slot.getRecipientId3().equals(recipientId)) {
+                                                        slot.setRecipientId3(null);
+                                                    }
+                                                    reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
+                                                }
 
-                                @Override
-                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                                @Override
+                                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                                }
+                                            });
                                 }
-                            });
-                }
-            }
+                            }
 
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                            @Override
+                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-            }
-        });
+                            }
+                        });
 
-        // update food quantity
-        food.setQuantity(food.getQuantity() + orderQuantity);
-        reference1.child(foodId).setValue(food);
+                        // update food quantity
+                        food.setQuantity(food.getQuantity() + orderQuantity);
+                        reference1.child(foodId).setValue(food);
 
-        Toast.makeText(ViewOrder.this, "Your order has been successfully cancelled.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ViewOrder.this, "Your order has been successfully cancelled.", Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(ViewOrder.this, RecipientViewOrders.class);
-        startActivity(intent);
-        finish();
+                        Intent intent = new Intent(ViewOrder.this, RecipientViewOrders.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#AF1B1B"));
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#AF1B1B"));
     }
 
     public void onOrderCompleted(View view) {
-        // move the order from Pending to Completed in the database
-        reference2.child("Completed").child(recipientId).child(slotId).child(foodId).setValue(order);
-        reference2.child("Pending").child(recipientId).child(slotId).child(foodId).removeValue();
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Complete Order")
+                .setMessage("Are you sure you have claimed the donated food items as stated in the order?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // move the order from Pending to Completed in the database
+                        reference2.child("Completed").child(recipientId).child(slotId).child(foodId).setValue(order);
+                        reference2.child("Pending").child(recipientId).child(slotId).child(foodId).removeValue();
 
-        // update slot only if the same recipient does not have any other orders in the same time slot
-        ArrayList<String> foodIds = new ArrayList<>();
-        reference2.child("Pending").child(recipientId).child(slotId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                for(DataSnapshot data : snapshot.getChildren()) {
-                    foodIds.add(data.getKey());
-                }
-                if(foodIds.isEmpty()) {
-                    reference4 = FirebaseDatabase.getInstance().getReference("Slots");
-                    reference4.child("Pending").child(donorId).addValueEventListener(
-                            new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                    for (DataSnapshot data : snapshot.getChildren()) {
-                                        if (data.getKey().equals(slotId)) {
-                                            slot = data.getValue(Slot.class);
-                                        }
-                                    }
-                                    slot.setNumRecipients(slot.getNumRecipients() - 1);
-                                    if (recipientId.equals(slot.getRecipientId1())) {
-                                        slot.setRecipientId1(null);
-                                    } else if (recipientId.equals(slot.getRecipientId2())) {
-                                        slot.setRecipientId2(null);
-                                    } else if (recipientId.equals(slot.getRecipientId3())) {
-                                        slot.setRecipientId3(null);
-                                    }
-                                    reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
+                        // update slot only if the same recipient does not have any other orders in the same time slot
+                        ArrayList<String> foodIds = new ArrayList<>();
+                        reference2.child("Pending").child(recipientId).child(slotId).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                for(DataSnapshot data : snapshot.getChildren()) {
+                                    foodIds.add(data.getKey());
                                 }
+                                if(foodIds.isEmpty()) {
+                                    reference4 = FirebaseDatabase.getInstance().getReference("Slots");
+                                    reference4.child("Pending").child(donorId).addValueEventListener(
+                                            new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                                    for (DataSnapshot data : snapshot.getChildren()) {
+                                                        if (data.getKey().equals(slotId)) {
+                                                            slot = data.getValue(Slot.class);
+                                                        }
+                                                    }
+                                                    slot.setNumRecipients(slot.getNumRecipients() - 1);
+                                                    if (recipientId.equals(slot.getRecipientId1())) {
+                                                        slot.setRecipientId1(null);
+                                                    } else if (recipientId.equals(slot.getRecipientId2())) {
+                                                        slot.setRecipientId2(null);
+                                                    } else if (recipientId.equals(slot.getRecipientId3())) {
+                                                        slot.setRecipientId3(null);
+                                                    }
+                                                    reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
+                                                }
 
-                                @Override
-                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                                @Override
+                                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                                }
+                                            });
                                 }
-                            });
-                }
-            }
+                            }
 
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                            @Override
+                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-            }
-        });
+                            }
+                        });
 
-        // record order in Completed section of Slots
-        order.setRecipientId(recipientId);
-        reference4.child("Completed").child(donorId).child(slotId).child(recipientId).child(foodId).setValue(order);
+                        // record order in Completed section of Slots
+                        order.setRecipientId(recipientId);
+                        reference4.child("Completed").child(donorId).child(slotId).child(recipientId).child(foodId).setValue(order);
 
-        // Update weekly points and all-time points for donors
-        DatabaseReference donorRef = FirebaseDatabase.getInstance().getReference("Users").child(donorId);
-        donorRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
-                User user = task.getResult().getValue(User.class);
-                int currWeeklyPoints = user.getNumberOfWeeklyPoints();
-                int currAllTimePoints = user.getNumberOfPoints();
-                donorRef.child("numberOfWeeklyPoints").setValue(currWeeklyPoints + orderQuantity);
-                donorRef.child("numberOfPoints").setValue(currAllTimePoints + orderQuantity);
-            }
-        });
+                        // Update weekly points and all-time points for donors
+                        DatabaseReference donorRef = FirebaseDatabase.getInstance().getReference("Users").child(donorId);
+                        donorRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                                User user = task.getResult().getValue(User.class);
+                                int currWeeklyPoints = user.getNumberOfWeeklyPoints();
+                                int currAllTimePoints = user.getNumberOfPoints();
+                                donorRef.child("numberOfWeeklyPoints").setValue(currWeeklyPoints + orderQuantity);
+                                donorRef.child("numberOfPoints").setValue(currAllTimePoints + orderQuantity);
+                            }
+                        });
 
-        Toast.makeText(ViewOrder.this, "Order has been registered as completed.", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(ViewOrder.this, RecipientsRecords.class);
-        startActivity(intent);
-        finish();
+                        Toast.makeText(ViewOrder.this, "Order has been registered as completed.", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(ViewOrder.this, RecipientsRecords.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#AF1B1B"));
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#AF1B1B"));
     }
 
     @Override
