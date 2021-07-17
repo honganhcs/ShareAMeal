@@ -51,7 +51,7 @@ import java.util.Locale;
 public class EditProfileActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
 
-    private AppCompatButton chooseImageBtn, uploadImageBtn;
+    private AppCompatButton chooseImageBtn, uploadImageBtn, deleteImageBtn;
     private ImageView profilePicImg;
     private Uri imageUri;
     private StorageReference mStorageRef;
@@ -59,9 +59,9 @@ public class EditProfileActivity extends AppCompatActivity {
 
     // Purpose of these boolean values is to ensure user update the profile after he/she has
     // confirmed on the image choice for the profile picture
-    private boolean isImageUploaded, isProfileUpdated;
+    private boolean isImageUploaded, isProfileUpdated, isImageDeleted;
     private AppCompatButton updateProfileInfoBtn;
-    private TextView textView5;
+    private TextView textView4, textView5;
     private EditText usernameEdt, addressEdt, restaurantEdt;
     private String userGroup, imageUrl, oldImageUrl;
     private TextInputLayout restaurantWrapper, addressWrapper;
@@ -92,6 +92,7 @@ public class EditProfileActivity extends AppCompatActivity {
         usernameEdt = findViewById(R.id.usernameEdt);
         addressEdt = findViewById(R.id.addressEdt);
         addressWrapper = findViewById(R.id.addressWrapper);
+        textView4 = findViewById(R.id.textView4);
         textView5 = findViewById(R.id.textView5);
         restaurantEdt = findViewById(R.id.restaurantEdt);
         restaurantWrapper = findViewById(R.id.restaurantWrapper);
@@ -157,6 +158,7 @@ public class EditProfileActivity extends AppCompatActivity {
         uploadImageBtn.setClickable(false);
         uploadImageBtn.setEnabled(false);
         uploadImageBtn.setBackground(getDrawable(R.drawable.disabledbutton));
+        deleteImageBtn = findViewById(R.id.deleteImageBtn);
         profilePicImg = findViewById(R.id.profilePicImg);
         StorageReference storageReference =
                 FirebaseStorage.getInstance().getReference("profilePicUploads");
@@ -178,16 +180,11 @@ public class EditProfileActivity extends AppCompatActivity {
                                 }
                                 oldImageUrl = user.getImageUrl();
 
-                                // If user is recipient, the "Name of food service" field will be uneditable
+                                // If user is recipient, the "Name of food service" field will not be shown
                                 if (user.getUserGroup().equals("recipient")) {
                                     textView5.setVisibility(View.GONE);
                                     restaurantEdt.setVisibility(View.GONE);
                                     restaurantWrapper.setVisibility(View.GONE);
-//                                    restaurantEdt.setEnabled(false);
-//                                    restaurantEdt.setClickable(false);
-//                                    restaurantEdt.setBackground(getDrawable(R.drawable.disablededittext));
-//                                    restaurantWrapper.setHintTextColor(
-//                                            ColorStateList.valueOf(getResources().getColor(R.color.white)));
                                 } else {
                                     if (!TextUtils.isEmpty(user.getRestaurant())) {
                                         restaurantEdt.setText(user.getRestaurant());
@@ -196,24 +193,22 @@ public class EditProfileActivity extends AppCompatActivity {
 
                                 // If user is admin, the address field will be disabled
                                 if (userGroup.equals("admin")) {
-                                    restaurantEdt.setEnabled(false);
-                                    restaurantEdt.setClickable(false);
-                                    restaurantEdt.setBackground(getDrawable(R.drawable.disablededittext));
-                                    restaurantWrapper.setHintTextColor(
-                                            ColorStateList.valueOf(getResources().getColor(R.color.white)));
-                                    addressEdt.setEnabled(false);
-                                    addressEdt.setClickable(false);
-                                    addressEdt.setBackground(getDrawable(R.drawable.disablededittext));
-                                    addressWrapper.setHintTextColor(
-                                            ColorStateList.valueOf(getResources().getColor(R.color.white)));
+                                    textView5.setVisibility(View.GONE);
+                                    restaurantEdt.setVisibility(View.GONE);
+                                    restaurantWrapper.setVisibility(View.GONE);
+                                    textView4.setVisibility(View.GONE);
+                                    addressEdt.setVisibility(View.GONE);
+                                    addressWrapper.setVisibility(View.GONE);
                                 }
 
                                 // If no profile pic previously, set default profile pic
                                 if (oldImageUrl == null) {
                                     profilePicImg.setImageResource(R.drawable.profile128px);
+                                    deleteImageBtn.setVisibility(View.GONE);
                                 } else {
                                     if (oldImageUrl.equals("null")) {
                                         profilePicImg.setImageResource(R.drawable.profile128px);
+                                        deleteImageBtn.setVisibility(View.GONE);
                                     } else {
                                         Picasso.get().load(oldImageUrl).into(profilePicImg);
                                     }
@@ -275,6 +270,20 @@ public class EditProfileActivity extends AppCompatActivity {
                     }
                 });
 
+        deleteImageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//                FirebaseDatabase.getInstance().getReference("Users").child(userId).child("imageUrl").removeValue();
+                isImageDeleted = true;
+                deleteImageBtn.setVisibility(View.GONE);
+                profilePicImg.setImageResource(R.drawable.profile128px);
+                updateProfileInfoBtn.setClickable(true);
+                updateProfileInfoBtn.setEnabled(true);
+                updateProfileInfoBtn.setBackground(getDrawable(R.drawable.button2));
+            }
+        });
+
         // Updating the database of the new user information
         updateProfileInfoBtn.setOnClickListener(
                 new View.OnClickListener() {
@@ -301,7 +310,9 @@ public class EditProfileActivity extends AppCompatActivity {
                                 user.setRestaurant(newRestaurant);
 
                                 if (imageUrl == null) {
-                                    user.setImageUrl(oldImageUrl);
+                                    if (!isImageDeleted) {
+                                        user.setImageUrl(oldImageUrl);
+                                    }
                                 } else {
                                     user.setImageUrl(imageUrl);
                                 }
