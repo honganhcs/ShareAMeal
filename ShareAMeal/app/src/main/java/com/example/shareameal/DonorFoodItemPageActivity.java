@@ -1,10 +1,12 @@
 package com.example.shareameal;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -168,37 +170,49 @@ public class DonorFoodItemPageActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        String userId = user.getUid();
-                        DatabaseReference database =
-                                FirebaseDatabase.getInstance().getReference("Foods").child(userId);
-                        database.child(foodId).removeValue();
+                        AlertDialog dialog = new AlertDialog.Builder(DonorFoodItemPageActivity.this)
+                                .setTitle("Delete Food Listing")
+                                .setMessage("Are you sure you want to delete this food listing?")
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                        String userId = user.getUid();
+                                        DatabaseReference database =
+                                                FirebaseDatabase.getInstance().getReference("Foods").child(userId);
+                                        database.child(foodId).removeValue();
 
-                        // Deletes the image from the cloud storage
-                        if (food.getImageUrl() != null) {
-                            if (!food.getImageUrl().equals("null")) {
-                                StorageReference storageReference =
-                                        FirebaseStorage.getInstance().getReferenceFromUrl(food.getImageUrl());
-                                storageReference
-                                        .delete()
-                                        .addOnSuccessListener(
-                                                new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void unused) {
-                                                    }
-                                                })
-                                        .addOnFailureListener(
-                                                new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                    }
-                                                });
-                            }
-                        }
+                                        // Deletes the image from the cloud storage
+                                        if (food.getImageUrl() != null) {
+                                            if (!food.getImageUrl().equals("null")) {
+                                                StorageReference storageReference =
+                                                        FirebaseStorage.getInstance().getReferenceFromUrl(food.getImageUrl());
+                                                storageReference
+                                                        .delete()
+                                                        .addOnSuccessListener(
+                                                                new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void unused) {
+                                                                    }
+                                                                })
+                                                        .addOnFailureListener(
+                                                                new OnFailureListener() {
+                                                                    @Override
+                                                                    public void onFailure(@NonNull Exception e) {
+                                                                    }
+                                                                });
+                                            }
+                                        }
 
-                        Intent intent = new Intent(DonorFoodItemPageActivity.this, DonateFoodActivity.class);
-                        startActivity(intent);
-                        finish();
+                                        Intent intent = new Intent(DonorFoodItemPageActivity.this, DonateFoodActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                })
+                                .setNegativeButton("No", null)
+                                .show();
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#AF1B1B"));
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#AF1B1B"));
                     }
                 });
 

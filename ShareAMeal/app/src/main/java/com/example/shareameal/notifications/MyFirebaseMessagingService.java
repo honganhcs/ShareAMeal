@@ -45,27 +45,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             Intent intent = new Intent(MyFirebaseMessagingService.this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+        } else {
+            String userid = user.getUid();
+
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+            reference
+                    .child(userid)
+                    .addListenerForSingleValueEvent(
+                            new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                    User user = snapshot.getValue(User.class);
+                                    user.setFcmToken(token);
+                                    reference.child(userid).setValue(user);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                                }
+                            });
         }
-        String userid = user.getUid();
-
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-        reference
-                .child(userid)
-                .addListenerForSingleValueEvent(
-                        new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                User user = snapshot.getValue(User.class);
-                                user.setFcmToken(token);
-                                reference.child(userid).setValue(user);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-                            }
-                        });
     }
 
     @Override

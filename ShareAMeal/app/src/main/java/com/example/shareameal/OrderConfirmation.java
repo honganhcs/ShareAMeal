@@ -1,10 +1,12 @@
 package com.example.shareameal;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -201,67 +203,79 @@ public class OrderConfirmation extends AppCompatActivity {
                         Toast.LENGTH_SHORT)
                         .show();
             } else {
-                orderQuantity = Integer.valueOf(qty);
+                AlertDialog dialog = new AlertDialog.Builder(this)
+                        .setTitle("Confirm Order")
+                        .setMessage("Are you sure you want to confirm this order of " + qty + " x " + food.getName() + "?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                orderQuantity = Integer.valueOf(qty);
 
-                // create new order
-                Order order = new Order();
-                order.setDate(slot.getDate());
-                order.setStartTime(slot.getStartTime());
-                order.setEndTime(slot.getEndTime());
-                order.setDonorId(donorId);
-                order.setFoodId(foodId);
-                order.setQuantity(orderQuantity);
-                order.setFoodName(food.getName());
-                order.setFoodImageURL(food.getImageUrl());
-                order.setSlotId(slot.getSlotId());
-                order.setYear(slot.getYear());
-                order.setMonth(slot.getMonth());
-                order.setDayOfMonth(slot.getDayOfMonth());
-                order.setStartHour(slot.getStartHour());
-                order.setStartMinute(slot.getStartMinute());
+                                // create new order
+                                Order order = new Order();
+                                order.setDate(slot.getDate());
+                                order.setStartTime(slot.getStartTime());
+                                order.setEndTime(slot.getEndTime());
+                                order.setDonorId(donorId);
+                                order.setFoodId(foodId);
+                                order.setQuantity(orderQuantity);
+                                order.setFoodName(food.getName());
+                                order.setFoodImageURL(food.getImageUrl());
+                                order.setSlotId(slot.getSlotId());
+                                order.setYear(slot.getYear());
+                                order.setMonth(slot.getMonth());
+                                order.setDayOfMonth(slot.getDayOfMonth());
+                                order.setStartHour(slot.getStartHour());
+                                order.setStartMinute(slot.getStartMinute());
 
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                String userId = user.getUid();
-                reference4 = FirebaseDatabase.getInstance().getReference("Orders").child("Pending").child(userId);
-                reference4.child(slot.getSlotId()).child(foodId).setValue(order);
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                String userId = user.getUid();
+                                reference4 = FirebaseDatabase.getInstance().getReference("Orders").child("Pending").child(userId);
+                                reference4.child(slot.getSlotId()).child(foodId).setValue(order);
 
-                // update food item
-                food.setQuantity(food.getQuantity() - orderQuantity);
-                reference1.child(foodId).setValue(food);
+                                // update food item
+                                food.setQuantity(food.getQuantity() - orderQuantity);
+                                reference1.child(foodId).setValue(food);
 
-                // update slot only if recipient hasn't already ordered anything from the donor in the same slot.
-                if(!recipientId.equals(slot.getRecipientId1()) && !recipientId.equals(slot.getRecipientId2()) && !recipientId.equals(slot.getRecipientId3())) {
-                    slot.setNumRecipients(slot.getNumRecipients() + 1);
-                    if(slot.getRecipientId1() == null) {
-                        slot.setRecipientId1(recipientId);
-                    } else if(slot.getRecipientId2() == null) {
-                        slot.setRecipientId2(recipientId);
-                    } else if(slot.getRecipientId3() == null) {
-                        slot.setRecipientId3(recipientId);
-                    }
-                    reference3 = FirebaseDatabase.getInstance().getReference("Slots").child("Pending").child(donorId);
-                    reference3.child(slot.getSlotId()).setValue(slot);
-                }
+                                // update slot only if recipient hasn't already ordered anything from the donor in the same slot.
+                                if(!recipientId.equals(slot.getRecipientId1()) && !recipientId.equals(slot.getRecipientId2()) && !recipientId.equals(slot.getRecipientId3())) {
+                                    slot.setNumRecipients(slot.getNumRecipients() + 1);
+                                    if(slot.getRecipientId1() == null) {
+                                        slot.setRecipientId1(recipientId);
+                                    } else if(slot.getRecipientId2() == null) {
+                                        slot.setRecipientId2(recipientId);
+                                    } else if(slot.getRecipientId3() == null) {
+                                        slot.setRecipientId3(recipientId);
+                                    }
+                                    reference3 = FirebaseDatabase.getInstance().getReference("Slots").child("Pending").child(donorId);
+                                    reference3.child(slot.getSlotId()).setValue(slot);
+                                }
 
-                // update recipient info
-                recipient.setNumOrdersLeft(numOrdersLeft - 1);
-                reference2.child(recipientId).setValue(recipient);
+                                // update recipient info
+                                recipient.setNumOrdersLeft(numOrdersLeft - 1);
+                                reference2.child(recipientId).setValue(recipient);
 
-                Toast.makeText(
-                        OrderConfirmation.this,
-                        "Your order has been successfully created.",
-                        Toast.LENGTH_SHORT)
+                                Toast.makeText(
+                                        OrderConfirmation.this,
+                                        "Your order has been successfully created.",
+                                        Toast.LENGTH_SHORT)
+                                        .show();
+
+                                // send notification to donor
+                                String token = donor.getFcmToken();
+                                String body = "A recipient has booked the time slot at " + slot.getStartTime() + " on " + slot.getDate();
+                                NotificationsSender notificationsSender = new NotificationsSender(token, getString(R.string.slot_booked), body, getApplicationContext(), OrderConfirmation.this);
+                                notificationsSender.sendNotification();
+
+                                Intent intent = new Intent(OrderConfirmation.this, RecipientViewOrders.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", null)
                         .show();
-
-                // send notification to donor
-                String token = donor.getFcmToken();
-                String body = "A recipient has booked the time slot at " + slot.getStartTime() + " on " + slot.getDate();
-                NotificationsSender notificationsSender = new NotificationsSender(token, getString(R.string.slot_booked), body, getApplicationContext(), OrderConfirmation.this);
-                notificationsSender.sendNotification();
-
-                Intent intent = new Intent(OrderConfirmation.this, RecipientViewOrders.class);
-                startActivity(intent);
-                finish();
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#AF1B1B"));
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#AF1B1B"));
             }
         }
     }
