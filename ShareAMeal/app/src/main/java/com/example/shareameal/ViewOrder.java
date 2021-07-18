@@ -122,7 +122,7 @@ public class ViewOrder extends AppCompatActivity {
                                 new OnCompleteListener<DataSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
-                                        if (task.isSuccessful()) {
+                                        if (!task.isSuccessful()) {
                                             Log.e("Firebase", "Error getting data", task.getException());
                                         } else {
                                             order = task.getResult().getValue(Order.class);
