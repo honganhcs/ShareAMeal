@@ -4,4 +4,6 @@
     <string name="post_URL">https://fcm.googleapis.com/fcm/send</string>
     <string name="channel_id">CHANNEL_ID</string>
     <string name="slot_booked">Time Slot Booked</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
