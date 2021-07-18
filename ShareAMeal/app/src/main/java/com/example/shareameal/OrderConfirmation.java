@@ -39,8 +39,7 @@ import java.util.ArrayList;
 public class OrderConfirmation extends AppCompatActivity {
 
     private ImageView foodImage;
-    private TextView foodNameTxt, foodDescriptionTxt, txtCurrentQuantity, txtSchedule, txtAddress;
-    private EditText foodQuantityEdt;
+    private TextView foodNameTxt, foodDescriptionTxt, txtCurrentQuantity, txtSchedule, txtAddress, foodQuantityTxt;
     private ConstraintLayout bufferLayout;
     private AppCompatButton decrementBtn, incrementBtn;
 
@@ -73,7 +72,7 @@ public class OrderConfirmation extends AppCompatActivity {
         txtCurrentQuantity = findViewById(R.id.txtOrderQuantity);
         txtSchedule = findViewById(R.id.txtSchedule);
         txtAddress = findViewById(R.id.txtAddress);
-        foodQuantityEdt = findViewById(R.id.foodQuantityEdt);
+        foodQuantityTxt = findViewById(R.id.foodQuantityTxt);
         bufferLayout = findViewById(R.id.layout1);
         decrementBtn = findViewById(R.id.decrementBtn);
         incrementBtn = findViewById(R.id.incrementBtn);
@@ -167,31 +166,34 @@ public class OrderConfirmation extends AppCompatActivity {
         decrementBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int currQty = Integer.valueOf(foodQuantityEdt.getText().toString());
+                int currQty = Integer.valueOf(foodQuantityTxt.getText().toString());
                 if (currQty > 0) {
                     currQty -= 1;
                 }
-                foodQuantityEdt.setText(String.valueOf(currQty));
+                foodQuantityTxt.setText(String.valueOf(currQty));
             }
         });
 
         incrementBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int currQty = Integer.valueOf(foodQuantityEdt.getText().toString());
+                int currQty = Integer.valueOf(foodQuantityTxt.getText().toString());
                 if (currQty < existingQty) {
-                    foodQuantityEdt.setText(String.valueOf(currQty + 1));
+                    if (currQty < 2) {
+                        foodQuantityTxt.setText(String.valueOf(currQty + 1));
+                    } else {
+                        Toast.makeText(OrderConfirmation.this, "Only a maximum of 2 food items claimable per order", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
-
     }
 
     public void onConfirmOrder(View view) {
         if(numOrdersLeft == 0) {
             Toast.makeText(OrderConfirmation.this, "You cannot create any more orders today as you have reached your daily limit.", Toast.LENGTH_SHORT).show();
         } else {
-            String qty = foodQuantityEdt.getText().toString();
+            String qty = foodQuantityTxt.getText().toString();
             if (Integer.valueOf(qty) == 0 || TextUtils.isEmpty(qty)) {
                 Toast.makeText(
                         OrderConfirmation.this, "Please enter a number larger than 0.", Toast.LENGTH_SHORT)
