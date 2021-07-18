@@ -34,11 +34,14 @@ import org.junit.runner.RunWith;
 @LargeTest
 public class AdminSignUpUI {
     @Rule
-    public ActivityScenarioRule<SignupActivity> activityRule
-            = new ActivityScenarioRule<SignupActivity>(SignupActivity.class);
+    public ActivityScenarioRule<LoginActivity> activityRule
+            = new ActivityScenarioRule<LoginActivity>(LoginActivity.class);
 
     @Before
     public void changeToAdminSignUp() {
+        rest();
+        onView(withId(R.id.txtSignUp)).perform(click());
+        rest();
         onView(withId(R.id.adminSignUpTxt)).perform(click());
     }
 
@@ -145,7 +148,7 @@ public class AdminSignUpUI {
 
     private static void rest() {
         try {
-            Thread.sleep(3000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

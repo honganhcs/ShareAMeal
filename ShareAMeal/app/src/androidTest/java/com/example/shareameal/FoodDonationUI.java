@@ -143,7 +143,7 @@ public class FoodDonationUI {
 
     private static void rest() {
         try {
-            Thread.sleep(3000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
