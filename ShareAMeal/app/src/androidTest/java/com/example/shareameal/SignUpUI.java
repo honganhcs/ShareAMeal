@@ -38,6 +38,7 @@ public class SignUpUI {
     // Check that all necessary components are shown and functional to the user
     @Test
     public void SignUpPageTest() {
+        rest();
         onView(withId(R.id.emailEdt)).check(matches(withHint("Email")));
         onView(withId(R.id.passwordEdt)).check(matches(withHint("Password (Min. 6 characters)")));
         onView(withId(R.id.changePwVisibility)).check(matches(isDisplayed()));
@@ -53,6 +54,8 @@ public class SignUpUI {
     // Testing if user is able to toggle password visibility.
     @Test
     public void changePwVisibilityTest() {
+        rest();
+
         String samplePw = "abcdef";
         onView(withId(R.id.passwordEdt)).perform(typeText(samplePw), closeSoftKeyboard());
 
@@ -71,6 +74,8 @@ public class SignUpUI {
     // Testing if user is able to sign up with any empty fields
     @Test
     public void emptyFieldsTest() {
+        rest();
+
         // Empty password and email test
         onView(withId(R.id.signupBtn)).perform(click());
         onView(withId(R.id.signupBtn)).check(matches(isDisplayed()));
@@ -116,5 +121,13 @@ public class SignUpUI {
                 return editText.getTransformationMethod() instanceof PasswordTransformationMethod;
             }
         };
+    }
+
+    private void rest() {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

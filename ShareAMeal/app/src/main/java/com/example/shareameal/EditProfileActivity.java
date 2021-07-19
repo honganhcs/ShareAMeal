@@ -273,8 +273,6 @@ public class EditProfileActivity extends AppCompatActivity {
         deleteImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//                FirebaseDatabase.getInstance().getReference("Users").child(userId).child("imageUrl").removeValue();
                 isImageDeleted = true;
                 deleteImageBtn.setVisibility(View.GONE);
                 profilePicImg.setImageResource(R.drawable.profile128px);
@@ -371,7 +369,9 @@ public class EditProfileActivity extends AppCompatActivity {
                                 user.setUserGroup(userGroup);
 
                                 if (imageUrl == null) {
-                                    user.setImageUrl(oldImageUrl);
+                                    if (!isImageDeleted) {
+                                        user.setImageUrl(oldImageUrl);
+                                    }
                                 } else {
                                     user.setImageUrl(imageUrl);
                                 }
