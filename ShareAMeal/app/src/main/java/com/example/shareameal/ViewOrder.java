@@ -89,7 +89,7 @@ public class ViewOrder extends AppCompatActivity {
                 new OnCompleteListener<DataSnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
-                        if (task.isSuccessful()) {
+                        if (!task.isSuccessful()) {
                             Log.e("Firebase", "Error getting food", task.getException());
                         } else {
                             food = task.getResult().getValue(Food.class);
@@ -124,7 +124,7 @@ public class ViewOrder extends AppCompatActivity {
                                     new OnCompleteListener<DataSnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
-                                            if (task.isSuccessful()) {
+                                            if (!task.isSuccessful()) {
                                                 Log.e("Firebase", "Error getting order", task.getException());
                                             } else {
                                                 order = task.getResult().getValue(Order.class);

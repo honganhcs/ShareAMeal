@@ -32,11 +32,17 @@ import java.util.Calendar;
 public class CleanUpService extends IntentService {
 
     private static final String TAG = "CleanUpService";
+
+    public CleanUpService() {
+        super(TAG);
+    }
+
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
      * @param name Used to name the worker thread, important only for debugging.
      */
+
     public CleanUpService(String name) {
         super(TAG);
     }

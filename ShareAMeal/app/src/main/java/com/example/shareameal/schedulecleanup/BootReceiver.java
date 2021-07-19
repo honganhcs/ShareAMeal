@@ -19,7 +19,7 @@ public class BootReceiver extends BroadcastReceiver {
                     PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-            Log.d(TAG, "On receive");
+            Log.d(TAG, "On cold boot");
             alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, System.currentTimeMillis(), DEFAULT_INTERVAL, cleanUp);
         }
     }
