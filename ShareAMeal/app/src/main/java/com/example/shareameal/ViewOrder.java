@@ -265,29 +265,25 @@ public class ViewOrder extends AppCompatActivity {
                                     foodIds.add(data.getKey());
                                 }
                                 if(foodIds.isEmpty()) {
-                                    reference4 = FirebaseDatabase.getInstance().getReference("Slots");
-                                    reference4.child("Pending").child(donorId).addValueEventListener(
-                                            new ValueEventListener() {
+                                    reference4.child("Pending").child(donorId).child(slotId).get().addOnCompleteListener(
+                                            new OnCompleteListener<DataSnapshot>() {
                                                 @Override
-                                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                                    for (DataSnapshot data : snapshot.getChildren()) {
-                                                        if (data.getKey().equals(slotId)) {
-                                                            slot = data.getValue(Slot.class);
+                                                public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                                                    if (!task.isSuccessful()) {
+                                                        Log.e("Firebase", "Error getting slot", task.getException());
+                                                    } else {
+                                                        Slot slot = task.getResult().getValue(Slot.class);
+                                                        slot.setNumRecipients(slot.getNumRecipients() - 1);
+                                                        if (slot.getRecipientId1().equals(recipientId)) {
+                                                            slot.setRecipientId1(null);
+                                                        } else if (slot.getRecipientId2().equals(recipientId)) {
+                                                            slot.setRecipientId2(null);
+                                                        } else if (slot.getRecipientId3().equals(recipientId)) {
+                                                            slot.setRecipientId3(null);
                                                         }
-                                                    }
-                                                    slot.setNumRecipients(slot.getNumRecipients() - 1);
-                                                    if (recipientId.equals(slot.getRecipientId1())) {
-                                                        slot.setRecipientId1(null);
-                                                    } else if (recipientId.equals(slot.getRecipientId2())) {
-                                                        slot.setRecipientId2(null);
-                                                    } else if (recipientId.equals(slot.getRecipientId3())) {
-                                                        slot.setRecipientId3(null);
-                                                    }
-                                                    reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
-                                                }
+                                                        reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
 
-                                                @Override
-                                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                                    }
                                                 }
                                             });
                                 }
