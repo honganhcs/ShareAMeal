@@ -18,6 +18,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/deleteImageBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button2"
+        android:ems="8"
+        android:text="Delete Image"
+        android:textColor="@color/white"
+        android:layout_marginLeft="30dp"
+        app:layout_constraintStart_toEndOf="@+id/foodImage"
+        app:layout_constraintTop_toTopOf="@+id/foodImage" />
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/chooseImageBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,11 +37,11 @@
         android:textColor="@color/white"
         android:background="@drawable/button"
         android:ems="8"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="30dp"
         android:layout_marginBottom="50dp"
-        app:layout_constraintBottom_toBottomOf="@+id/foodImage"
         app:layout_constraintStart_toEndOf="@+id/foodImage"
-        app:layout_constraintTop_toTopOf="@+id/foodImage" />
+        app:layout_constraintTop_toBottomOf="@+id/deleteImageBtn" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/uploadImageBtn"

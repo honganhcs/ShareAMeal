@@ -139,27 +139,24 @@ public class ViewOrder extends AppCompatActivity {
                                                                     if (data.getKey().equals(donorId)) {
                                                                         donor = data.getValue(User.class);
                                                                     }
-                                                                }
 
-                                                                orderQuantity = order.getQuantity();
-                                                                foodNameTxt.setText(food.getName());
-                                                                foodDescriptionTxt.setText(food.getDescription());
-                                                                txtOrderQuantity.setText(String.valueOf(orderQuantity));
-                                                                txtSchedule.setText(order.getStartTime()
-                                                                        + " - "
-                                                                        + order.getEndTime()
-                                                                        + ", "
-                                                                        + order.getDate());
-                                                                txtAddress.setText(donor.getAddress());
+                                                                    orderQuantity = order.getQuantity();
+                                                                    foodNameTxt.setText(food.getName());
+                                                                    foodDescriptionTxt.setText(food.getDescription());
+                                                                    txtOrderQuantity.setText(String.valueOf(orderQuantity));
+                                                                    txtSchedule.setText(order.getStartTime()
+                                                                            + " - "
+                                                                            + order.getEndTime()
+                                                                            + ", "
+                                                                            + order.getDate());
+                                                                    txtAddress.setText(donor.getAddress());
                                                             }
 
                                                             @Override
                                                             public void onCancelled(@NonNull @NotNull DatabaseError error) {
                                                             }
-                                                        });
-                                            }
-                                        }
-                                    });
+                                                        }   
+                                                });
                         }
                     }
 
