@@ -131,10 +131,7 @@
         </receiver>
 
         <service
-            android:name=".schedulecleanup.CleanUpService"
-            android:enabled="true"
-            android:exported="true"
-            tools:ignore="Instantiatable"></service>
+            android:name=".schedulecleanup.CleanUpService" />
     </application>
 
 </manifest>
