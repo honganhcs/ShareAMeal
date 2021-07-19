@@ -43,14 +43,14 @@ import org.w3c.dom.Text;
 public class EditFoodItemActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
 
-    private AppCompatButton chooseImageBtn, uploadImageBtn;
+    private AppCompatButton chooseImageBtn, uploadImageBtn, deleteImageBtn;
     private ImageView foodImage;
     private Uri imageUri;
     private StorageReference mStorageRef;
 
     // Purpose of these boolean values is to ensure user update the profile after he/she has
     // confirmed on the image choice for the food image
-    private boolean isImageUploaded, isFoodUpdated;
+    private boolean isImageUploaded, isFoodUpdated, isImageDeleted;
 
     private EditText foodNameEdt;
     private EditText foodDescriptionEdt;
@@ -85,6 +85,7 @@ public class EditFoodItemActivity extends AppCompatActivity {
         uploadImageBtn.setClickable(false);
         uploadImageBtn.setEnabled(false);
         uploadImageBtn.setBackground(getDrawable(R.drawable.disabledbutton));
+        deleteImageBtn = findViewById(R.id.deleteImageBtn);
         foodImage = findViewById(R.id.foodImage);
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference("imageUploads");
@@ -144,9 +145,11 @@ public class EditFoodItemActivity extends AppCompatActivity {
 
             if (oldFood.getImageUrl() == null) {
                 foodImage.setImageResource(R.drawable.dish128);
+                deleteImageBtn.setVisibility(View.GONE);
             } else {
                 if (oldFood.getImageUrl().equals("null")) {
                     foodImage.setImageResource(R.drawable.dish128);
+                    deleteImageBtn.setVisibility(View.GONE);
                 } else {
                     Picasso.get().load(oldFood.getImageUrl()).into(foodImage);
                 }
@@ -206,6 +209,18 @@ public class EditFoodItemActivity extends AppCompatActivity {
                     }
                 });
 
+        deleteImageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isImageDeleted = true;
+                deleteImageBtn.setVisibility(View.GONE);
+                foodImage.setImageResource(R.drawable.profile128px);
+                editFoodItemBtn.setClickable(true);
+                editFoodItemBtn.setEnabled(true);
+                editFoodItemBtn.setBackground(getDrawable(R.drawable.button2));
+            }
+        });
+
         // When "Edit Food Listing" button is clicked
         editFoodItemBtn.setOnClickListener(
                 new View.OnClickListener() {
@@ -227,7 +242,9 @@ public class EditFoodItemActivity extends AppCompatActivity {
                         }
 
                         if (imageUrl == null) {
-                            food.setImageUrl(oldFood.getImageUrl());
+                            if (!isImageDeleted) {
+                                food.setImageUrl(oldFood.getImageUrl());
+                            }
                         } else {
                             food.setImageUrl(imageUrl);
                         }

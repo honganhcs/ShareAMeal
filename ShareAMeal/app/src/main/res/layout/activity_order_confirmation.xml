@@ -137,19 +137,19 @@
             android:layout_height="24dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/ic_baseline_horizontal_rule_24"
-            app:layout_constraintBottom_toBottomOf="@+id/foodQuantityEdt"
-            app:layout_constraintEnd_toStartOf="@+id/foodQuantityEdt"
-            app:layout_constraintTop_toBottomOf="@+id/foodQuantityHeader" />
+            app:layout_constraintBottom_toBottomOf="@+id/foodQuantityTxt"
+            app:layout_constraintEnd_toStartOf="@+id/foodQuantityTxt"
+            app:layout_constraintTop_toTopOf="@+id/foodQuantityTxt" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/incrementBtn"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:background="@drawable/ic_baseline_add_24"
             android:layout_marginLeft="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/foodQuantityEdt"
-            app:layout_constraintStart_toEndOf="@+id/foodQuantityEdt"
-            app:layout_constraintTop_toBottomOf="@+id/foodQuantityHeader" />
+            android:background="@drawable/ic_baseline_add_24"
+            app:layout_constraintBottom_toBottomOf="@+id/foodQuantityTxt"
+            app:layout_constraintStart_toEndOf="@+id/foodQuantityTxt"
+            app:layout_constraintTop_toTopOf="@+id/foodQuantityTxt" />
 
         <TextView
             android:id="@+id/foodQuantityHeader"
@@ -163,13 +163,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtOrderQuantity" />
 
-        <EditText
-            android:id="@+id/foodQuantityEdt"
+        <TextView
+            android:id="@+id/foodQuantityTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="2"
+            android:layout_marginTop="10dp"
             android:text="0"
             android:textColor="#EC7423"
+            android:textSize="21sp"
             android:inputType="numberSigned"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="@+id/foodQuantityHeader"
@@ -189,7 +191,7 @@
             android:layout_marginTop="40dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/foodQuantityEdt"
+            app:layout_constraintTop_toBottomOf="@+id/foodQuantityTxt"
             android:onClick="onConfirmOrder"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
