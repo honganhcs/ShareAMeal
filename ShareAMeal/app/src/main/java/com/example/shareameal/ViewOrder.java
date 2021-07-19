@@ -154,10 +154,6 @@ public class ViewOrder extends AppCompatActivity {
                                                                     txtAddress.setText(donor.getAddress());
                                                                 }
                                                             }
-
-                                                            @Override
-                                                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                                                            }
                                                         });
                                             }
                                         }
