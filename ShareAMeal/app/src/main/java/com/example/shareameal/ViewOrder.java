@@ -31,7 +31,9 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class ViewOrder extends AppCompatActivity {
 
@@ -131,14 +133,14 @@ public class ViewOrder extends AppCompatActivity {
 
                                                 // initiate reference3 for Users
                                                 reference3 = FirebaseDatabase.getInstance().getReference("Users");
-                                                reference3.addValueEventListener(
-                                                        new ValueEventListener() {
+                                                reference3.child(donorId).get().addOnCompleteListener(
+                                                        new OnCompleteListener<DataSnapshot>() {
                                                             @Override
-                                                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                                                for (DataSnapshot data : snapshot.getChildren()) {
-                                                                    if (data.getKey().equals(donorId)) {
-                                                                        donor = data.getValue(User.class);
-                                                                    }
+                                                            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                                                                if(!task.isSuccessful()) {
+                                                                    Log.e("Firebase", "Error getting user", task.getException());
+                                                                } else {
+                                                                    donor = task.getResult().getValue(User.class);
 
                                                                     orderQuantity = order.getQuantity();
                                                                     foodNameTxt.setText(food.getName());
@@ -150,16 +152,14 @@ public class ViewOrder extends AppCompatActivity {
                                                                             + ", "
                                                                             + order.getDate());
                                                                     txtAddress.setText(donor.getAddress());
+                                                                }
                                                             }
-
-                                                            @Override
-                                                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                                                            }
-                                                        }   
-                                                });
+                                                        });
+                                            }
+                                        }
+                                    });
                         }
                     }
-
                 });
 
         FirebaseDatabase.getInstance().getReference("Users").child(donorId).get().addOnCompleteListener(
@@ -206,7 +206,7 @@ public class ViewOrder extends AppCompatActivity {
                                                     if (!task.isSuccessful()) {
                                                         Log.e("Firebase", "Error getting slot", task.getException());
                                                     } else {
-                                                        Slot slot = task.getResult().getValue(Slot.class);
+                                                        slot = task.getResult().getValue(Slot.class);
                                                         slot.setNumRecipients(slot.getNumRecipients() - 1);
                                                         if (slot.getRecipientId1().equals(recipientId)) {
                                                             slot.setRecipientId1(null);
@@ -243,82 +243,105 @@ public class ViewOrder extends AppCompatActivity {
     }
 
     public void onOrderCompleted(View view) {
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Complete Order")
-                .setMessage("Are you sure you have claimed the donated food items as stated in the order?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // move the order from Pending to Completed in the database
-                        reference2.child("Completed").child(recipientId).child(slotId).child(foodId).setValue(order);
-                        reference2.child("Pending").child(recipientId).child(slotId).child(foodId).removeValue();
+        Calendar cal = Calendar.getInstance();
+        int todayYear = cal.get(Calendar.YEAR);
+        int todayMonth = cal.get(Calendar.MONTH) + 1;
+        int today = cal.get(Calendar.DAY_OF_MONTH);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);
+        int endHour, endMinute;
+        if(order.getStartMinute() == 30) {
+            endHour = order.getStartHour() + 1;
+            endMinute = 0;
+        } else {
+            endHour = order.getStartHour();
+            endMinute = 30;
+        }
 
-                        // update slot only if the same recipient does not have any other orders in the same time slot
-                        ArrayList<String> foodIds = new ArrayList<>();
-                        reference2.child("Pending").child(recipientId).child(slotId).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                for(DataSnapshot data : snapshot.getChildren()) {
-                                    foodIds.add(data.getKey());
-                                }
-                                if(foodIds.isEmpty()) {
-                                    reference4.child("Pending").child(donorId).child(slotId).get().addOnCompleteListener(
-                                            new OnCompleteListener<DataSnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
-                                                    if (!task.isSuccessful()) {
-                                                        Log.e("Firebase", "Error getting slot", task.getException());
-                                                    } else {
-                                                        Slot slot = task.getResult().getValue(Slot.class);
-                                                        slot.setNumRecipients(slot.getNumRecipients() - 1);
-                                                        if (slot.getRecipientId1().equals(recipientId)) {
-                                                            slot.setRecipientId1(null);
-                                                        } else if (slot.getRecipientId2().equals(recipientId)) {
-                                                            slot.setRecipientId2(null);
-                                                        } else if (slot.getRecipientId3().equals(recipientId)) {
-                                                            slot.setRecipientId3(null);
+        if(order.getYear() > todayYear || (order.getYear() == todayYear && order.getMonth() > todayMonth)
+           || (order.getYear() == todayYear && order.getMonth() == todayMonth && order.getDayOfMonth() > today)
+        || (order.getYear() == todayYear && order.getMonth() == todayMonth && order.getDayOfMonth() == today && endHour > hour)
+        || (order.getYear() == todayYear && order.getMonth() == todayMonth && order.getDayOfMonth() == today && endHour == hour && endMinute >= minute)) {
+            Toast.makeText(this, "You can only complete the order once the time slot for this order has ended.", Toast.LENGTH_LONG).show();
+        } else {
+
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle("Complete Order")
+                    .setMessage("Are you sure you have claimed the donated food items as stated in the order?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // move the order from Pending to Completed in the database
+                            reference2.child("Completed").child(recipientId).child(slotId).child(foodId).setValue(order);
+                            reference2.child("Pending").child(recipientId).child(slotId).child(foodId).removeValue();
+
+                            // update slot only if the same recipient does not have any other orders in the same time slot
+                            ArrayList<String> foodIds = new ArrayList<>();
+                            reference2.child("Pending").child(recipientId).child(slotId).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                    for (DataSnapshot data : snapshot.getChildren()) {
+                                        foodIds.add(data.getKey());
+                                    }
+                                    if (foodIds.isEmpty()) {
+                                        reference4.child("Pending").child(donorId).child(slotId).get().addOnCompleteListener(
+                                                new OnCompleteListener<DataSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                                                        if (!task.isSuccessful()) {
+                                                            Log.e("Firebase", "Error getting slot", task.getException());
+                                                        } else {
+                                                            slot = task.getResult().getValue(Slot.class);
+                                                            slot.setNumRecipients(slot.getNumRecipients() - 1);
+                                                            if (slot.getRecipientId1().equals(recipientId)) {
+                                                                slot.setRecipientId1(null);
+                                                            } else if (slot.getRecipientId2().equals(recipientId)) {
+                                                                slot.setRecipientId2(null);
+                                                            } else if (slot.getRecipientId3().equals(recipientId)) {
+                                                                slot.setRecipientId3(null);
+                                                            }
+                                                            reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
+
                                                         }
-                                                        reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
-
                                                     }
-                                                }
-                                            });
+                                                });
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                @Override
+                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-                            }
-                        });
+                                }
+                            });
 
-                        // record order in Completed section of Slots
-                        order.setRecipientId(recipientId);
-                        reference4.child("Completed").child(donorId).child(slotId).child(recipientId).child(foodId).setValue(order);
+                            // record order in Completed section of Slots
+                            order.setRecipientId(recipientId);
+                            reference4.child("Completed").child(donorId).child(slotId).child(recipientId).child(foodId).setValue(order);
 
-                        // Update weekly points and all-time points for donors
-                        DatabaseReference donorRef = FirebaseDatabase.getInstance().getReference("Users").child(donorId);
-                        donorRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
-                                User user = task.getResult().getValue(User.class);
-                                int currWeeklyPoints = user.getNumberOfWeeklyPoints();
-                                int currAllTimePoints = user.getNumberOfPoints();
-                                donorRef.child("numberOfWeeklyPoints").setValue(currWeeklyPoints + orderQuantity);
-                                donorRef.child("numberOfPoints").setValue(currAllTimePoints + orderQuantity);
-                            }
-                        });
+                            // Update weekly points and all-time points for donors
+                            DatabaseReference donorRef = FirebaseDatabase.getInstance().getReference("Users").child(donorId);
+                            donorRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                                    User user = task.getResult().getValue(User.class);
+                                    int currWeeklyPoints = user.getNumberOfWeeklyPoints();
+                                    int currAllTimePoints = user.getNumberOfPoints();
+                                    donorRef.child("numberOfWeeklyPoints").setValue(currWeeklyPoints + orderQuantity);
+                                    donorRef.child("numberOfPoints").setValue(currAllTimePoints + orderQuantity);
+                                }
+                            });
 
-                        Toast.makeText(ViewOrder.this, "Order has been registered as completed.", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(ViewOrder.this, RecipientsRecords.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                })
-                .setNegativeButton("No", null)
-                .show();
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#AF1B1B"));
-        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#AF1B1B"));
+                            Toast.makeText(ViewOrder.this, "Order has been registered as completed.", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(ViewOrder.this, RecipientsRecords.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#AF1B1B"));
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#AF1B1B"));
+        }
     }
 
     @Override
