@@ -43,6 +43,7 @@ public class AddNewTimeSlotActivity extends AppCompatActivity implements CustomT
 
     // other vars
     int todayYear, todayMonth, today;
+    int currentHour, currentMinute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,8 @@ public class AddNewTimeSlotActivity extends AppCompatActivity implements CustomT
         todayYear = cal.get(Calendar.YEAR);
         todayMonth = cal.get(Calendar.MONTH) + 1;
         today = cal.get(Calendar.DAY_OF_MONTH);
+        currentHour = cal.get(Calendar.HOUR_OF_DAY);
+        currentMinute = cal.get(Calendar.MINUTE);
     }
 
     private void initDatePicker() {
@@ -176,9 +179,13 @@ public class AddNewTimeSlotActivity extends AppCompatActivity implements CustomT
                     .show();
         } else if (Year < todayYear
                 || (Year == todayYear && Month < todayMonth)
-                || (Year == todayYear && Month == todayMonth && Day <= today)) {
+                || (Year == todayYear && Month == todayMonth && Day < today)) {
             Toast.makeText(
-                    AddNewTimeSlotActivity.this, "Please select a date after today.", Toast.LENGTH_SHORT)
+                    AddNewTimeSlotActivity.this, "Please select a date no earlier than today.", Toast.LENGTH_SHORT)
+                    .show();
+        } else if (Year == todayYear && Month == todayMonth && Day == today && startHour < currentHour + 2){
+            Toast.makeText(
+                    AddNewTimeSlotActivity.this, "Please select a time 2 hours after now.", Toast.LENGTH_SHORT)
                     .show();
         } else if (endHour < startHour || (endHour == startHour && endMinute <= startMinute)) {
             Toast.makeText(
