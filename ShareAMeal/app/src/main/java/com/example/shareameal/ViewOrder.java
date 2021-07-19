@@ -3,7 +3,6 @@ package com.example.shareameal;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.DialogInterface;
@@ -15,7 +14,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +36,7 @@ import java.util.ArrayList;
 public class ViewOrder extends AppCompatActivity {
 
     private ImageView foodImage;
-    private TextView foodNameTxt, foodDescriptionTxt, txtOrderQuantity, txtSchedule, txtAddress, txtDonorHeader, txtDonor;
+    private TextView foodNameTxt, foodDescriptionTxt, txtOrderQuantity, txtSchedule, txtAddress, txtDonor;
     private DatabaseReference reference1, reference2, reference3, reference4;
     private String donorId, foodId, slotId, recipientId;
     private Order order;
@@ -55,55 +53,51 @@ public class ViewOrder extends AppCompatActivity {
 
         getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
 
+        //top action bar
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
         getSupportActionBar().setTitle("View order");
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // initiate widgets
         foodImage = findViewById(R.id.foodImage);
         foodNameTxt = findViewById(R.id.foodNameTxt);
         foodDescriptionTxt = findViewById(R.id.foodDescriptionTxt);
         txtOrderQuantity = findViewById(R.id.txtOrderQuantity);
         txtSchedule = findViewById(R.id.txtSchedule);
         txtAddress = findViewById(R.id.txtAddress);
-        txtDonorHeader = findViewById(R.id.txtDonorHeader);
         txtDonor = findViewById(R.id.txtDonor);
         bufferLayout = findViewById(R.id.layout1);
 
+        //initiate current userId (recipientId)
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         recipientId = user.getUid();
 
+        // initiate reference4 for Slots.
         reference4 = FirebaseDatabase.getInstance().getReference("Slots");
 
         Intent intent = getIntent();
 
+        // initiate donorId, foodId, slotId
         donorId = intent.getStringExtra("donorId");
         foodId = intent.getStringExtra("foodId");
         slotId = intent.getStringExtra("slotId");
 
+        // initiate reference 1 for Foods
         reference1 = FirebaseDatabase.getInstance().getReference("Foods").child(donorId);
-        reference1.addValueEventListener(
-                new ValueEventListener() {
+        reference1.child(foodId).get().addOnCompleteListener(
+                new OnCompleteListener<DataSnapshot>() {
                     @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        for (DataSnapshot data : snapshot.getChildren()) {
-                            if (data.getKey().equals(foodId)) {
-                                food = data.getValue(Food.class);
-                            }
-                        }
-
-                        DisplayMetrics displayMetrics = new DisplayMetrics();
-                        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-                        if (food.getImageUrl() == null) {
-                            foodImage.setImageResource(R.drawable.dish);
-                            ViewGroup.LayoutParams layoutParams = foodImage.getLayoutParams();
-                            layoutParams.width = displayMetrics.widthPixels;
-                            final float density = getApplicationContext().getResources().getDisplayMetrics().density;
-                            layoutParams.height = (int) (230 * density);
-                            foodImage.setLayoutParams(layoutParams);
+                    public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Log.e("Firebase", "Error getting food", task.getException());
                         } else {
-                            if (food.getImageUrl().equals("null")) {
+                            food = task.getResult().getValue(Food.class);
+
+                            DisplayMetrics displayMetrics = new DisplayMetrics();
+                            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+                            if (food.getImageUrl() == null) {
                                 foodImage.setImageResource(R.drawable.dish);
                                 ViewGroup.LayoutParams layoutParams = foodImage.getLayoutParams();
                                 layoutParams.width = displayMetrics.widthPixels;
@@ -111,56 +105,64 @@ public class ViewOrder extends AppCompatActivity {
                                 layoutParams.height = (int) (230 * density);
                                 foodImage.setLayoutParams(layoutParams);
                             } else {
-                                bufferLayout.setVisibility(View.GONE);
-                                Picasso.get().load(food.getImageUrl()).fit().into(foodImage);
+                                if (food.getImageUrl().equals("null")) {
+                                    foodImage.setImageResource(R.drawable.dish);
+                                    ViewGroup.LayoutParams layoutParams = foodImage.getLayoutParams();
+                                    layoutParams.width = displayMetrics.widthPixels;
+                                    final float density = getApplicationContext().getResources().getDisplayMetrics().density;
+                                    layoutParams.height = (int) (230 * density);
+                                    foodImage.setLayoutParams(layoutParams);
+                                } else {
+                                    bufferLayout.setVisibility(View.GONE);
+                                    Picasso.get().load(food.getImageUrl()).fit().into(foodImage);
+                                }
                             }
-                        }
 
+                            // initiate reference2 for Orders
+                            reference2 = FirebaseDatabase.getInstance().getReference("Orders");
+                            reference2.child("Pending").child(recipientId).child(slotId).child(foodId).get().addOnCompleteListener(
+                                    new OnCompleteListener<DataSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.e("Firebase", "Error getting order", task.getException());
+                                            } else {
+                                                order = task.getResult().getValue(Order.class);
 
-                        reference2 = FirebaseDatabase.getInstance().getReference("Orders");
-                        reference2.child("Pending").child(recipientId).child(slotId).child(foodId).get().addOnCompleteListener(
-                                new OnCompleteListener<DataSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            Log.e("Firebase", "Error getting data", task.getException());
-                                        } else {
-                                            order = task.getResult().getValue(Order.class);
-                                            reference3 = FirebaseDatabase.getInstance().getReference("Users");
-                                            reference3.addValueEventListener(
-                                                    new ValueEventListener() {
-                                                        @Override
-                                                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                                            for (DataSnapshot data : snapshot.getChildren()) {
-                                                                if (data.getKey().equals(donorId)) {
-                                                                    donor = data.getValue(User.class);
+                                                // initiate reference3 for Users
+                                                reference3 = FirebaseDatabase.getInstance().getReference("Users");
+                                                reference3.addValueEventListener(
+                                                        new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                                                for (DataSnapshot data : snapshot.getChildren()) {
+                                                                    if (data.getKey().equals(donorId)) {
+                                                                        donor = data.getValue(User.class);
+                                                                    }
                                                                 }
+
+                                                                orderQuantity = order.getQuantity();
+                                                                foodNameTxt.setText(food.getName());
+                                                                foodDescriptionTxt.setText(food.getDescription());
+                                                                txtOrderQuantity.setText(String.valueOf(orderQuantity));
+                                                                txtSchedule.setText(order.getStartTime()
+                                                                        + " - "
+                                                                        + order.getEndTime()
+                                                                        + ", "
+                                                                        + order.getDate());
+                                                                txtAddress.setText(donor.getAddress());
                                                             }
 
-                                                            orderQuantity = order.getQuantity();
-                                                            foodNameTxt.setText(food.getName());
-                                                            foodDescriptionTxt.setText(food.getDescription());
-                                                            txtOrderQuantity.setText(String.valueOf(orderQuantity));
-                                                            txtSchedule.setText(order.getStartTime()
-                                                                    + " - "
-                                                                    + order.getEndTime()
-                                                                    + ", "
-                                                                    + order.getDate());
-                                                            txtAddress.setText(donor.getAddress());
-                                                        }
-
-                                                        @Override
-                                                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                                                        }
-                                                    });
+                                                            @Override
+                                                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                                            }
+                                                        });
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                        }
                     }
 
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                    }
                 });
 
         FirebaseDatabase.getInstance().getReference("Users").child(donorId).get().addOnCompleteListener(
@@ -187,6 +189,10 @@ public class ViewOrder extends AppCompatActivity {
                         // remove order
                         reference2.child("Pending").child(recipientId).child(slotId).child(foodId).removeValue();
 
+                        // update food quantity
+                        food.setQuantity(food.getQuantity() + orderQuantity);
+                        reference1.child(foodId).setValue(food);
+
                         // update slot only if the same recipient does not have any other orders in the same time slot
                         ArrayList<String> foodIds = new ArrayList<>();
                         reference2.child("Pending").child(recipientId).child(slotId).addValueEventListener(new ValueEventListener() {
@@ -201,7 +207,7 @@ public class ViewOrder extends AppCompatActivity {
                                                 @Override
                                                 public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                                                     if (!task.isSuccessful()) {
-                                                        Log.e("Firebase", "Error getting data", task.getException());
+                                                        Log.e("Firebase", "Error getting slot", task.getException());
                                                     } else {
                                                         Slot slot = task.getResult().getValue(Slot.class);
                                                         slot.setNumRecipients(slot.getNumRecipients() - 1);
@@ -214,19 +220,11 @@ public class ViewOrder extends AppCompatActivity {
                                                         }
                                                         reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
 
-                                                        // update food quantity
-                                                        food.setQuantity(food.getQuantity() + orderQuantity);
-                                                        reference1.child(foodId).setValue(food);
-
-                                                        Toast.makeText(ViewOrder.this, "Your order has been successfully cancelled.", Toast.LENGTH_SHORT).show();
-
-                                                        Intent intent = new Intent(ViewOrder.this, RecipientViewOrders.class);
-                                                        startActivity(intent);
-                                                        finish();
                                                     }
                                                 }
                                             });
                                 }
+
                             }
 
                             @Override
@@ -234,7 +232,11 @@ public class ViewOrder extends AppCompatActivity {
 
                             }
                         });
+                        Toast.makeText(ViewOrder.this, "Your order has been successfully cancelled.", Toast.LENGTH_SHORT).show();
 
+                        Intent intent = new Intent(ViewOrder.this, RecipientViewOrders.class);
+                        startActivity(intent);
+                        finish();
                     }
                 })
                 .setNegativeButton("No", null)
