@@ -150,16 +150,18 @@ public class ViewOrder extends AppCompatActivity {
                                                                             + ", "
                                                                             + order.getDate());
                                                                     txtAddress.setText(donor.getAddress());
+                                                                }
                                                             }
 
                                                             @Override
                                                             public void onCancelled(@NonNull @NotNull DatabaseError error) {
                                                             }
-                                                        }   
-                                                });
+                                                        });
+                                            }
+                                        }
+                                    });
                         }
                     }
-
                 });
 
         FirebaseDatabase.getInstance().getReference("Users").child(donorId).get().addOnCompleteListener(
