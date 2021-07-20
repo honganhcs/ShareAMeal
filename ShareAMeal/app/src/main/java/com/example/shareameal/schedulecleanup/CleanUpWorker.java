@@ -138,7 +138,7 @@ public class CleanUpWorker extends Worker {
                                                                     if(order.getYear() < todayDay || (order.getYear() == todayYear && order.getMonth() < todayMonth)
                                                                             || (order.getYear() == todayYear && order.getMonth() == todayMonth && order.getDayOfMonth() < todayDay)) {
 
-                                                                        String body = "You have outdated order(s). Please confirm the completion of the order(s) or delete the order(s).";
+                                                                        String body = "You have outdated order(s). Please confirm the completion of or delete the order(s).";
                                                                         Activity activity = (Activity) getApplicationContext();
 
                                                                         NotificationsSender notificationsSender = new NotificationsSender(token, "Order is outdated", body, getApplicationContext(), activity);
