@@ -369,6 +369,107 @@ public class DonorHomepageActivity extends AppCompatActivity {
             }
         });
 
+        leaderboardOneFirstTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DonorHomepageActivity.this, ShowUserProfile.class);
+                intent.putExtra("leaderboard", "weekly");
+                intent.putExtra("rank", "1");
+                startActivity(intent);
+                finish();
+            }
+        });
+        leaderboardOneSecondTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DonorHomepageActivity.this, ShowUserProfile.class);
+                intent.putExtra("leaderboard", "weekly");
+                intent.putExtra("rank", "2");
+                startActivity(intent);
+                finish();
+            }
+        });
+        leaderboardOneThirdTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DonorHomepageActivity.this, ShowUserProfile.class);
+                intent.putExtra("leaderboard", "weekly");
+                intent.putExtra("rank", "3");
+                startActivity(intent);
+                finish();
+            }
+        });
+        leaderboardOneFourthTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DonorHomepageActivity.this, ShowUserProfile.class);
+                intent.putExtra("leaderboard", "weekly");
+                intent.putExtra("rank", "4");
+                startActivity(intent);
+                finish();
+            }
+        });
+        leaderboardOneFifthTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DonorHomepageActivity.this, ShowUserProfile.class);
+                intent.putExtra("leaderboard", "weekly");
+                intent.putExtra("rank", "5");
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        leaderboardTwoFirstTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DonorHomepageActivity.this, ShowUserProfile.class);
+                intent.putExtra("leaderboard", "all");
+                intent.putExtra("rank", "1");
+                startActivity(intent);
+                finish();
+            }
+        });
+        leaderboardTwoSecondTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DonorHomepageActivity.this, ShowUserProfile.class);
+                intent.putExtra("leaderboard", "all");
+                intent.putExtra("rank", "2");
+                startActivity(intent);
+                finish();
+            }
+        });
+        leaderboardTwoThirdTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DonorHomepageActivity.this, ShowUserProfile.class);
+                intent.putExtra("leaderboard", "all");
+                intent.putExtra("rank", "3");
+                startActivity(intent);
+                finish();
+            }
+        });
+        leaderboardTwoFourthTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DonorHomepageActivity.this, ShowUserProfile.class);
+                intent.putExtra("leaderboard", "all");
+                intent.putExtra("rank", "4");
+                startActivity(intent);
+                finish();
+            }
+        });
+        leaderboardTwoFifthTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DonorHomepageActivity.this, ShowUserProfile.class);
+                intent.putExtra("leaderboard", "all");
+                intent.putExtra("rank", "5");
+                startActivity(intent);
+                finish();
+            }
+        });
 
         DatabaseReference foodRef = FirebaseDatabase.getInstance().getReference("Foods");
         foodRef
