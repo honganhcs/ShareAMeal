@@ -193,9 +193,10 @@ public class ViewOrder extends AppCompatActivity {
 
                         // update slot only if the same recipient does not have any other orders in the same time slot
                         ArrayList<String> foodIds = new ArrayList<>();
-                        reference2.child("Pending").child(recipientId).child(slotId).addValueEventListener(new ValueEventListener() {
+                        reference2.child("Pending").child(recipientId).child(slotId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                             @Override
-                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                                DataSnapshot snapshot = task.getResult();
                                 for(DataSnapshot data : snapshot.getChildren()) {
                                     foodIds.add(data.getKey());
                                 }
@@ -217,17 +218,10 @@ public class ViewOrder extends AppCompatActivity {
                                                             slot.setRecipientId3(null);
                                                         }
                                                         reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
-
                                                     }
                                                 }
                                             });
                                 }
-
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
                             }
                         });
                         Toast.makeText(ViewOrder.this, "Your order has been successfully cancelled.", Toast.LENGTH_SHORT).show();
