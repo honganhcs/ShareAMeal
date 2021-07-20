@@ -2,6 +2,9 @@ package com.example.shareameal;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.shareameal.schedulecleanup.CleanUpWorker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -56,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
                             token = task.getResult();
                         }
                     });
+
+            WorkRequest cleanUpWorkRequest = new OneTimeWorkRequest.Builder(CleanUpWorker.class).build();
+            WorkManager.getInstance(MainActivity.this).enqueue(cleanUpWorkRequest);
 
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
             reference
