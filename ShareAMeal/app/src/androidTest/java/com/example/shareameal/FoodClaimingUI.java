@@ -51,8 +51,8 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class FoodClaimingUI {
-    static String donorEmail = "espressoDonor@gmail.com";
-    static String donorPassword = "espressoD";
+    static String donorEmail = "testdonor@gmail.com";
+    static String donorPassword = "donorr";
     static String recipientEmail = "espressoRecipient@gmail.com";
     static String recipientPassword = "espressoR";
 
@@ -132,7 +132,7 @@ public class FoodClaimingUI {
     @Test
     public void claimFood() {
         onView(withId(R.id.rv)).perform(RecyclerViewActions.actionOnItem(
-                hasDescendant(withText("espressoDonor")), click()
+                hasDescendant(withText("Chicken rice")), click()
         ));
         rest();
         onView(withId(R.id.rv)).perform(RecyclerViewActions.actionOnItem(
@@ -157,7 +157,7 @@ public class FoodClaimingUI {
         onView(withId(R.id.rv)).perform(actionOnItemAtPosition(0, click()));
         rest();
 
-        onView(withId(R.id.txtDonor)).perform(scrollTo()).check(matches(withText("espressoDonor")));
+        onView(withId(R.id.txtDonor)).perform(scrollTo()).check(matches(withText("Chicken rice")));
         onView(withId(R.id.btnCancelOrder)).perform(scrollTo(), click());
         onView(withText("YES")).inRoot(isDialog()).check(matches(isDisplayed())).perform(click());
         rest();
