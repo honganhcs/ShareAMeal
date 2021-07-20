@@ -1,17 +1,12 @@
 package com.example.shareameal;
 
-import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.NumberPicker;
-import android.widget.TimePicker;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
-import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -20,17 +15,12 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
-import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.NoMatchingViewException;
@@ -38,35 +28,25 @@ import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.action.GeneralClickAction;
 import androidx.test.espresso.action.GeneralLocation;
 import androidx.test.espresso.action.GeneralSwipeAction;
 import androidx.test.espresso.action.Press;
 import androidx.test.espresso.action.Swipe;
-import androidx.test.espresso.action.Tap;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
-import androidx.test.rule.ActivityTestRule;
 
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -148,7 +128,7 @@ public class FoodClaimingUI {
         rest();
     }
 
-    // Check if recipients are able to claim a food order
+    // Check if recipients are able to claim a food order, and view the order in the "Schedule" page
     @Test
     public void claimFood() {
         onView(withId(R.id.rv)).perform(RecyclerViewActions.actionOnItem(
@@ -180,6 +160,8 @@ public class FoodClaimingUI {
         onView(withId(R.id.txtDonor)).perform(scrollTo()).check(matches(withText("espressoDonor")));
         onView(withId(R.id.btnCancelOrder)).perform(scrollTo(), click());
         onView(withText("YES")).inRoot(isDialog()).check(matches(isDisplayed())).perform(click());
+        rest();
+        onView(withId(R.id.rv)).check(new FoodClaimingUI.RecyclerViewItemCountAssertion(0));
 
         rest();
         onView(withId(R.id.profile)).perform(click());
@@ -187,7 +169,7 @@ public class FoodClaimingUI {
         onView(withId(R.id.logoutTxt)).perform(click());
     }
 
-
+    // Delete the newly added time slot and food listing for the donor
     @After
     public void cleanUpSlotAndListing() {
         onView(withId(R.id.emailEdt)).perform(typeText(donorEmail), closeSoftKeyboard());
