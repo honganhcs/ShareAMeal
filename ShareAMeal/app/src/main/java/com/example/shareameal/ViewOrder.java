@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -167,7 +168,7 @@ public class ViewOrder extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                 User user = task.getResult().getValue(User.class);
-                if (user.getRestaurant() == null || user.getRestaurant().equals("null")) {
+                if (user.getRestaurant() == null || TextUtils.isEmpty(user.getRestaurant())) {
                     txtDonor.setText(user.getName());
                 } else {
                     txtDonor.setText(user.getRestaurant());
@@ -192,9 +193,10 @@ public class ViewOrder extends AppCompatActivity {
 
                         // update slot only if the same recipient does not have any other orders in the same time slot
                         ArrayList<String> foodIds = new ArrayList<>();
-                        reference2.child("Pending").child(recipientId).child(slotId).addValueEventListener(new ValueEventListener() {
+                        reference2.child("Pending").child(recipientId).child(slotId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                             @Override
-                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                                DataSnapshot snapshot = task.getResult();
                                 for(DataSnapshot data : snapshot.getChildren()) {
                                     foodIds.add(data.getKey());
                                 }
@@ -216,17 +218,10 @@ public class ViewOrder extends AppCompatActivity {
                                                             slot.setRecipientId3(null);
                                                         }
                                                         reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
-
                                                     }
                                                 }
                                             });
                                 }
-
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
                             }
                         });
                         Toast.makeText(ViewOrder.this, "Your order has been successfully cancelled.", Toast.LENGTH_SHORT).show();

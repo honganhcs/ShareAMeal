@@ -62,8 +62,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private boolean isImageUploaded, isProfileUpdated, isImageDeleted;
     private AppCompatButton updateProfileInfoBtn;
     private TextView textView4, textView5;
-    private EditText usernameEdt, addressEdt, restaurantEdt;
-    private String userGroup, imageUrl, oldImageUrl;
+    private EditText usernameEdt, addressEdt, restaurantEdt, descriptionEdt;
+    private String userGroup, imageUrl, oldImageUrl, description;
     private TextInputLayout restaurantWrapper, addressWrapper;
     private ProgressBar progressBar;
 
@@ -96,6 +96,7 @@ public class EditProfileActivity extends AppCompatActivity {
         textView5 = findViewById(R.id.textView5);
         restaurantEdt = findViewById(R.id.restaurantEdt);
         restaurantWrapper = findViewById(R.id.restaurantWrapper);
+        descriptionEdt = findViewById(R.id.descriptionEdt);
         progressBar = findViewById(R.id.progress_circular);
         progressBar.setVisibility(View.GONE);
 
@@ -151,6 +152,23 @@ public class EditProfileActivity extends AppCompatActivity {
                     public void afterTextChanged(Editable s) {
                     }
                 });
+        descriptionEdt.addTextChangedListener(
+                new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        updateProfileInfoBtn.setClickable(true);
+                        updateProfileInfoBtn.setEnabled(true);
+                        updateProfileInfoBtn.setBackground(getDrawable(R.drawable.button2));
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
+                });
 
         // Profile picture feature: Initialising of widgets and storage
         chooseImageBtn = findViewById(R.id.chooseImageBtn);
@@ -179,6 +197,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                     addressEdt.setText(user.getAddress());
                                 }
                                 oldImageUrl = user.getImageUrl();
+                                description = user.getProfileDescription();
 
                                 // If user is recipient, the "Name of food service" field will not be shown
                                 if (user.getUserGroup().equals("recipient")) {
@@ -212,6 +231,12 @@ public class EditProfileActivity extends AppCompatActivity {
                                     } else {
                                         Picasso.get().load(oldImageUrl).into(profilePicImg);
                                     }
+                                }
+
+                                if (description == null) {
+                                    descriptionEdt.setText("");
+                                } else {
+                                    descriptionEdt.setText(description);
                                 }
 
                                 updateProfileInfoBtn.setClickable(false);
@@ -290,6 +315,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         String newUsername = usernameEdt.getText().toString();
                         String newAddress = addressEdt.getText().toString();
                         String newRestaurant = restaurantEdt.getText().toString();
+                        String newDescription = descriptionEdt.getText().toString();
 
                         if (!userGroup.equals("admin")) {
                             if (TextUtils.isEmpty(newUsername)) {
@@ -306,6 +332,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                 user.setUserId(userId);
                                 user.setUserGroup(userGroup);
                                 user.setRestaurant(newRestaurant);
+                                user.setProfileDescription(newDescription);
 
                                 if (imageUrl == null) {
                                     if (!isImageDeleted) {
@@ -367,6 +394,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                 user.setName(newUsername);
                                 user.setUserId(userId);
                                 user.setUserGroup(userGroup);
+                                user.setProfileDescription(newDescription);
 
                                 if (imageUrl == null) {
                                     if (!isImageDeleted) {

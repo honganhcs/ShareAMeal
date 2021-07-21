@@ -10,6 +10,7 @@ public class User {
     private double addressLatitude;
     private double addressLongitude;
     private int numberOfReports;
+    private String profileDescription;
 
     //for donors only
     private String restaurant;
@@ -160,5 +161,13 @@ public class User {
 
     public void setFcmToken(String fcmToken) {
         this.fcmToken = fcmToken;
+    }
+
+    public void setProfileDescription(String profileDescription) {
+        this.profileDescription = profileDescription;
+    }
+
+    public String getProfileDescription() {
+        return profileDescription;
     }
 }
