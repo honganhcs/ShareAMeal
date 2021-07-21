@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat;
 import com.example.shareameal.LoginActivity;
 import com.example.shareameal.MainActivity;
 import com.example.shareameal.R;
+import com.example.shareameal.RecipientViewOrders;
 import com.example.shareameal.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -73,8 +74,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
 
         Log.d("message_received", "From " + remoteMessage.getFrom());
+        Intent intent;
 
-        Intent intent = new Intent(this, MainActivity.class);
+        if(remoteMessage.getNotification().getTitle().equals(getString(R.string.slot_booked))
+        || remoteMessage.getNotification().getTitle().equals("Outdated order(s)")) {
+            intent = new Intent(this, RecipientViewOrders.class);
+        } else {
+            intent = new Intent(this, MainActivity.class);
+        }
+
         // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 

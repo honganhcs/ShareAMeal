@@ -34,8 +34,11 @@ public class NotificationsSender {
         this.activity = activity;
     }
 
+
     public void sendNotification() {
+
         this.requestQueue = Volley.newRequestQueue(activity);
+
         JSONObject obj = new JSONObject();
         try {
            obj.put("to", this.fcmToken);

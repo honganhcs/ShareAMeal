@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.shareameal.notifications.NotificationsSender;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,6 +47,7 @@ public class ViewOrder extends AppCompatActivity {
     private Food food;
     private User donor;
     private int orderQuantity;
+    private String foodName;
     private ConstraintLayout bufferLayout;
 
     @Override
@@ -143,7 +145,8 @@ public class ViewOrder extends AppCompatActivity {
                                                                     donor = task.getResult().getValue(User.class);
 
                                                                     orderQuantity = order.getQuantity();
-                                                                    foodNameTxt.setText(food.getName());
+                                                                    foodName = food.getName();
+                                                                    foodNameTxt.setText(foodName);
                                                                     foodDescriptionTxt.setText(food.getDescription());
                                                                     txtOrderQuantity.setText(String.valueOf(orderQuantity));
                                                                     txtSchedule.setText(order.getStartTime()
@@ -190,6 +193,12 @@ public class ViewOrder extends AppCompatActivity {
                         food.setQuantity(food.getQuantity() + orderQuantity);
                         reference1.child(foodId).setValue(food);
 
+                        // send notification to donor
+                        String fcmToken = donor.getFcmToken();
+                        NotificationsSender notificationsSender = new NotificationsSender(fcmToken, "Order cancelled", "The order of " + orderQuantity + " " + foodName
+                                + " at " + order.getStartTime() + " on " + order.getDate() + " has been cancelled by the recipient.", getApplicationContext(), ViewOrder.this);
+                        notificationsSender.sendNotification();
+
                         // update slot only if the same recipient does not have any other orders in the same time slot
                         ArrayList<String> foodIds = new ArrayList<>();
                         reference2.child("Pending").child(recipientId).child(slotId).addValueEventListener(new ValueEventListener() {
@@ -207,15 +216,18 @@ public class ViewOrder extends AppCompatActivity {
                                                         Log.e("Firebase", "Error getting slot", task.getException());
                                                     } else {
                                                         slot = task.getResult().getValue(Slot.class);
-                                                        slot.setNumRecipients(slot.getNumRecipients() - 1);
-                                                        if (slot.getRecipientId1().equals(recipientId)) {
-                                                            slot.setRecipientId1(null);
-                                                        } else if (slot.getRecipientId2().equals(recipientId)) {
-                                                            slot.setRecipientId2(null);
-                                                        } else if (slot.getRecipientId3().equals(recipientId)) {
-                                                            slot.setRecipientId3(null);
+
+                                                        if(slot != null) {
+                                                            slot.setNumRecipients(slot.getNumRecipients() - 1);
+                                                            if (slot.getRecipientId1().equals(recipientId)) {
+                                                                slot.setRecipientId1(null);
+                                                            } else if (slot.getRecipientId2().equals(recipientId)) {
+                                                                slot.setRecipientId2(null);
+                                                            } else if (slot.getRecipientId3().equals(recipientId)) {
+                                                                slot.setRecipientId3(null);
+                                                            }
+                                                            reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
                                                         }
-                                                        reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
 
                                                     }
                                                 }
@@ -275,6 +287,12 @@ public class ViewOrder extends AppCompatActivity {
                             reference2.child("Completed").child(recipientId).child(slotId).child(foodId).setValue(order);
                             reference2.child("Pending").child(recipientId).child(slotId).child(foodId).removeValue();
 
+                            // send notification to donor
+                            String fcmToken = donor.getFcmToken();
+                            NotificationsSender notificationsSender = new NotificationsSender(fcmToken, "Order completed", "The order of " + orderQuantity + " " + foodName
+                                    + " at " + order.getStartTime() + " on " + order.getDate() + " has been registered as completed by the recipient.", getApplicationContext(), ViewOrder.this);
+                            notificationsSender.sendNotification();
+
                             // update slot only if the same recipient does not have any other orders in the same time slot
                             ArrayList<String> foodIds = new ArrayList<>();
                             reference2.child("Pending").child(recipientId).child(slotId).addValueEventListener(new ValueEventListener() {
@@ -292,15 +310,17 @@ public class ViewOrder extends AppCompatActivity {
                                                             Log.e("Firebase", "Error getting slot", task.getException());
                                                         } else {
                                                             slot = task.getResult().getValue(Slot.class);
-                                                            slot.setNumRecipients(slot.getNumRecipients() - 1);
-                                                            if (slot.getRecipientId1().equals(recipientId)) {
-                                                                slot.setRecipientId1(null);
-                                                            } else if (slot.getRecipientId2().equals(recipientId)) {
-                                                                slot.setRecipientId2(null);
-                                                            } else if (slot.getRecipientId3().equals(recipientId)) {
-                                                                slot.setRecipientId3(null);
+                                                            if(slot != null) {
+                                                                slot.setNumRecipients(slot.getNumRecipients() - 1);
+                                                                if (slot.getRecipientId1().equals(recipientId)) {
+                                                                    slot.setRecipientId1(null);
+                                                                } else if (slot.getRecipientId2().equals(recipientId)) {
+                                                                    slot.setRecipientId2(null);
+                                                                } else if (slot.getRecipientId3().equals(recipientId)) {
+                                                                    slot.setRecipientId3(null);
+                                                                }
+                                                                reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
                                                             }
-                                                            reference4.child("Pending").child(donorId).child(slotId).setValue(slot);
 
                                                         }
                                                     }
