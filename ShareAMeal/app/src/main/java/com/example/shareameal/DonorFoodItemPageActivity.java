@@ -233,7 +233,9 @@ public class DonorFoodItemPageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int currQty = Integer.valueOf(foodQuantityEdt.getText().toString());
-                foodQuantityEdt.setText(String.valueOf(currQty + 1));
+                if (currQty <= 998) {
+                    foodQuantityEdt.setText(String.valueOf(currQty + 1));
+                }
             }
         });
     }

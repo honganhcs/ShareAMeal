@@ -129,7 +129,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:inputType="textMultiLine"
-                    android:text="food items waiting to be claimed"
+                    android:text="food items to be claimed"
                     android:textColor="#AF1B1B"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@+id/reminderIcon"
