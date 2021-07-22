@@ -63,6 +63,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private AppCompatButton updateProfileInfoBtn;
     private TextView textView4, textView5;
     private EditText usernameEdt, addressEdt, restaurantEdt, descriptionEdt;
+    private int weeklyPoints, allTimePoints;
     private String userGroup, imageUrl, oldImageUrl, description;
     private TextInputLayout restaurantWrapper, addressWrapper;
     private ProgressBar progressBar;
@@ -198,6 +199,8 @@ public class EditProfileActivity extends AppCompatActivity {
                                 }
                                 oldImageUrl = user.getImageUrl();
                                 description = user.getProfileDescription();
+                                weeklyPoints = user.getNumberOfWeeklyPoints();
+                                allTimePoints = user.getNumberOfPoints();
 
                                 // If user is recipient, the "Name of food service" field will not be shown
                                 if (user.getUserGroup().equals("recipient")) {
@@ -333,6 +336,8 @@ public class EditProfileActivity extends AppCompatActivity {
                                 user.setUserGroup(userGroup);
                                 user.setRestaurant(newRestaurant);
                                 user.setProfileDescription(newDescription);
+                                user.setNumberOfWeeklyPoints(weeklyPoints);
+                                user.setNumberOfPoints(allTimePoints);
 
                                 if (imageUrl == null) {
                                     if (!isImageDeleted) {
