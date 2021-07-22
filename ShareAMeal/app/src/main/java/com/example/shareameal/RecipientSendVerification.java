@@ -157,10 +157,10 @@ public class RecipientSendVerification extends AppCompatActivity {
                     ver.setMinute(minute);
 
                     verificationsRef.setValue(ver);
-
-                    verificationsRef.addValueEventListener(new ValueEventListener() {
+                    
+                    verificationsRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
-                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                             Toast.makeText(RecipientSendVerification.this, "Verification request successfully submitted", Toast.LENGTH_SHORT).show();
                             DatabaseReference usersRef = database.getReference("Users");
                             usersRef.child(userId).child("verificationState").setValue(1);
@@ -169,9 +169,6 @@ public class RecipientSendVerification extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         }
-
-                        @Override
-                        public void onCancelled(@NonNull @NotNull DatabaseError error) {}
                     });
                 }
             }
