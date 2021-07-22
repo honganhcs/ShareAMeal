@@ -178,6 +178,10 @@ public class RVDonorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             new Filter() {
                 @Override
                 protected FilterResults performFiltering(CharSequence constraint) {
+                    if (listFull.size() == 0) {
+                        listFull = new ArrayList<>(list);
+                    }
+                    
                     List<User> filteredList = new ArrayList<>();
 
                     if (constraint == null || constraint.length() == 0) {

@@ -74,6 +74,7 @@
             android:layout_height="wrap_content"
             android:ems="2"
             android:text="0"
+            android:maxLength="3"
             android:digits="0123456789"
             android:inputType="number"
             android:textAlignment="center"

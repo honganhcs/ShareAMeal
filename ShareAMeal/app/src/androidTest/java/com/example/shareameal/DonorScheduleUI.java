@@ -82,18 +82,21 @@ public class DonorScheduleUI {
         // Select date
         onView(withId(R.id.btnDatePicker)).perform(click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2021, 8, 21));
+        rest();
         onView(withText("OK")).inRoot(isDialog()).check(matches(isDisplayed())).perform(click());
 
         // Select start time
         onView(withId(R.id.btnStartPicker)).perform(click());
         setTimeValue(onView(withId(R.id.hourPicker)), 8);
         setTimeValue(onView(withId(R.id.minutePicker)), 0);
+        rest();
         onView(withText("OK")).inRoot(isDialog()).check(matches(isDisplayed())).perform(click());
 
         // Select end time
         onView(withId(R.id.btnEndPicker)).perform(click());
         setTimeValue(onView(withId(R.id.hourPicker)), 8);
         setTimeValue(onView(withId(R.id.minutePicker)), 30);
+        rest();
         onView(withText("OK")).inRoot(isDialog()).check(matches(isDisplayed())).perform(click());
 
         // Create Time Slot

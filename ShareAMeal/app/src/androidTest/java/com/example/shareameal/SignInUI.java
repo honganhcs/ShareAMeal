@@ -99,7 +99,7 @@ public class SignInUI {
     public void validSignIn() {
         String validEmail = "placeholder1@gmail.com";
         String validPw = "placeholder1";
-        onView(withId(R.id.emailEdt)).perform(typeText(validEmail));
+        onView(withId(R.id.emailEdt)).perform(typeText(validEmail), closeSoftKeyboard());
         onView(withId(R.id.passwordEdt)).perform(typeText(validPw), closeSoftKeyboard());
         onView(withId(R.id.loginBtn)).perform(click());
         rest();
