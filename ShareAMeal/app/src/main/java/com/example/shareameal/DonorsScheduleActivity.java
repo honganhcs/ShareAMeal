@@ -46,7 +46,7 @@ public class DonorsScheduleActivity extends AppCompatActivity
         setContentView(R.layout.activity_donors_schedule);
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-        getSupportActionBar().setTitle("View time slots for food collection");
+        getSupportActionBar().setTitle("Time Slots for Food Donation");
 
         getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
 

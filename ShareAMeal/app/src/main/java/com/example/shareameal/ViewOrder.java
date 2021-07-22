@@ -59,7 +59,7 @@ public class ViewOrder extends AppCompatActivity {
 
         //top action bar
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-        getSupportActionBar().setTitle("View order");
+        getSupportActionBar().setTitle("Pending Order");
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

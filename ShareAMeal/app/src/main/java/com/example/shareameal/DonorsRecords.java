@@ -43,7 +43,7 @@ public class DonorsRecords extends AppCompatActivity implements RVOrdersAdapter.
         getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-        getSupportActionBar().setTitle("View completed orders");
+        getSupportActionBar().setTitle("Completed Orders");
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

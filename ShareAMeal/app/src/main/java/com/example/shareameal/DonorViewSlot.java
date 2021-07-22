@@ -50,7 +50,7 @@ public class DonorViewSlot extends AppCompatActivity {
         setContentView(R.layout.activity_donor_view_slot);
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-        getSupportActionBar().setTitle("View time slot");
+        getSupportActionBar().setTitle("Time Slot");
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

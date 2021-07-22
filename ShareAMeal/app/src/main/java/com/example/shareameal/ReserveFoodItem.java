@@ -45,7 +45,7 @@ public class ReserveFoodItem extends AppCompatActivity
         getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-        getSupportActionBar().setTitle("Select a time slot");
+        getSupportActionBar().setTitle("Select Time Slot");
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

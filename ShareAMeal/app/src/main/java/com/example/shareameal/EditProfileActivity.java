@@ -81,7 +81,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-        getSupportActionBar().setTitle("Edit profile");
+        getSupportActionBar().setTitle("Edit Profile");
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

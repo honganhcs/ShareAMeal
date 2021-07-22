@@ -57,7 +57,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-        getSupportActionBar().setTitle("Change password");
+        getSupportActionBar().setTitle("Change Password");
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

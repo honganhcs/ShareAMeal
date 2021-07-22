@@ -45,7 +45,7 @@ public class RecipientViewOrders extends AppCompatActivity
         getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-        getSupportActionBar().setTitle("View current orders");
+        getSupportActionBar().setTitle("Pending Orders");
 
         recyclerView = findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
