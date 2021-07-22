@@ -63,7 +63,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private AppCompatButton updateProfileInfoBtn;
     private TextView textView4, textView5;
     private EditText usernameEdt, addressEdt, restaurantEdt, descriptionEdt;
-    private int weeklyPoints, allTimePoints, verificationState, numberOfReports;
+    private int weeklyPoints, allTimePoints, verificationState, numberOfReports, numberOfOrdersLeft, year, month, dayOfMonth;
     private String userGroup, imageUrl, oldImageUrl, description;
     private TextInputLayout restaurantWrapper, addressWrapper;
     private ProgressBar progressBar;
@@ -205,6 +205,12 @@ public class EditProfileActivity extends AppCompatActivity {
                                 if (userGroup.equals("donor")) {
                                     numberOfReports = user.getNumberOfReports();
                                 }
+                                if (userGroup.equals("recipient")) {
+                                    numberOfOrdersLeft = user.getNumOrdersLeft();
+                                    year = user.getYear();
+                                    month = user.getMonth();
+                                    dayOfMonth = user.getDayOfMonth();
+                                }
 
                                 // If user is recipient, the "Name of food service" field will not be shown
                                 if (user.getUserGroup().equals("recipient")) {
@@ -345,6 +351,12 @@ public class EditProfileActivity extends AppCompatActivity {
                                 user.setVerificationState(verificationState);
                                 if (userGroup.equals("donor")) {
                                     user.setNumberOfReports(numberOfReports);
+                                }
+                                if (userGroup.equals("recipient")) {
+                                    user.setNumOrdersLeft(numberOfOrdersLeft);
+                                    user.setYear(year);
+                                    user.setMonth(month);
+                                    user.setDayOfMonth(dayOfMonth);
                                 }
 
                                 if (imageUrl == null) {
