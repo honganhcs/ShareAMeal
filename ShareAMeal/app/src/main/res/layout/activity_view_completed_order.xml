@@ -178,6 +178,18 @@
             app:layout_constraintTop_toBottomOf="@+id/txtAddress"
             android:visibility="visible"/>
 
+        <TextView
+            android:id="@+id/reported"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/btnReport"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:text=""
+            android:layout_marginTop="5dp"
+            android:textSize="15sp"
+            />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

@@ -28,10 +28,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class ReviewReport extends AppCompatActivity {
     private final int MAX_ALLOWED_NUMBER_OF_REPORTS = 3;
+
     private ImageView foodImage, reportImage;
     private TextView foodNameTxt, foodDescriptionTxt, txtOrderQuantity, txtSchedule, reportContentTxt;
-    private String donorId, recipientId, slotId, reportId;
     private AppCompatButton rejectReportBtn, acceptReportBtn;
+
+    private String donorId, recipientId, slotId, reportId, foodId;
+    private Order order;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class ReviewReport extends AppCompatActivity {
         recipientId = intent.getStringExtra("recipientId");
         slotId = intent.getStringExtra("slotId");
         reportId = intent.getStringExtra("reportId");
+        foodId = intent.getStringExtra("foodId");
 
         getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
 
@@ -65,10 +69,10 @@ public class ReviewReport extends AppCompatActivity {
         DatabaseReference foodsRef = FirebaseDatabase.getInstance().getReference("Foods");
         DatabaseReference slotsRef = FirebaseDatabase.getInstance().getReference("Slots");
 
-        ordersRef.child(recipientId).child(slotId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        ordersRef.child("Completed").child(recipientId).child(slotId).child(foodId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
-                Order order = task.getResult().getValue(Order.class);
+                order = task.getResult().getValue(Order.class);
                 if (order.getFoodImageURL() == null) {
                     foodImage.setImageResource(R.drawable.dish128);
                 } else {
@@ -123,6 +127,8 @@ public class ReviewReport extends AppCompatActivity {
         rejectReportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                order.setReported(false);
+                ordersRef.child("Completed").child(recipientId).child(slotId).child(foodId).setValue(order);
                 DatabaseReference currReportRef = reportsRef.child(donorId).child(reportId);
                 currReportRef.removeValue();
                 Intent intent = new Intent(ReviewReport.this, AdminViewReportedDonors.class);
@@ -156,14 +162,14 @@ public class ReviewReport extends AppCompatActivity {
                                 if (foodsRef.child(donorId) != null) {
                                     foodsRef.child(donorId).removeValue();
                                 }
-                                slotsRef.child(donorId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                slotsRef.child("Completed").child(donorId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                                         DataSnapshot resultSnapshot = task.getResult();
                                         for (DataSnapshot data : resultSnapshot.getChildren()) {
                                             Slot currSlot = data.getValue(Slot.class);
                                             String slotId = currSlot.getSlotId();
-                                            ordersRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                            ordersRef.child("Completed").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                                 @Override
                                                 public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                                                     DataSnapshot resultSnapshot1 = task.getResult();
@@ -178,7 +184,7 @@ public class ReviewReport extends AppCompatActivity {
                                         }
                                     }
                                 });
-                                slotsRef.child(donorId).removeValue();
+                                slotsRef.child("Completed").child(donorId).removeValue();
                             }
                         }
                     }

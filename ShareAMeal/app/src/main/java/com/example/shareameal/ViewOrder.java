@@ -284,6 +284,7 @@ public class ViewOrder extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // move the order from Pending to Completed in the database
+                            order.setReported(false);
                             reference2.child("Completed").child(recipientId).child(slotId).child(foodId).setValue(order);
                             reference2.child("Pending").child(recipientId).child(slotId).child(foodId).removeValue();
 

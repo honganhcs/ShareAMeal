@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 public class ViewCompletedOrder extends AppCompatActivity {
 
     private ImageView foodImage;
-    private TextView foodNameTxt, foodDescriptionTxt, txtOrderQuantity, txtSchedule, txtAddress, txtDonorHeader, txtDonor;
+    private TextView foodNameTxt, foodDescriptionTxt, txtOrderQuantity, txtSchedule, txtAddress, txtDonorHeader, txtDonor, reported;
     private DatabaseReference reference1, reference2, reference3;
     private AppCompatButton btnReport;
     private String userId, donorId, foodId, slotId, recipientId;
@@ -63,6 +63,7 @@ public class ViewCompletedOrder extends AppCompatActivity {
         txtDonor = findViewById(R.id.txtDonor);
         bufferLayout = findViewById(R.id.layout1);
         btnReport = findViewById(R.id.btnReport);
+        reported = findViewById(R.id.reported);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         userId = user.getUid();
@@ -138,6 +139,31 @@ public class ViewCompletedOrder extends AppCompatActivity {
                                                                 + ", "
                                                                 + order.getDate());
                                                         txtAddress.setText(donor.getAddress());
+
+                                                        if(userId.equals(recipientId)) {
+                                                            if(!order.getReported()) {
+                                                                btnReport.setOnClickListener(new View.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(View v) {
+                                                                        Intent intent = new Intent(ViewCompletedOrder.this, ReportDonorActivity.class);
+                                                                        intent.putExtra("donorId", donorId);
+                                                                        intent.putExtra("slotId", slotId);
+                                                                        intent.putExtra("foodId", foodId);
+                                                                        startActivity(intent);
+                                                                        finish();
+                                                                    }
+                                                                });
+                                                            } else {
+                                                                btnReport.setEnabled(false);
+                                                                btnReport.setClickable(false);
+                                                                btnReport.setBackground(getDrawable(R.drawable.disabledbutton));
+                                                                reported.setText("You have already reported the donor regarding this order.");
+                                                            }
+                                                        } else {
+                                                            btnReport.setVisibility(View.GONE);
+                                                            txtDonor.setVisibility(View.GONE);
+                                                            txtDonorHeader.setVisibility(View.GONE);
+                                                        }
                                                     }
 
                                                     @Override
@@ -169,23 +195,6 @@ public class ViewCompletedOrder extends AppCompatActivity {
             }
         });
 
-        if(userId.equals(recipientId)) {
-            btnReport.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(ViewCompletedOrder.this, ReportDonorActivity.class);
-                    intent.putExtra("donorId", donorId);
-                    intent.putExtra("slotId", slotId);
-                    intent.putExtra("foodId", foodId);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-        } else {
-            btnReport.setVisibility(View.GONE);
-            txtDonor.setVisibility(View.GONE);
-            txtDonorHeader.setVisibility(View.GONE);
-        }
     }
 
     @Override

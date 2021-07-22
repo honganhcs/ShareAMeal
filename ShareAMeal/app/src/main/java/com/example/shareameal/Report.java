@@ -11,9 +11,18 @@ public class Report implements Parcelable {
     private String reportContent;
     private String reportImageUrl;
     private String reportTime;
+    private String foodId;
     private int year, month, day, hour, minute;
 
     public Report() {}
+
+    public String getFoodId() {
+        return foodId;
+    }
+
+    public void setFoodId(String foodId) {
+        this.foodId = foodId;
+    }
 
     public void setSlotId(String slotId) {
         this.slotId = slotId;

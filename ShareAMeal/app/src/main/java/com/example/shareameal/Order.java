@@ -15,7 +15,18 @@ public class Order {
     //for completed orders in Slots
     private String recipientId;
 
+    //for completed orders only
+    private Boolean reported;
+
     public Order() {
+    }
+
+    public Boolean getReported() {
+        return reported;
+    }
+
+    public void setReported(Boolean reported) {
+        this.reported = reported;
     }
 
     public String getRecipientId() {

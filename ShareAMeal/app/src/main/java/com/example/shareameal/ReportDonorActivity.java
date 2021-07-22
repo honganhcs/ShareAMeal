@@ -13,6 +13,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
@@ -91,6 +92,7 @@ public class ReportDonorActivity extends AppCompatActivity {
         donorId = intent.getStringExtra("donorId");
         slotId = intent.getStringExtra("slotId");
         foodId = intent.getStringExtra("foodId");
+        Log.d("foodId", foodId);
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference("reportsUploads");
         mStorageRef = storageReference.child(recipientId);
@@ -146,6 +148,7 @@ public class ReportDonorActivity extends AppCompatActivity {
                                             report.setSlotId(slotId);
                                             report.setRecipientId(recipientId);
                                             report.setReportContent(reportContent);
+                                            report.setFoodId(foodId);
 
                                             if (imageUrl == null) {
                                                 report.setReportImageUrl("null");

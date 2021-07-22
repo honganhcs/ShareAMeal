@@ -83,6 +83,7 @@ public class AdminViewReportsAdapter extends RecyclerView.Adapter<RecyclerView.V
                 intent.putExtra("recipientId", report.getRecipientId());
                 intent.putExtra("slotId", report.getSlotId());
                 intent.putExtra("reportId", report.getReportId());
+                intent.putExtra("foodId", report.getFoodId());
                 v.getContext().startActivity(intent);
             }
         });
