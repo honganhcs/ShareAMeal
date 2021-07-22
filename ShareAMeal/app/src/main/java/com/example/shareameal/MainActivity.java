@@ -173,6 +173,8 @@ public class MainActivity extends AppCompatActivity {
                                             finish();
                                         } else if (user.getUserGroup().equals("admin")) {
                                             Intent intent = new Intent(MainActivity.this, AdminHomepageActivity.class);
+                                            startActivity(intent);
+                                            finish();
                                         }
                                     }
                                 }
