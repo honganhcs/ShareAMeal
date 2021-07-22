@@ -12,6 +12,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.example.shareameal.DonorsScheduleActivity;
 import com.example.shareameal.LoginActivity;
 import com.example.shareameal.MainActivity;
 import com.example.shareameal.R;
@@ -76,11 +77,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d("message_received", "From " + remoteMessage.getFrom());
         Intent intent;
 
-        if(remoteMessage.getNotification().getTitle().equals(getString(R.string.slot_booked))
-        || remoteMessage.getNotification().getTitle().equals("Outdated order(s)")) {
+        if(remoteMessage.getNotification().getTitle().equals("Outdated order(s)")
+        || remoteMessage.getNotification().getTitle().equals("Order cancelled(s) by donor")) {
             intent = new Intent(this, RecipientViewOrders.class);
         } else {
-            intent = new Intent(this, MainActivity.class);
+            intent = new Intent(this, DonorsScheduleActivity.class);
         }
 
         // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.shareameal.notifications.NotificationsSender;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,12 +35,12 @@ public class DonorViewSlot extends AppCompatActivity {
 
     //data
     private Slot slot;
-    private String donorId, slotId;
+    private String donorId, slotId, donorName;
 
     private HashMap<String, ArrayList<Order>> recipientIdToOrder;
     private Food food;
 
-    private DatabaseReference reference1, reference2, reference3;
+    private DatabaseReference reference1, reference2, reference3, reference4;
 
 
 
@@ -73,6 +74,20 @@ public class DonorViewSlot extends AppCompatActivity {
         txtDate.setText("Date: " + slot.getDate());
         txtTime.setText("Time: " + slot.getStartTime() + " - " + slot.getEndTime());
         txtReserved.setText(slot.getNumRecipients() == 0 ? "Not Reserved" : "Reserved for Donation of:");
+
+        reference4 = FirebaseDatabase.getInstance().getReference("Users");
+        reference4.child(donorId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                User donor = snapshot.getValue(User.class);
+                donorName = donor.getName();
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
 
         if (slot.getNumRecipients() == 0) {
             txtReservedItem.setText("");
@@ -329,7 +344,7 @@ public class DonorViewSlot extends AppCompatActivity {
                                 // remove slot
                                 reference2.child(slotId).removeValue();
 
-                                // remove orders & update food quantities
+                                // remove orders & update food quantities & notify recipients of cancelled orders
                                 reference3 = FirebaseDatabase.getInstance().getReference("Foods").child(donorId);
 
                                 if(slot.getRecipientId1() != null) {
@@ -349,6 +364,21 @@ public class DonorViewSlot extends AppCompatActivity {
                                         });
                                     }
                                     reference1.child(slot.getRecipientId1()).child(slotId).removeValue();
+                                    reference4.child(slot.getRecipientId1()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                            User recipient = snapshot.getValue(User.class);
+                                            String fcmToken = recipient.getFcmToken();
+                                            NotificationsSender notificationsSender = new NotificationsSender(fcmToken, "Order(s) cancelled by donor", "Your order(s) scheduled at "
+                                                    + slot.getStartTime() + " on " + slot.getDate() + " have been cancelled by " + donorName, getApplication(), DonorViewSlot.this);
+                                            notificationsSender.sendNotification();
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                                        }
+                                    });
                                 }
                                 if(slot.getRecipientId2() != null) {
                                     for (Order order : recipientIdToOrder.get(slot.getRecipientId2())) {
@@ -367,6 +397,21 @@ public class DonorViewSlot extends AppCompatActivity {
                                         });
                                     }
                                     reference1.child(slot.getRecipientId2()).child(slotId).removeValue();
+                                    reference4.child(slot.getRecipientId2()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                            User recipient = snapshot.getValue(User.class);
+                                            String fcmToken = recipient.getFcmToken();
+                                            NotificationsSender notificationsSender = new NotificationsSender(fcmToken, "Order(s) cancelled by donor", "Your order(s) scheduled at "
+                                                    + slot.getStartTime() + " on " + slot.getDate() + " have been cancelled by " + donorName, getApplication(), DonorViewSlot.this);
+                                            notificationsSender.sendNotification();
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                                        }
+                                    });
                                 }
                                 if(slot.getRecipientId3() != null) {
                                     for (Order order : recipientIdToOrder.get(slot.getRecipientId3())) {
@@ -385,6 +430,21 @@ public class DonorViewSlot extends AppCompatActivity {
                                         });
                                     }
                                     reference1.child(slot.getRecipientId3()).child(slotId).removeValue();
+                                    reference4.child(slot.getRecipientId3()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                            User recipient = snapshot.getValue(User.class);
+                                            String fcmToken = recipient.getFcmToken();
+                                            NotificationsSender notificationsSender = new NotificationsSender(fcmToken, "Order(s) cancelled by donor", "Your order(s) scheduled at "
+                                                    + slot.getStartTime() + " on " + slot.getDate() + " have been cancelled by " + donorName, getApplication(), DonorViewSlot.this);
+                                            notificationsSender.sendNotification();
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                                        }
+                                    });
                                 }
 
                                 Intent intent = new Intent(DonorViewSlot.this, DonorsScheduleActivity.class);

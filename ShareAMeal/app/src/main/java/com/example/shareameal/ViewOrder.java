@@ -195,7 +195,7 @@ public class ViewOrder extends AppCompatActivity {
 
                         // send notification to donor
                         String fcmToken = donor.getFcmToken();
-                        NotificationsSender notificationsSender = new NotificationsSender(fcmToken, "Order cancelled", "The order of " + orderQuantity + " " + foodName
+                        NotificationsSender notificationsSender = new NotificationsSender(fcmToken, "Order cancelled by recipient", "The order of " + orderQuantity + " " + foodName
                                 + " at " + order.getStartTime() + " on " + order.getDate() + " has been cancelled by the recipient.", getApplicationContext(), ViewOrder.this);
                         notificationsSender.sendNotification();
 
