@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class DonorUserPageActivity extends AppCompatActivity {
     private BottomNavigationView bottomNav;
-    private TextView recordsTxt, editProfileTxt, changePasswordTxt, logoutTxt, donatedFoodsQtyTxt;
+    private TextView recordsTxt, editProfileTxt, changePasswordTxt, logoutTxt, donatedFoodsQtyTxt, numberOfReportsTxt;
     private TextView userNameTxt;
     private ImageView userProfilePic;
     private int numberOfReports;
@@ -47,6 +47,7 @@ public class DonorUserPageActivity extends AppCompatActivity {
         // Setting name to the registered name of the account
         userNameTxt = findViewById(R.id.userNameTxt);
         userProfilePic = findViewById(R.id.userProfilePic);
+        numberOfReportsTxt = findViewById(R.id.numberOfReportTxt);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userid = user.getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
@@ -69,6 +70,12 @@ public class DonorUserPageActivity extends AppCompatActivity {
                                     } else {
                                         Picasso.get().load(imageUrl).into(userProfilePic);
                                     }
+                                }
+
+                                if (numberOfReports == 0) {
+                                    numberOfReportsTxt.setVisibility(View.GONE);
+                                } else {
+                                    numberOfReportsTxt.setText("Number of Received Reports: " + numberOfReports);
                                 }
                             }
 
