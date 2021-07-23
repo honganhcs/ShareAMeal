@@ -44,6 +44,7 @@
             android:text="Profile Description"
             android:textColor="#AF1B1B"
             android:textSize="18sp"
+            android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="@+id/userNameTxt"
             app:layout_constraintStart_toStartOf="@+id/userNameTxt"
             app:layout_constraintTop_toBottomOf="@+id/userNameTxt" />
