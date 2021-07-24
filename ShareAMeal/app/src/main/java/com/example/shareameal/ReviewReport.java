@@ -233,7 +233,7 @@ public class ReviewReport extends AppCompatActivity implements RejectReportDialo
 
                         String recipientToken = recipient.getFcmToken();
                         // send notification to recipient
-                        NotificationsSender sender = new NotificationsSender(recipientToken, "Report Rejected", "Your report of " + donorName + " (donor) regarding their donation of " + foodName + " has been rejected because: " + reasons, getApplication(), ReviewReport.this);
+                        NotificationsSender sender = new NotificationsSender(recipientToken, "Report rejected", "Your report of " + donorName + " (donor) regarding their donation of " + foodName + " has been rejected because: " + reasons, getApplication(), ReviewReport.this);
                         sender.sendNotification();
                         // allow recipient to submit another report
                         order.setReported(false);

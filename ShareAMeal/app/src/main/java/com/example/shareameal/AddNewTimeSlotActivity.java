@@ -193,7 +193,7 @@ public class AddNewTimeSlotActivity extends AppCompatActivity implements CustomT
             Toast.makeText(
                     AddNewTimeSlotActivity.this, "End time must be after start time.", Toast.LENGTH_SHORT)
                     .show();
-        } else {
+        } else{
 
             DatabaseReference reference =
                     FirebaseDatabase.getInstance().getReference("Slots").child("Pending").child(userId);

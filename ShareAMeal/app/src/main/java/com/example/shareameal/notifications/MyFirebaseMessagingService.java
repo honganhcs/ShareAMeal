@@ -17,6 +17,7 @@ import com.example.shareameal.LoginActivity;
 import com.example.shareameal.MainActivity;
 import com.example.shareameal.R;
 import com.example.shareameal.RecipientViewOrders;
+import com.example.shareameal.RecipientsRecords;
 import com.example.shareameal.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -80,6 +81,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if(remoteMessage.getNotification().getTitle().equals("Outdated order(s)")
         || remoteMessage.getNotification().getTitle().equals("Order cancelled(s) by donor")) {
             intent = new Intent(this, RecipientViewOrders.class);
+        } else if(remoteMessage.getNotification().getTitle().equals("Report rejected")) {
+            intent = new Intent(this, RecipientsRecords.class);
         } else {
             intent = new Intent(this, DonorsScheduleActivity.class);
         }

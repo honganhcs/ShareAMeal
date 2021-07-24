@@ -191,18 +191,18 @@ public class OrderConfirmation extends AppCompatActivity {
 
     public void onConfirmOrder(View view) {
         if(numOrdersLeft == 0) {
-            Toast.makeText(OrderConfirmation.this, "You cannot create any more orders today as you have reached your daily limit.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(OrderConfirmation.this, "You cannot create any more orders today as you have reached your daily limit.", Toast.LENGTH_LONG).show();
         } else {
             String qty = foodQuantityTxt.getText().toString();
             if (Integer.valueOf(qty) == 0 || TextUtils.isEmpty(qty)) {
                 Toast.makeText(
-                        OrderConfirmation.this, "Please enter a number larger than 0.", Toast.LENGTH_SHORT)
+                        OrderConfirmation.this, "Please enter a number larger than 0.", Toast.LENGTH_LONG)
                         .show();
             } else if (Integer.valueOf(qty) > food.getQuantity()) {
                 Toast.makeText(
                         OrderConfirmation.this,
                         "Please enter at most " + food.getQuantity() + ".",
-                        Toast.LENGTH_SHORT)
+                        Toast.LENGTH_LONG)
                         .show();
             } else {
                 AlertDialog dialog = new AlertDialog.Builder(this)
@@ -260,7 +260,7 @@ public class OrderConfirmation extends AppCompatActivity {
                                 Toast.makeText(
                                         OrderConfirmation.this,
                                         "Your order has been successfully created.",
-                                        Toast.LENGTH_SHORT)
+                                        Toast.LENGTH_LONG)
                                         .show();
 
                                 // send notification to donor
