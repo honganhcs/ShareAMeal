@@ -157,27 +157,16 @@ public class AddFoodItemActivity extends AppCompatActivity {
                             food.setFoodId(foodId);
                             database.child(foodId).setValue(food);
 
-                            database.addValueEventListener(
-                                    new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            Toast.makeText(
-                                                    AddFoodItemActivity.this,
-                                                    "Food item successfully added",
-                                                    Toast.LENGTH_SHORT)
-                                                    .show();
-                                            Intent intent =
-                                                    new Intent(AddFoodItemActivity.this, DonateFoodActivity.class);
-                                            startActivity(intent);
-                                            isFoodUpdated = true;
-                                            finish();
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-
-                                        }
-                                    });
+                            Toast.makeText(
+                                    AddFoodItemActivity.this,
+                                    "Food item successfully added",
+                                    Toast.LENGTH_SHORT)
+                                    .show();
+                            Intent intent =
+                                    new Intent(AddFoodItemActivity.this, DonateFoodActivity.class);
+                            startActivity(intent);
+                            isFoodUpdated = true;
+                            finish();
                         }
                     }
                 });
