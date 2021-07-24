@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.shareameal.notifications.NotificationsSender;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -26,14 +27,15 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
-public class ReviewReport extends AppCompatActivity {
+public class ReviewReport extends AppCompatActivity implements RejectReportDialogFragment.DialogListener{
     private final int MAX_ALLOWED_NUMBER_OF_REPORTS = 3;
 
     private ImageView foodImage, reportImage;
     private TextView foodNameTxt, foodDescriptionTxt, txtOrderQuantity, txtSchedule, reportContentTxt;
     private AppCompatButton rejectReportBtn, acceptReportBtn;
 
-    private String donorId, recipientId, slotId, reportId, foodId;
+    private DatabaseReference ordersRef, reportsRef, usersRef;
+    private String donorId, recipientId, slotId, reportId, foodId, foodName;
     private Order order;
 
     @Override
@@ -63,9 +65,9 @@ public class ReviewReport extends AppCompatActivity {
         reportImage = findViewById(R.id.reportImage);
         reportContentTxt = findViewById(R.id.reportContent);
 
-        DatabaseReference reportsRef = FirebaseDatabase.getInstance().getReference("Reports");
-        DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("Orders");
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
+        reportsRef = FirebaseDatabase.getInstance().getReference("Reports");
+        ordersRef = FirebaseDatabase.getInstance().getReference("Orders");
+        usersRef = FirebaseDatabase.getInstance().getReference("Users");
         DatabaseReference foodsRef = FirebaseDatabase.getInstance().getReference("Foods");
         DatabaseReference slotsRef = FirebaseDatabase.getInstance().getReference("Slots");
 
@@ -90,6 +92,7 @@ public class ReviewReport extends AppCompatActivity {
                     public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                         Food food = task.getResult().getValue(Food.class);
                         foodDescriptionTxt.setText(food.getDescription());
+                        foodName = food.getName();
                     }
                 });
 
@@ -127,13 +130,9 @@ public class ReviewReport extends AppCompatActivity {
         rejectReportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                order.setReported(false);
-                ordersRef.child("Completed").child(recipientId).child(slotId).child(foodId).setValue(order);
-                DatabaseReference currReportRef = reportsRef.child(donorId).child(reportId);
-                currReportRef.removeValue();
-                Intent intent = new Intent(ReviewReport.this, AdminViewReportedDonors.class);
-                startActivity(intent);
-                finish();
+
+                RejectReportDialogFragment fragment = new RejectReportDialogFragment();
+                fragment.show(getSupportFragmentManager(), "Reject Report Reasons Dialog Fragment");
             }
         });
 
@@ -213,5 +212,55 @@ public class ReviewReport extends AppCompatActivity {
         startActivity(intent);
         finish();
         return true;
+    }
+
+    @Override
+    public void setReasons(String reasons) {
+        usersRef.child(recipientId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                User recipient = snapshot.getValue(User.class);
+                usersRef.child(donorId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        User donor = snapshot.getValue(User.class);
+                        String donorName;
+                        if(TextUtils.isEmpty(donor.getRestaurant())) {
+                            donorName = donor.getName();
+                        } else {
+                            donorName = donor.getRestaurant();
+                        }
+
+                        String recipientToken = recipient.getFcmToken();
+                        // send notification to recipient
+                        NotificationsSender sender = new NotificationsSender(recipientToken, "Report Rejected", "Your report of " + donorName + " (donor) regarding their donation of " + foodName + " has been rejected because: " + reasons, getApplication(), ReviewReport.this);
+                        sender.sendNotification();
+                        // allow recipient to submit another report
+                        order.setReported(false);
+                        ordersRef.child("Completed").child(recipientId).child(slotId).child(foodId).setValue(order);
+
+                        // remove rejected report from Database
+                        DatabaseReference currReportRef = reportsRef.child(donorId).child(reportId);
+                        currReportRef.removeValue();
+
+                        // return to View Reports page
+                        Intent intent = new Intent(ReviewReport.this, AdminViewReportedDonors.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
     }
 }
