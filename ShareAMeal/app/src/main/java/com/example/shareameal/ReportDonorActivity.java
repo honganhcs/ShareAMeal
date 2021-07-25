@@ -195,18 +195,10 @@ public class ReportDonorActivity extends AppCompatActivity {
                                             report.setReportId(reportId);
                                             database.child(reportId).setValue(report);
 
-                                            database.addValueEventListener(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                                    Toast.makeText(ReportDonorActivity.this, "Report successfully sent in", Toast.LENGTH_SHORT).show();
-                                                    Intent intent = new Intent(ReportDonorActivity.this, RecipientsRecords.class);
-                                                    startActivity(intent);
-                                                    finish();
-                                                }
-
-                                                @Override
-                                                public void onCancelled(@NonNull @NotNull DatabaseError error) {}
-                                            });
+                                            Toast.makeText(ReportDonorActivity.this, "Report successfully sent in", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(ReportDonorActivity.this, RecipientsRecords.class);
+                                            startActivity(intent);
+                                            finish();
                                         }
                                     })
                                     .setNegativeButton("No", null)
