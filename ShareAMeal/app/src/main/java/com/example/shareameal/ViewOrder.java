@@ -48,7 +48,7 @@ public class ViewOrder extends AppCompatActivity {
     private Food food;
     private User donor;
     private int orderQuantity;
-    private String foodName;
+    private String foodName, recipientName;
     private ConstraintLayout bufferLayout;
 
     @Override
@@ -159,6 +159,18 @@ public class ViewOrder extends AppCompatActivity {
                                                                 }
                                                             }
                                                         });
+
+                                                reference3.child(recipientId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                                        recipientName = snapshot.getValue(User.class).getName();
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                                                    }
+                                                });
                                             }
                                         }
                                     });
@@ -197,7 +209,7 @@ public class ViewOrder extends AppCompatActivity {
                         // send notification to donor
                         String fcmToken = donor.getFcmToken();
                         NotificationsSender notificationsSender = new NotificationsSender(fcmToken, "Order cancelled by recipient", "The order of " + orderQuantity + " " + foodName
-                                + " at " + order.getStartTime() + " on " + order.getDate() + " has been cancelled by the recipient.", getApplicationContext(), ViewOrder.this);
+                                + " at " + order.getStartTime() + " on " + order.getDate() + " has been cancelled by " + recipientName + ".", getApplicationContext(), ViewOrder.this);
                         notificationsSender.sendNotification();
 
                         // update slot only if the same recipient does not have any other orders in the same time slot
@@ -292,7 +304,7 @@ public class ViewOrder extends AppCompatActivity {
                             // send notification to donor
                             String fcmToken = donor.getFcmToken();
                             NotificationsSender notificationsSender = new NotificationsSender(fcmToken, "Order completed", "The order of " + orderQuantity + " " + foodName
-                                    + " at " + order.getStartTime() + " on " + order.getDate() + " has been registered as completed by the recipient.", getApplicationContext(), ViewOrder.this);
+                                    + " at " + order.getStartTime() + " on " + order.getDate() + " has been registered as completed by " + recipientName + ".", getApplicationContext(), ViewOrder.this);
                             notificationsSender.sendNotification();
 
                             // update slot only if the same recipient does not have any other orders in the same time slot
