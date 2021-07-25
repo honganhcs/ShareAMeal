@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -170,7 +171,7 @@ public class ViewOrder extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                 User user = task.getResult().getValue(User.class);
-                if (user.getRestaurant() == null || user.getRestaurant().equals("null")) {
+                if (user.getRestaurant() == null || TextUtils.isEmpty(user.getRestaurant())) {
                     txtDonor.setText(user.getName());
                 } else {
                     txtDonor.setText(user.getRestaurant());
