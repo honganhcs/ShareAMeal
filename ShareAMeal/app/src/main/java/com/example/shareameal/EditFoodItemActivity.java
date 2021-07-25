@@ -38,6 +38,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Text;
 
 public class EditFoodItemActivity extends AppCompatActivity {
@@ -254,26 +255,15 @@ public class EditFoodItemActivity extends AppCompatActivity {
 
                         database.child(foodId).setValue(food);
 
-                        database.addValueEventListener(
-                                new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        Toast.makeText(
-                                                EditFoodItemActivity.this,
-                                                "Food item successfully edited",
-                                                Toast.LENGTH_SHORT)
-                                                .show();
-                                        editFoodItemBtn.setClickable(false);
-                                        editFoodItemBtn.setEnabled(false);
-                                        editFoodItemBtn.setBackground(getDrawable(R.drawable.disabledbutton));
-                                        isFoodUpdated = true;
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                    }
-                                });
+                        Toast.makeText(
+                                EditFoodItemActivity.this,
+                                "Food item successfully edited",
+                                Toast.LENGTH_SHORT)
+                                .show();
+                        editFoodItemBtn.setClickable(false);
+                        editFoodItemBtn.setEnabled(false);
+                        editFoodItemBtn.setBackground(getDrawable(R.drawable.disabledbutton));
+                        isFoodUpdated = true;
                     }
                 });
     }
