@@ -63,7 +63,7 @@ public class DonateFoodActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(Color.parseColor("#F6DABA"));
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F6DABA")));
-        getSupportActionBar().setTitle("Food listings");
+        getSupportActionBar().setTitle("Food Listings");
 
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
         String donorId = FirebaseAuth.getInstance().getCurrentUser().getUid();

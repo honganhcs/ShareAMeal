@@ -17,9 +17,8 @@
             android:layout_height="wrap_content"
             android:text="Date: "
             android:textColor="@color/black"
-            android:textSize="30sp"
+            android:textSize="25sp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
@@ -31,9 +30,8 @@
             android:layout_height="wrap_content"
             android:text="Time: "
             android:textColor="@color/black"
-            android:textSize="30sp"
+            android:textSize="25sp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtDate"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
@@ -43,11 +41,12 @@
             android:id="@+id/txtReserved"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Reserved for donation of:"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="25sp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtTime"
             android:layout_marginTop="20dp" />
 
@@ -65,7 +64,22 @@
             android:paddingRight="30dp"
             android:text="quantity + food item"
             android:inputType="textMultiLine"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="20dp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/txtRecipients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/txtReservedItem"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text= ""
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:visibility="visible"
+            android:inputType="textMultiLine"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/deleteSlot"
@@ -80,7 +94,7 @@
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtReservedItem"
+            app:layout_constraintTop_toBottomOf="@+id/txtRecipients"
             app:layout_constraintVertical_bias="0.2"
             android:layout_marginTop="20dp"/>
 

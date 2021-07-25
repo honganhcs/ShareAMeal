@@ -3,7 +3,7 @@
     <string name="firebase_server_key">AAAAPJHO_dE:APA91bGvcny1z4EXq43pqgEdvhhN-jYde1paEcx75_HCS_8HQcaF_zj1uGfHSl40VHQRFDDjVVRlllVR3kNbAdtBkyUwDmkfDaLwjMcfBhclxOoEDb61rTmLnjfB8-X3lP81lb8W6eT0</string>
     <string name="post_URL">https://fcm.googleapis.com/fcm/send</string>
     <string name="channel_id">CHANNEL_ID</string>
-    <string name="slot_booked">Time Slot Booked</string>
+    <string name="slot_booked">Time slot booked</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -17,7 +17,7 @@
         <NumberPicker
             android:id="@+id/hourPicker"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/timeDeliminator"
@@ -33,6 +33,18 @@
             android:id="@+id/minutePicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtAM"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AM"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:textSize="15sp"
+            android:textColor="@color/blood_orange"
+            android:textStyle="bold"
+            />
 
     </LinearLayout>
 

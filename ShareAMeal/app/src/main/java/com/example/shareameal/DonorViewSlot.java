@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -31,13 +32,15 @@ import java.util.HashMap;
 public class DonorViewSlot extends AppCompatActivity {
 
     //widgets
-    private TextView txtDate, txtTime, txtReserved, txtReservedItem;
+    private TextView txtDate, txtTime, txtReserved, txtReservedItem, txtRecipients;
 
     //data
     private Slot slot;
     private String donorId, slotId, donorName;
 
     private HashMap<String, ArrayList<Order>> recipientIdToOrder;
+    private ArrayList<String> recipientNames;
+    private String recipients;
     private Food food;
 
     private DatabaseReference reference1, reference2, reference3, reference4;
@@ -63,8 +66,11 @@ public class DonorViewSlot extends AppCompatActivity {
         txtTime = findViewById(R.id.txtTime);
         txtReserved = findViewById(R.id.txtReserved);
         txtReservedItem = findViewById(R.id.txtReservedItem);
+        txtRecipients = findViewById(R.id.txtRecipients);
 
         reference1 = FirebaseDatabase.getInstance().getReference("Orders").child("Pending");
+        recipientNames = new ArrayList<>();
+        recipients = "";
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -76,11 +82,32 @@ public class DonorViewSlot extends AppCompatActivity {
         txtReserved.setText(slot.getNumRecipients() == 0 ? "Not Reserved" : "Reserved for Donation of:");
 
         reference4 = FirebaseDatabase.getInstance().getReference("Users");
-        reference4.child(donorId).addListenerForSingleValueEvent(new ValueEventListener() {
+        reference4.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                User donor = snapshot.getValue(User.class);
-                donorName = donor.getName();
+                for(DataSnapshot data : snapshot.getChildren()) {
+                    if(data.getKey().equals(donorId)) {
+                        User donor = data.getValue(User.class);
+                        donorName = donor.getName();
+                    } else if(data.getKey().equals(slot.getRecipientId1())) {
+                        recipientNames.add(data.getValue(User.class).getName());
+                    } else if(data.getKey().equals(slot.getRecipientId2())) {
+                        recipientNames.add(data.getValue(User.class).getName());
+                    } else if(data.getKey().equals(slot.getRecipientId3())) {
+                        recipientNames.add(data.getValue(User.class).getName());
+                    }
+                }
+
+
+                for(int i = 0; i < recipientNames.size(); i++) {
+                    Log.d("recipient", recipientNames.get(i));
+                    if(i == recipientNames.size() - 1) {
+                        recipients = recipients + recipientNames.get(i) + ".";
+                    } else {
+                        recipients = recipients + recipientNames.get(i) + ", ";
+                    }
+                }
+                txtRecipients.setText("Recipient(s): " + recipients);
             }
 
             @Override
@@ -90,8 +117,13 @@ public class DonorViewSlot extends AppCompatActivity {
         });
 
         if (slot.getNumRecipients() == 0) {
-            txtReservedItem.setText("");
+            txtReserved.setText("Not reserved.");
+            txtReservedItem.setVisibility(View.GONE);
+            txtRecipients.setVisibility(View.GONE);
         } else {
+            txtReserved.setText("Reserved for donation of: ");
+
+            // for food items
             ArrayList<String> items = new ArrayList<>();
 
             recipientIdToOrder = new HashMap<>();

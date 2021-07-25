@@ -38,7 +38,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:text="Donor name"
-                android:inputType="textMultiLine"
                 android:textColor="#C45508"
                 android:textSize="25sp"
                 android:textStyle="bold"

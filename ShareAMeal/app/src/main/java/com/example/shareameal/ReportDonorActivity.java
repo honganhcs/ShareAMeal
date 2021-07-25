@@ -177,6 +177,20 @@ public class ReportDonorActivity extends AppCompatActivity {
                                             report.setHour(hour);
                                             report.setMinute(minute);
 
+                                            DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("Orders").child("Completed");
+                                            orderRef.child(recipientId).child(slotId).child(foodId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                                                    if(!task.isSuccessful()) {
+                                                        Log.e("Firebase", "Failed to get order");
+                                                    } else {
+                                                        Order order = task.getResult().getValue(Order.class);
+                                                        order.setReported(true);
+                                                        orderRef.child(recipientId).child(slotId).child(foodId).setValue(order);
+                                                    }
+                                                }
+                                            });
+
                                             String reportId = database.push().getKey();
                                             report.setReportId(reportId);
                                             database.child(reportId).setValue(report);

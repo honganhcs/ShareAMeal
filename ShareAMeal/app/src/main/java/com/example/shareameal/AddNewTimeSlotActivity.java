@@ -183,15 +183,17 @@ public class AddNewTimeSlotActivity extends AppCompatActivity implements CustomT
                 || (Year == todayYear && Month < todayMonth)
                 || (Year == todayYear && Month == todayMonth && Day < today)) {
             Toast.makeText(
-                    AddNewTimeSlotActivity.this, "Please select a date no earlier than today.", Toast.LENGTH_SHORT)
+                    AddNewTimeSlotActivity.this, "Please select a date no earlier than today.", Toast.LENGTH_LONG)
                     .show();
+        } else if(Year > todayYear + 1) {
+            Toast.makeText(AddNewTimeSlotActivity.this, "Please select a date within the years " + todayYear + " and " + (todayYear + 1) + ".", Toast.LENGTH_LONG).show();
         } else if (Year == todayYear && Month == todayMonth && Day == today && startHour < currentHour + 2){
             Toast.makeText(
-                    AddNewTimeSlotActivity.this, "Please select a time 2 hours after now.", Toast.LENGTH_SHORT)
+                    AddNewTimeSlotActivity.this, "Please select a time 2 hours after now.", Toast.LENGTH_LONG)
                     .show();
         } else if (endHour < startHour || (endHour == startHour && endMinute <= startMinute)) {
             Toast.makeText(
-                    AddNewTimeSlotActivity.this, "End time must be after start time.", Toast.LENGTH_SHORT)
+                    AddNewTimeSlotActivity.this, "End time must be after start time.", Toast.LENGTH_LONG)
                     .show();
         } else{
 
@@ -230,8 +232,8 @@ public class AddNewTimeSlotActivity extends AppCompatActivity implements CustomT
 
             Toast.makeText(
                     AddNewTimeSlotActivity.this,
-                    "Time slots successfully added.",
-                    Toast.LENGTH_SHORT)
+                    numSlots + " new 30-minute time slots added.",
+                    Toast.LENGTH_LONG)
                     .show();
             Intent intent = new Intent(AddNewTimeSlotActivity.this, DonorsScheduleActivity.class);
             startActivity(intent);

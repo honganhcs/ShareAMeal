@@ -47,7 +47,7 @@ public class OrderConfirmation extends AppCompatActivity {
     private DatabaseReference reference1, reference2, reference3, reference4;
     private Bundle bundle;
     private Slot slot;
-    private String donorId, foodId, donorName, recipientId, prevScreen;
+    private String donorId, foodId, donorName, recipientId, prevScreen, recipientUsername, foodName;
     private Food food;
     private User donor, recipient;
     private int orderQuantity;
@@ -136,11 +136,13 @@ public class OrderConfirmation extends AppCompatActivity {
                                             }
                                             if (data.getKey().equals(recipientId)) {
                                                 recipient = data.getValue(User.class);
+                                                recipientUsername = recipient.getName();
                                                 numOrdersLeft = recipient.getNumOrdersLeft();
                                             }
                                         }
 
                                         foodNameTxt.setText(food.getName());
+                                        foodName = food.getName();
                                         foodDescriptionTxt.setText(food.getDescription());
                                         txtCurrentQuantity.setText("Current Quantity: " + food.getQuantity());
                                         existingQty = food.getQuantity();
@@ -265,7 +267,8 @@ public class OrderConfirmation extends AppCompatActivity {
 
                                 // send notification to donor
                                 String token = donor.getFcmToken();
-                                String body = "A recipient has booked the time slot at " + slot.getStartTime() + " on " + slot.getDate();
+                                String body = recipientUsername + " has booked your time slot at " + slot.getStartTime()
+                                        + " on " + slot.getDate() + " for the collection of " + orderQuantity + " " + foodName + ".";
                                 NotificationsSender notificationsSender = new NotificationsSender(token, getString(R.string.slot_booked), body, getApplicationContext(), OrderConfirmation.this);
                                 notificationsSender.sendNotification();
 
